@@ -6,6 +6,9 @@ declare module "styled-components" {
       black: {
         main: string
       }
+      grey: {
+        main: string
+      }
       blue: {
         darker: string
         main: string
@@ -14,8 +17,12 @@ declare module "styled-components" {
         main: string
         light: string
         lighter: string
+        strong: string
       }
       orange: {
+        main: string
+      }
+      red: {
         main: string
       }
       white: {

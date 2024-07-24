@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 export const Page = styled.div`
-  background-color: ${({ theme }) => theme.colors.green.main};
+  background-color: ${({ theme }) => theme.colors.green.lighter};
   display: flex;
   min-height: 100vh;
   gap: 36px;

@@ -5,6 +5,9 @@ export const theme: DefaultTheme = {
     black: {
       main: "#232323",
     },
+    grey: {
+      main: "#AFAFAF",
+    },
     blue: {
       main: "",
       darker: "",
@@ -12,10 +15,14 @@ export const theme: DefaultTheme = {
     green: {
       main: "#D1EBD4",
       light: "#ACE3B2",
-      lighter: "#F3FFF4",
+      lighter: "#E8F9E9",
+      strong: "#31E521",
     },
     orange: {
-      main: "orange",
+      main: "#FABB1B",
+    },
+    red: {
+      main: "#F92525",
     },
     white: {
       main: "#FFFFFF",

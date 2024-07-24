@@ -5,6 +5,7 @@ import Template from "../pages/_template"
 
 // dashboard pages
 import ProductsPage from "../pages/Products"
+import ProductForm from "../pages/ProductForm"
 
 const Router = () => {
   return (
@@ -14,7 +15,10 @@ const Router = () => {
 
         {/* <Route path="/" element={<AuthRoute />}> */}
         <Route path="dashboard" element={<Template />}>
-          <Route path="products" element={<ProductsPage />} />
+          <Route path="products">
+            <Route path={""} element={<ProductsPage />} />
+            <Route path={"single"} element={<ProductForm />} />
+          </Route>
           <Route path="clients" element={<></>} />
           <Route path="orders" element={<></>} />
           <Route path="manufacturing" element={<></>} />

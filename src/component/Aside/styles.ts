@@ -67,7 +67,7 @@ export const MenuItem = styled.div`
 
   &:hover,
   &.active {
-    background-color: ${({ theme }) => theme.colors.green.main};
+    background-color: ${({ theme }) => theme.colors.green.lighter};
   }
 
   svg {

@@ -5,35 +5,35 @@ import PageHead from "../../component/PageHead"
 import { tableConfig } from "../../utils/sys/table"
 import useFetch from "../../utils/hooks/useFetch"
 import Table from "../../component/Table"
-import { useNavigate } from "react-router-dom"
 
-const ProductsPage = () => {
-  const navigate = useNavigate()
-
+const ProductForm = () => {
   const [search, setSearch] = useState("")
 
   const products = useFetch("http://localhost:8080/api/products")
 
-  const handleNewProduct = () => {
-    navigate("single")
+  const handleCancel = () => {
+    // ...
+  }
+
+  const handleSave = () => {
+    // ...
   }
 
   return (
     <S.Content>
       <PageHead
         title={"Produtos"}
-        search={search}
-        onChangeSearch={setSearch}
-        buttons={[{ role: "new", text: "Novo", onClick: handleNewProduct }]}
+        subtitle="Cadastro de produto"
+        buttons={[
+          { role: "cancel", text: "Cancelar", onClick: handleCancel },
+          { role: "new", text: "Novo", onClick: handleSave },
+        ]}
       />
-
-      {/* Table */}
-      <Table
-        config={tableConfig.products}
-        data={products.data ? products.data.list : []}
-      />
+      
+      {/* form */}
+      formulário
     </S.Content>
   )
 }
 
-export default ProductsPage
+export default ProductForm
