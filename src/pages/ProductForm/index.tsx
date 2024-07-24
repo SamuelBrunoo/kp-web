@@ -2,14 +2,11 @@ import React, { useState } from "react"
 import * as S from "./styles"
 
 import PageHead from "../../component/PageHead"
-import { tableConfig } from "../../utils/sys/table"
-import useFetch from "../../utils/hooks/useFetch"
-import Table from "../../component/Table"
+import Input from "../../component/Inpts"
+import { initialForm } from "../../utils/initialData/form"
 
 const ProductForm = () => {
-  const [search, setSearch] = useState("")
-
-  const products = useFetch("http://localhost:8080/api/products")
+  const [product, setProduct] = useState(initialForm.product)
 
   const handleCancel = () => {
     // ...
@@ -17,6 +14,14 @@ const ProductForm = () => {
 
   const handleSave = () => {
     // ...
+  }
+
+  const handleField = (field: string, value: any) => {
+    // ...
+    const obj = { ...product, [field]: value }
+    console.log(field, value)
+
+    setProduct(obj)
   }
 
   return (
@@ -29,9 +34,35 @@ const ProductForm = () => {
           { role: "new", text: "Novo", onClick: handleSave },
         ]}
       />
-      
+
       {/* form */}
-      formulário
+      <S.FormGroup>
+        <S.GroupTitle>Informações gerais</S.GroupTitle>
+        <S.FormLine>
+          <Input.Default
+            label="Tipo"
+            onChange={(v) => handleField("type", v)}
+            value={product.type}
+          />
+          <Input.Default
+            label="Modelo"
+            onChange={(v) => handleField("model", v)}
+            value={product.model}
+          />
+          <Input.Default
+            label="Cor"
+            onChange={(v) => handleField("color", v)}
+            value={product.color}
+          />
+        </S.FormLine>
+        <S.FormLine>
+          <Input.Default
+            label="Código"
+            onChange={(v) => handleField("code", v)}
+            value={product.code}
+          />
+        </S.FormLine>
+      </S.FormGroup>
     </S.Content>
   )
 }

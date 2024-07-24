@@ -1,5 +1,4 @@
 import * as S from "./styles"
-import { TConfig } from "../../utils/sys/table"
 import icons from "../../assets/icons"
 
 type Props = {
