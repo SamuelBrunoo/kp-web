@@ -1,10 +1,14 @@
 import styled from "styled-components"
 
-export const InputArea = styled.div<{ $hasError: boolean }>`
+export const InputArea = styled.div<{
+  $disabled?: boolean
+  $hasError: boolean
+}>`
   flex: 1;
   position: relative;
   display: flex;
   flex-direction: column;
+  transition: opacity 0.3s;
 
   span {
     color: ${({ $hasError, theme }) =>
@@ -15,15 +19,21 @@ export const InputArea = styled.div<{ $hasError: boolean }>`
     top: 100%;
     font-size: 0.8rem;
   }
+
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  cursor: default;
 `
 
-export const SelectedArea = styled.div<{ $hasError: boolean }>`
+export const SelectedArea = styled.div<{
+  $hasError: boolean
+  $cursorNormal?: boolean
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-width: 240px;
   width: fit-content;
-  cursor: pointer;
+  cursor: ${({ $cursorNormal }) => ($cursorNormal ? "unset" : "pointer")};
   transition: background-color 0.3s, border-color 0.3s;
 `
 
@@ -91,6 +101,17 @@ export const Input = styled.input<{ $hasError: boolean }>`
   flex: 1;
   transition: color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`
+
+export const Value = styled.span`
+  color: ${({ theme }) => theme.colors.black.main};
+  font-size: inherit;
+  font-weight: 300;
+  white-space: nowrap;
+  padding: 8px;
+  display: block;
+  flex: 1;
+  transition: color 0.3s;
 `
 
 export const DropArea = styled.div<{ $visible: boolean }>`

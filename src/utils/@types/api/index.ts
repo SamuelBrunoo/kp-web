@@ -5,4 +5,9 @@ export type TApi = {
   get: {
     products: (p: TParams["get"]["products"]) => TResponses["get"]["products"]
   }
+  pageInfo: {
+    productForm: (
+      p: TParams["pageInfo"]["productForm"]
+    ) => TResponses["pageInfo"]["productForm"]
+  }
 }

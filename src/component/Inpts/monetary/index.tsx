@@ -1,18 +1,20 @@
 import { useRef } from "react"
 import * as S from "../styles"
 
+import { formatMoney } from "../../../utils/helpers/formatters/money"
+
 type Props = {
+  placeholder?: string
   label: string
   value: any
   onChange: (v: any) => void
-  disabled?: boolean
   error?: {
     state: boolean
     message: string
   }
 }
 
-const InputModal = ({ label, value, onChange, disabled, error }: Props) => {
+const InputModal = ({ label, value, onChange, error }: Props) => {
   const inputRef = useRef<null | HTMLInputElement>(null)
 
   const handleClick = () => {
@@ -20,26 +22,20 @@ const InputModal = ({ label, value, onChange, disabled, error }: Props) => {
   }
 
   const handleValue = (v: string) => {
-    const n = v.replace(/\D/g, "").length > 0 ? +v.replace(/\D/g, "") : 0
-    onChange(n)
+    const money = v.replace(/\D/g, "")
+    onChange(money)
   }
 
   return (
-    <S.InputArea $disabled={disabled} $hasError={error?.state ?? false}>
-      <S.SelectedArea
-        onClick={disabled ? undefined : handleClick}
-        $hasError={error?.state ?? false}
-      >
+    <S.InputArea $disabled={false} $hasError={error?.state ?? false}>
+      <S.SelectedArea onClick={handleClick} $hasError={error?.state ?? false}>
         <S.Left>
           <S.InpLine>
             <S.Label $hasError={error?.state ?? false}>{label}</S.Label>
             <S.Input
               ref={inputRef}
-              value={value}
-              onFocus={(e) => (disabled ? e.currentTarget.blur() : undefined)}
-              onChange={
-                !disabled ? (e) => handleValue(e.target.value) : () => {}
-              }
+              value={formatMoney(value)}
+              onChange={(e) => handleValue(e.target.value)}
               $hasError={error?.state ?? false}
             />
           </S.InpLine>

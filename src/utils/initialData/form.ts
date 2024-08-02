@@ -3,9 +3,9 @@ export const initialForm = {
     type: "",
     model: "",
     color: "",
-    code: "",
+    code: "XXXXX",
     price: "",
-    hasStorage: true,
-    storage: 0,
+    hasStorage: "true",
+    storage: "0",
   },
 }

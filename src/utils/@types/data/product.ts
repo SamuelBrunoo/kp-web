@@ -4,24 +4,24 @@ export type TProduct = {
   model: TModel
   colors: TColor[]
   price: number
-  type: TType
+  type: TProductType
   storage: {
     has: boolean
     quantity: number
   }
 }
 
-export type TModel = {
+type TModel = {
   name: string
   code: string
 }
 
-export type TColor = {
+type TColor = {
   key: string
   name: string
 }
 
-export type TType = {
+type TProductType = {
   code: string
   key: string
   name: string
@@ -32,7 +32,7 @@ export type TNewProduct = {
   name: string
   color: TColor[]
   price: number
-  type: TType
+  type: TProductType
   storage: {
     has: boolean
     quantity: number

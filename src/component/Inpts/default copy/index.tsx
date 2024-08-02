@@ -57,7 +57,7 @@ const InputModal = ({
   }
 
   return (
-    <S.InputArea $hasError={error?.state ?? false}>
+    <S.InputArea $disabled={false} $hasError={error?.state ?? false}>
       <S.SelectedArea onClick={handleClick} $hasError={error?.state ?? false}>
         <S.Left>
           <S.InpLine>

@@ -1,5 +1,6 @@
 import * as S from "./styles"
 import icons from "../../assets/icons"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   table: "products"
@@ -7,8 +8,10 @@ type Props = {
 }
 
 const TableActions = ({ table, id }: Props) => {
+  const navigate = useNavigate()
+
   const handleEdit = () => {
-    // ...
+    navigate(`single/${id}`)
   }
 
   const handleDelete = () => {

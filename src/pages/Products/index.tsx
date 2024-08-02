@@ -1,22 +1,39 @@
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import * as S from "./styles"
 
-import PageHead from "../../component/PageHead"
-import { tableConfig } from "../../utils/sys/table"
-import useFetch from "../../utils/hooks/useFetch"
-import Table from "../../component/Table"
 import { useNavigate } from "react-router-dom"
+import { TProduct } from "../../utils/@types/data/product"
+import { tableConfig } from "../../utils/sys/table"
+
+import PageHead from "../../component/PageHead"
+import Table from "../../component/Table"
+
+import { Api } from "../../api"
 
 const ProductsPage = () => {
   const navigate = useNavigate()
 
+  const [products, setProducts] = useState<TProduct[]>([])
   const [search, setSearch] = useState("")
-
-  const products = useFetch("http://localhost:8080/api/products")
 
   const handleNewProduct = () => {
     navigate("single")
   }
+
+  const loadData = useCallback(async () => {
+    try {
+      const req = await Api.get.products({})
+      if (req.success) {
+        setProducts(req.data.list)
+      } else throw new Error(req.error.message)
+    } catch (error) {
+      // feedbackError
+    }
+  }, [])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   return (
     <S.Content>
@@ -28,10 +45,7 @@ const ProductsPage = () => {
       />
 
       {/* Table */}
-      <Table
-        config={tableConfig.products}
-        data={products.data ? products.data.list : []}
-      />
+      <Table config={tableConfig.products} data={products} />
     </S.Content>
   )
 }
