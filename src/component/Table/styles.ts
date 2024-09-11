@@ -1,6 +1,9 @@
 import styled from "styled-components"
 
 export const Wrapper = styled.div`
+  flex: 1;
+  width: 100%;
+  min-width: fit-content;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -24,14 +27,15 @@ export const TCol = styled.th<{ $size?: string | number; $align?: string }>`
   border-bottom: 1px solid ${({ theme }) => theme.colors.green.lighter};
 `
 
-export const TableBody = styled.tbody`
+export const TableBody = styled.tbody<{ $noHover?: boolean }>`
   border-collapse: collapse;
 
   tr {
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: ${({ theme }) => theme.colors.green.lighter};
+      ${({ $noHover, theme }) =>
+        $noHover ? "" : `background-color: ${theme.colors.green.lighter};`}
 
       .actions-area {
         opacity: 1;

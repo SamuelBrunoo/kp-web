@@ -60,7 +60,7 @@ export const SubTitle = styled.h2`
   flex: 1;
 `
 
-export const Button = styled.button<{ $role: "new" | "cancel" }>`
+export const Button = styled.button<{ $role: "new" | "update" | "cancel" }>`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -68,7 +68,11 @@ export const Button = styled.button<{ $role: "new" | "cancel" }>`
   border-radius: 4px;
   outline: none;
   background-color: ${({ $role, theme }) =>
-    $role === "new" ? theme.colors.green.strong : theme.colors.orange.main};
+    $role === "new"
+      ? theme.colors.green.strong
+      : $role === "cancel"
+      ? theme.colors.orange.main
+      : theme.colors.green.strong};
   border: none;
   box-sizing: border-box;
   cursor: pointer;
@@ -76,5 +80,6 @@ export const Button = styled.button<{ $role: "new" | "cancel" }>`
 
   svg {
     width: 16px;
+    height: 16px;
   }
 `

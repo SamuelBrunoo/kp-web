@@ -3,6 +3,12 @@ import icons from "../../assets/icons"
 export const menu = [
   { title: "Início", icon: icons.home, slug: "dash", link: "/dashboard" },
   {
+    title: "Modelos",
+    icon: icons.prods,
+    slug: "models",
+    link: "/dashboard/models",
+  },
+  {
     title: "Produtos",
     icon: icons.prods,
     slug: "products",

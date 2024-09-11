@@ -4,6 +4,12 @@ import LoginPage from "../pages/Login"
 import Template from "../pages/_template"
 
 // dashboard pages
+
+// # Models
+import ModelsPage from "../pages/Models"
+import ModelForm from "../pages/ModelsForm"
+
+// # Products
 import ProductsPage from "../pages/Products"
 import ProductForm from "../pages/ProductForm"
 
@@ -15,9 +21,15 @@ const Router = () => {
 
         {/* <Route path="/" element={<AuthRoute />}> */}
         <Route path="dashboard" element={<Template />}>
+          <Route path="models">
+            <Route path={""} element={<ModelsPage />} />
+            <Route path="single">
+              <Route path={""} element={<ModelForm />} />
+              <Route path={":id"} element={<ModelForm />} />
+            </Route>
+          </Route>
           <Route path="products">
             <Route path={""} element={<ProductsPage />} />
-            <Route path={"single"} element={<ProductForm />} />
             <Route path="single">
               <Route path={""} element={<ProductForm />} />
               <Route path={":id"} element={<ProductForm />} />

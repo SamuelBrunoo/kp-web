@@ -10,7 +10,7 @@ type Props = {
 }
 
 type TButton = {
-  role: "new" | "cancel"
+  role: "new" | "update" | "cancel"
   text: string
   onClick: (p?: any) => void | any
 }
@@ -41,6 +41,8 @@ const PageHead = ({
           <S.Button key={k} $role={btn.role} onClick={btn.onClick}>
             {btn.role === "new"
               ? icons.add
+              : btn.role === "update"
+              ? icons.check
               : btn.role === "cancel"
               ? icons.cancel
               : null}

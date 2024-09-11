@@ -1,5 +1,6 @@
+/* eslint react-hooks/exhaustive-deps: "off" */
 import React, { useCallback, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Api } from "../../api"
 
 import * as S from "./styles"
@@ -14,11 +15,16 @@ import Input from "../../component/Inpts"
 import { initialForm } from "../../utils/initialData/form"
 import { parseRoOption } from "../../utils/helpers/parsers/roOption"
 import { TProductType } from "../../utils/@types/data/productType"
+import { TNewProduct, TProduct } from "../../utils/@types/data/product"
 
 const ProductForm = () => {
+  const { id } = useParams()
+
   const navigate = useNavigate()
 
-  const [product, setProduct] = useState(initialForm.product)
+  const [product, setProduct] = useState<TNewProduct | TProduct>(
+    initialForm.product as any
+  )
 
   // Page control
 
@@ -40,12 +46,28 @@ const ProductForm = () => {
     navigate(-1)
   }
 
-  const handleSave = () => {
-    // ...
+  const handleSave = async () => {
+    if (id) {
+      // edit ...
+      const update = await Api.update.product(product as TProduct)
+
+      if (update.success) navigate(-1)
+    } else {
+      const create = await Api.new.product(product as TNewProduct)
+
+      if (create.success) navigate(-1)
+    }
   }
 
   const handleField = useCallback((field: string, value: any) => {
-    setProduct((p) => ({ ...p, [field]: value }))
+    if (field === "hasStorage") {
+      setProduct((p) => ({
+        ...p,
+        storage: { ...p.storage, has: value === "true" },
+      }))
+    } else if (field === "storage") {
+      setProduct((p) => ({ ...p, storage: { ...p.storage, quantity: value } }))
+    } else setProduct((p) => ({ ...p, [field]: value }))
   }, [])
 
   const computeCode = () => {
@@ -55,8 +77,8 @@ const ProductForm = () => {
       !!product.model &&
       !!product.color
     ) {
-      const pickedModel = models.find((m) => m.id === product.model)
-      const pickedColor = colors.find((m) => m.id === product.color)
+      const pickedModel = models.find((m) => m.code === product.model)
+      const pickedColor = colors.find((m) => m.code === product.color)
 
       const computedCode = `${pickedModel?.code ?? ""}${
         pickedColor?.code ?? ""
@@ -75,28 +97,30 @@ const ProductForm = () => {
 
   useEffect(() => {
     if (!!product.type) {
-      const tp = prodTypes.find((t) => t.id === product.type) as TProductType
-      const tpModels = models.filter((m) => m.type === tp.key)
+      const tp = prodTypes.find((t) => t.code === product.type) as TProductType
+      const tpModels = models.filter((m) => m.type === tp.code)
 
-      const parsedOptions = parseRoOption(tpModels, "name", "id")
+      const parsedOptions = parseRoOption(tpModels, "name", "code")
 
-      setOptions((o) => ({
-        ...o,
-        models: parsedOptions,
-      }))
+      setOptions((o) => ({ ...o, models: parsedOptions }))
 
       const pModel = parsedOptions.length > 0 ? parsedOptions[0].key : ""
 
       setProduct((p) => ({ ...p, model: pModel }))
+    } else {
+      if (prodTypes.length > 0)
+        setProduct((p) => ({ ...p, type: prodTypes[0].code }))
     }
-  }, [product.type])
+  }, [prodTypes, product.type])
 
   useEffect(() => {
     if (product.model) {
-      const m = models.find((m) => m.id === product.model) as TModel
-      const mColors = colors.filter((c) => m.colors.includes(c.code))
+      const m = models.find((m) => m.code === product.model) as TModel
+      const mColors = m ? colors.filter((c) => m.colors.includes(c.code)) : []
 
-      const parsedOptions = parseRoOption(mColors, "name", "id")
+      const parsedOptions = parseRoOption(mColors, "name", "code")
+
+      console.log(m)
 
       setOptions((o) => ({
         ...o,
@@ -123,9 +147,9 @@ const ProductForm = () => {
 
       if (pageInfo.success) {
         const opts = {
-          prodTypes: parseRoOption(pageInfo.data.prodTypes, "name", "id"),
-          models: parseRoOption(pageInfo.data.models, "name", "id"),
-          colors: parseRoOption(pageInfo.data.colors, "name", "id"),
+          prodTypes: parseRoOption(pageInfo.data.prodTypes, "name", "code"),
+          models: parseRoOption(pageInfo.data.models, "name", "code"),
+          colors: parseRoOption(pageInfo.data.colors, "name", "code"),
         }
 
         setOptions((o) => ({ ...o, ...opts }))
@@ -133,11 +157,17 @@ const ProductForm = () => {
         setProdTypes(pageInfo.data.prodTypes)
         setModels(pageInfo.data.models)
         setColors(pageInfo.data.colors)
-        // @ts-ignore
-        setProduct((p) => ({
-          ...p,
-          hasStorage: options.storage[0].key,
-        }))
+
+        if (id) {
+          const pInfo = await Api.get.product({ id })
+          setTimeout(() => {
+            if (pInfo.success) {
+              const p = pInfo.data.product
+
+              setProduct(p)
+            }
+          }, 150)
+        }
       }
     } catch (error) {
       alert("Tente novamente mais tarde")
@@ -155,7 +185,11 @@ const ProductForm = () => {
         subtitle="Cadastro de produto"
         buttons={[
           { role: "cancel", text: "Cancelar", onClick: handleCancel },
-          { role: "new", text: "Novo", onClick: handleSave },
+          {
+            role: id ? "update" : "new",
+            text: id ? "Salvar" : "Cadastrar",
+            onClick: handleSave,
+          },
         ]}
       />
 
@@ -188,31 +222,21 @@ const ProductForm = () => {
       </S.FormGroup>
 
       <S.FormGroup>
-        <S.GroupTitle>Informações de venda</S.GroupTitle>
-        <S.FormLine>
-          <Input.Monetary
-            label="Preço Unitário"
-            onChange={(v) => handleField("price", v)}
-            value={product.price}
-          />
-        </S.FormLine>
-      </S.FormGroup>
-
-      <S.FormGroup>
         <S.GroupTitle>Estoque</S.GroupTitle>
         <S.FormLine>
           <Input.Select
             label="Tem estoque"
             onChange={(v) => handleField("hasStorage", v)}
-            value={product.hasStorage}
+            value={String(product.storage.has)}
             roOptions={options.storage}
           />
-          {product.hasStorage && (
+          {product.storage.has && (
             <Input.Default
               label="Quantidade"
               onChange={(v) => handleField("storage", v)}
-              value={product.storage}
-              disabled={product.hasStorage !== "true"}
+              value={product.storage.quantity}
+              disabled={!Boolean(product.storage.has)}
+              isNumber={true}
             />
           )}
         </S.FormLine>

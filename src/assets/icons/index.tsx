@@ -8,6 +8,7 @@ import { ReactComponent as Prods } from "./Prods.svg"
 
 import { ReactComponent as Add } from "./add.svg"
 import { ReactComponent as Cancel } from "./cancel.svg"
+import { ReactComponent as Check } from "./check.svg"
 import { ReactComponent as Edit } from "./edit.svg"
 import { ReactComponent as Dropdown } from "./dropdown.svg"
 import { ReactComponent as Search } from "./search.svg"
@@ -25,6 +26,7 @@ const icons = {
   // system
   add: <Add />,
   cancel: <Cancel />,
+  check: <Check />,
   dropdown: <Dropdown />,
   edit: <Edit />,
   search: <Search />,

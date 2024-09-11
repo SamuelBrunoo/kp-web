@@ -4,9 +4,11 @@ import { TConfig } from "../../utils/sys/table"
 type Props = {
   config: TConfig
   data: any[]
+  actions?: any[]
+  noHover?: boolean
 }
 
-const Table = ({ config, data }: Props) => {
+const Table = ({ config, data, noHover, actions }: Props) => {
   return (
     <S.Wrapper>
       <S.Table>
@@ -19,14 +21,14 @@ const Table = ({ config, data }: Props) => {
             ))}
           </S.RowItem>
         </S.TableHead>
-        <S.TableBody>
+        <S.TableBody $noHover={noHover}>
           {data.map((item, k) => (
             <S.RowItem key={k}>
               {config.columns.map((col, k) => {
                 let content: any = null
 
                 content = config.specialFields[col.field]
-                  ? config.specialFields[col.field](item)
+                  ? config.specialFields[col.field](item, ...(actions ?? []))
                   : item[col.field]
 
                 return (

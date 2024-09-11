@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import * as S from "./styles"
 
 import { useNavigate } from "react-router-dom"
-import { TProduct } from "../../utils/@types/data/product"
+import { TModel } from "../../utils/@types/data/model"
 import { tableConfig } from "../../utils/sys/table"
 
 import PageHead from "../../component/PageHead"
@@ -10,28 +10,26 @@ import Table from "../../component/Table"
 
 import { Api } from "../../api"
 
-const ProductsPage = () => {
+const ModelsPage = () => {
   const navigate = useNavigate()
 
-  const [products, setProducts] = useState<TProduct[]>([])
+  const [models, setModels] = useState<TModel[]>([])
   const [search, setSearch] = useState("")
 
-  const handleNewProduct = () => {
+  const handleNew = () => {
     navigate("single")
   }
 
   const deleteCallback = (id: string) => {
-    setProducts((prods) => prods.filter((p) => p.id !== id))
+    setModels((mdls) => mdls.filter((m) => m.id !== id))
   }
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.get.products({})
-
+      const req = await Api.get.models({})
       if (req.success) {
-        const { list } = req.data
-
-        setProducts(list)
+        const list = req.data.list
+        setModels(list)
       } else throw new Error(req.error.message)
     } catch (error) {
       // feedbackError
@@ -45,20 +43,20 @@ const ProductsPage = () => {
   return (
     <S.Content>
       <PageHead
-        title={"Produtos"}
+        title={"Modelos"}
         search={search}
         onChangeSearch={setSearch}
-        buttons={[{ role: "new", text: "Novo", onClick: handleNewProduct }]}
+        buttons={[{ role: "new", text: "Novo", onClick: handleNew }]}
       />
 
       {/* Table */}
       <Table
-        config={tableConfig.products}
-        data={products}
+        config={tableConfig.models}
+        data={models}
         actions={[deleteCallback]}
       />
     </S.Content>
   )
 }
 
-export default ProductsPage
+export default ModelsPage

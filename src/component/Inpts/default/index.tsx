@@ -6,13 +6,21 @@ type Props = {
   value: any
   onChange: (v: any) => void
   disabled?: boolean
+  isNumber?: boolean
   error?: {
     state: boolean
     message: string
   }
 }
 
-const InputModal = ({ label, value, onChange, disabled, error }: Props) => {
+const InputModal = ({
+  label,
+  value,
+  onChange,
+  disabled,
+  error,
+  isNumber,
+}: Props) => {
   const inputRef = useRef<null | HTMLInputElement>(null)
 
   const handleClick = () => {
@@ -20,7 +28,11 @@ const InputModal = ({ label, value, onChange, disabled, error }: Props) => {
   }
 
   const handleValue = (v: string) => {
-    const n = v.replace(/\D/g, "").length > 0 ? +v.replace(/\D/g, "") : 0
+    const n = isNumber
+      ? v.replace(/\D/g, "").length > 0
+        ? +v.replace(/\D/g, "")
+        : 0
+      : v
     onChange(n)
   }
 
