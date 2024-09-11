@@ -3,7 +3,7 @@ import { TApi } from "../utils/@types/api"
 import { TDefaultBodyRes, TResData } from "../utils/@types/api/responses"
 import { TBackResponse } from "../utils/@types/api/back"
 
-axios.defaults.baseURL = "http://localhost:8080/api"
+axios.defaults.baseURL = process.env.REACT_APP_BACKURL
 
 const initialResponse: TDefaultBodyRes<undefined> = {
   success: false,
