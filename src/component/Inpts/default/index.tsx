@@ -11,6 +11,7 @@ type Props = {
     state: boolean
     message: string
   }
+  placeholder?: string
 }
 
 const InputModal = ({
@@ -20,6 +21,7 @@ const InputModal = ({
   disabled,
   error,
   isNumber,
+  placeholder,
 }: Props) => {
   const inputRef = useRef<null | HTMLInputElement>(null)
 
@@ -53,6 +55,7 @@ const InputModal = ({
                 !disabled ? (e) => handleValue(e.target.value) : () => {}
               }
               $hasError={error?.state ?? false}
+              placeholder={placeholder}
             />
           </S.InpLine>
         </S.Left>

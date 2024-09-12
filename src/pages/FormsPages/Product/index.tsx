@@ -1,21 +1,21 @@
 /* eslint react-hooks/exhaustive-deps: "off" */
 import React, { useCallback, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Api } from "../../api"
+import { Api } from "../../../api"
 
 import * as S from "./styles"
 
-import { TRoOption } from "../../utils/@types/sys/roOptions"
-import { TModel } from "../../utils/@types/data/model"
-import { TColor } from "../../utils/@types/data/color"
+import { TRoOption } from "../../../utils/@types/sys/roOptions"
+import { TModel } from "../../../utils/@types/data/model"
+import { TColor } from "../../../utils/@types/data/color"
 
-import PageHead from "../../component/PageHead"
-import Input from "../../component/Inpts"
+import PageHead from "../../../component/PageHead"
+import Input from "../../../component/Inpts"
 
-import { initialForm } from "../../utils/initialData/form"
-import { parseRoOption } from "../../utils/helpers/parsers/roOption"
-import { TProductType } from "../../utils/@types/data/productType"
-import { TNewProduct, TProduct } from "../../utils/@types/data/product"
+import { initialForm } from "../../../utils/initialData/form"
+import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
+import { TProductType } from "../../../utils/@types/data/productType"
+import { TNewProduct, TProduct } from "../../../utils/@types/data/product"
 
 const ProductForm = () => {
   const { id } = useParams()

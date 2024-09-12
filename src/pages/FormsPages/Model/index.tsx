@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Api } from "../../api"
+import { Api } from "../../../api"
 
 import * as S from "./styles"
 
-import { TRoOption } from "../../utils/@types/sys/roOptions"
-import { TModel, TNewModel } from "../../utils/@types/data/model"
-import { initialForm } from "../../utils/initialData/form"
-import { parseRoOption } from "../../utils/helpers/parsers/roOption"
-import { tableConfig } from "../../utils/sys/table"
+import { TRoOption } from "../../../utils/@types/sys/roOptions"
+import { TModel, TNewModel } from "../../../utils/@types/data/model"
+import { initialForm } from "../../../utils/initialData/form"
+import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
+import { tableConfig } from "../../../utils/sys/table"
 
-import PageHead from "../../component/PageHead"
-import Input from "../../component/Inpts"
-import Table from "../../component/Table"
+import PageHead from "../../../component/PageHead"
+import Input from "../../../component/Inpts"
+import Table from "../../../component/Table"
 
 const ModelForm = () => {
   const { id } = useParams()

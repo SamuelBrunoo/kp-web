@@ -15,4 +15,22 @@ export const initialForm = {
     code: "",
     price: "",
   },
+  client: {
+    name: "",
+    socialRole: "",
+    cpf: "",
+    cnpj: "",
+    stateRegister: "",
+    address: {
+      full: "",
+      street: "",
+      number: "",
+      neighborhood: "",
+      city: "",
+      state: "",
+      cep: "",
+    },
+    email: "",
+    phone: "",
+  },
 }

@@ -72,6 +72,26 @@ const newModel: TApi["new"]["model"] = async (nModel) => {
   })
 }
 
+const newClient: TApi["new"]["client"] = async (nClient) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["newClient"]> = initialResponse
+
+    try {
+      const req = await axios.post<TBackResponse>(`/clients`, nClient)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 // # Update
 
 const updateProduct: TApi["update"]["product"] = async (prod) => {
@@ -100,6 +120,29 @@ const updateModel: TApi["update"]["model"] = async (model) => {
 
     try {
       const req = await axios.put<TBackResponse>(`/models/${model.id}`, model)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
+const updateClient: TApi["update"]["client"] = async (client) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["updateClient"]> = initialResponse
+
+    try {
+      const req = await axios.put<TBackResponse>(
+        `/clients/${client.id}`,
+        client
+      )
 
       if (req.data.success) {
         const data = req.data.data
@@ -236,6 +279,46 @@ const getModel: TApi["get"]["model"] = async ({ id }) => {
   })
 }
 
+const getClients: TApi["get"]["clients"] = async () => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["clients"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/clients?pretty=yes`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
+const getClient: TApi["get"]["client"] = async ({ id }) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["client"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/clients/${id}`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 // # Pages info
 const getProductFormPageInfo: TApi["pageInfo"]["productForm"] = async () => {
   return new Promise(async (resolve) => {
@@ -347,14 +430,34 @@ const deleteModel: TApi["delete"]["model"] = async ({ id }) => {
   })
 }
 
+const deleteClient: TApi["delete"]["client"] = async ({ id }) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["deleteClient"]> = initialResponse
+
+    try {
+      const req = await axios.delete<TBackResponse>(`/clients/${id}`)
+
+      if (req.data.success) {
+        res = generateResponse({})
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 export const Api: TApi = {
   new: {
     product: newProduct,
     model: newModel,
+    client: newClient,
   },
   update: {
     product: updateProduct,
     model: updateModel,
+    client: updateClient,
   },
   get: {
     colors: getColors,
@@ -363,10 +466,13 @@ export const Api: TApi = {
     productTypes: getProductTypes,
     models: getModels,
     model: getModel,
+    clients: getClients,
+    client: getClient,
   },
   delete: {
     product: deleteProduct,
     model: deleteModel,
+    client: deleteClient,
   },
   pageInfo: {
     productForm: getProductFormPageInfo,

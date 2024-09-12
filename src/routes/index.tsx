@@ -7,11 +7,13 @@ import Template from "../pages/_template"
 
 // # Models
 import ModelsPage from "../pages/Models"
-import ModelForm from "../pages/ModelsForm"
+import ModelForm from "../pages/FormsPages/Model"
 
 // # Products
 import ProductsPage from "../pages/Products"
-import ProductForm from "../pages/ProductForm"
+import ProductForm from "../pages/FormsPages/Product"
+import ClientsPage from "../pages/Clients"
+import ClientsForm from "../pages/FormsPages/Clients"
 
 const Router = () => {
   return (
@@ -35,7 +37,13 @@ const Router = () => {
               <Route path={":id"} element={<ProductForm />} />
             </Route>
           </Route>
-          <Route path="clients" element={<></>} />
+          <Route path="clients">
+            <Route path={""} element={<ClientsPage />} />
+            <Route path="single">
+              <Route path={""} element={<ClientsForm />} />
+              <Route path={":id"} element={<ClientsForm />} />
+            </Route>
+          </Route>
           <Route path="orders" element={<></>} />
           <Route path="manufacturing" element={<></>} />
         </Route>

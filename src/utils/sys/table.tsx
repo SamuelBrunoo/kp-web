@@ -1,8 +1,12 @@
 import Input from "../../component/Inpts"
 import TableActions from "../../component/Table/TableActions"
+import { TClient } from "../@types/data/client"
 import { TModel } from "../@types/data/model"
 import { TProduct } from "../@types/data/product"
+import { formatCnpj } from "../helpers/formatters/cnpj"
+import { formatCpf } from "../helpers/formatters/cpf"
 import { formatMoney } from "../helpers/formatters/money"
+import { formatStateRegister } from "../helpers/formatters/stateRegister"
 
 export const tableConfig: {
   [key: string]: TConfig
@@ -81,6 +85,30 @@ export const tableConfig: {
       price: (item: TModel) => formatMoney(item.price),
       actions: (item: TModel) => (
         <TableActions table={"modelVariations"} id={item.id} />
+      ),
+    },
+  },
+  clients: {
+    columns: [
+      { title: "Cliente", field: "name" },
+      { title: "Endereço", field: "address" },
+      { title: "CPF / CNPJ", field: "cpfCnpj" },
+      { title: "Insc. Estadual", field: "stateRegister" },
+      { title: "Pedidos feitos", field: "orders", align: "center" },
+      { title: "", field: "actions" },
+    ],
+    specialFields: {
+      address: (item: TClient) => item.address.full,
+      cpfCnpj: (item: TClient) =>
+        item.cpf ? formatCpf(item.cpf) : formatCnpj(item.cnpj ?? ""),
+      stateRegister: (item: TClient) => formatStateRegister(item.stateRegister),
+      orders: (item: TClient) => item.orders.length,
+      actions: (item: TClient, deleteCallback) => (
+        <TableActions
+          table={"clients"}
+          id={item.id}
+          deleteCallback={deleteCallback}
+        />
       ),
     },
   },

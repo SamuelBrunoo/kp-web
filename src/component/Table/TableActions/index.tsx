@@ -5,7 +5,7 @@ import { Api } from "../../../api"
 import { useNavigate } from "react-router-dom"
 
 type Props = {
-  table: "products" | "models" | "modelVariations"
+  table: "products" | "models" | "modelVariations" | "clients"
   id: string
   deleteCallback?: (params?: any) => void
 }
@@ -18,9 +18,8 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
 
     switch (table) {
       case "products":
-        url = `single/${id}`
-        break
       case "models":
+      case "clients":
         url = `single/${id}`
         break
       case "modelVariations":
