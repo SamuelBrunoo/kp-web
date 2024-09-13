@@ -1,6 +1,7 @@
 import { TClient } from "../data/client"
 import { TColor } from "../data/color"
 import { TModel } from "../data/model"
+import { TOrder } from "../data/order"
 import { TProduct } from "../data/product"
 import { TProductType } from "../data/productType"
 import { TRepresentative } from "../data/representative"
@@ -41,21 +42,27 @@ export type TResData = {
   representatives: { list: TRepresentative[] }
   representative: { client: TRepresentative }
 
+  orders: { list: TOrder[] }
+  order: { client: TOrder }
+
   // New
   newProduct: { product: TProduct }
   newModel: { model: TModel }
   newClient: { client: TClient }
   newRepresentative: { representative: TRepresentative }
+  newOrder: { representative: TOrder }
 
   updateProduct: { product: TProduct }
   updateModel: { model: TModel }
   updateClient: { client: TClient }
   updateRepresentative: { representative: TRepresentative }
+  updateOrder: { order: TOrder }
 
   deleteProduct: {}
   deleteModel: {}
   deleteClient: {}
   deleteRepresentative: {}
+  deleteOrder: {}
 
   pageInfo: {
     productForm: {
@@ -75,12 +82,14 @@ export type TResponses = {
     model: TDefaultRes<TResData["newModel"]>
     client: TDefaultRes<TResData["newClient"]>
     representative: TDefaultRes<TResData["newRepresentative"]>
+    order: TDefaultRes<TResData["newOrder"]>
   }
   update: {
     product: TDefaultRes<TResData["updateProduct"]>
     model: TDefaultRes<TResData["updateModel"]>
     client: TDefaultRes<TResData["updateClient"]>
     representative: TDefaultRes<TResData["updateRepresentative"]>
+    order: TDefaultRes<TResData["updateOrder"]>
   }
   get: {
     colors: TDefaultRes<TResData["colors"]>
@@ -93,12 +102,15 @@ export type TResponses = {
     client: TDefaultRes<TResData["client"]>
     representatives: TDefaultRes<TResData["representatives"]>
     representative: TDefaultRes<TResData["representative"]>
+    orders: TDefaultRes<TResData["orders"]>
+    order: TDefaultRes<TResData["order"]>
   }
   delete: {
     product: TDefaultRes<TResData["deleteProduct"]>
     model: TDefaultRes<TResData["deleteModel"]>
     client: TDefaultRes<TResData["deleteClient"]>
     representative: TDefaultRes<TResData["deleteRepresentative"]>
+    order: TDefaultRes<TResData["deleteOrder"]>
   }
   pageInfo: {
     productForm: TDefaultRes<TResData["pageInfo"]["productForm"]>

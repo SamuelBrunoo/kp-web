@@ -11,7 +11,6 @@ export const Wrapper = styled.div`
 
 export const Table = styled.table`
   border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors.green.lighter};
   border-spacing: 0;
 `
 
@@ -23,48 +22,26 @@ export const TCol = styled.th<{ $size?: string | number; $align?: string }>`
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 400;
-  padding: 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.green.lighter};
+  padding: 12px 0;
+  color: ${({ theme }) => theme.colors.green.strong};
 `
 
 export const TableBody = styled.tbody<{ $noHover?: boolean }>`
   border-collapse: collapse;
+  opacity: 1;
 
   tr {
-    transition: background-color 0.3s, opacity 0.3s;
-
-    &:not(.noHover):hover {
-      ${({ $noHover, theme }) =>
-        $noHover ? "" : `background-color: ${theme.colors.green.lighter};`}
-
-      .actions-area {
-        opacity: 1;
-      }
-    }
-
-    &.noBg,
-    &.noBg:hover {
+    &:hover {
       background-color: transparent;
-    }
-  }
-
-  &:has(.highlighted) {
-    tr:not(.highlighted):not(.normal) {
-      opacity: 0.2;
     }
   }
 `
 
 export const RowItem = styled.tr`
-  &:nth-last-child(1) {
+  &.totals {
     td {
-      border: none;
+      padding-top: 36px;
     }
-  }
-
-  &.highlighted {
-    opacity: 1;
-    z-index: 2;
   }
 `
 
@@ -82,6 +59,10 @@ export const RowExpandable = styled.tr`
   display: table-row;
   outline: 0px;
   cursor: unset;
+
+  &.normal {
+    opacity: 1;
+  }
 `
 
 export const REWrapper = styled.td`
@@ -106,9 +87,20 @@ export const ItemData = styled.td<{ $align?: string; $hasPointer?: boolean }>`
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 300;
-  padding: 12px;
-  border-left: none;
-  border-right: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.green.lighter};
+  padding: 0;
+  border: none;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
+`
+
+export const ResumeProductsData = styled.td<{
+  $align?: string
+  $hasPointer?: boolean
+}>`
+  text-align: ${({ $align }) => $align ?? "left"};
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0;
+  border: none;
+  cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
+  color: ${({ theme }) => theme.colors.green.strong};
 `

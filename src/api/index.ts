@@ -117,6 +117,26 @@ const newRepresentative: TApi["new"]["representative"] = async (
   })
 }
 
+const newOrder: TApi["new"]["order"] = async (nOrder) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["newOrder"]> = initialResponse
+
+    try {
+      const req = await axios.post<TBackResponse>(`/orders`, nOrder)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 // # Update
 
 const updateProduct: TApi["update"]["product"] = async (prod) => {
@@ -193,6 +213,26 @@ const updateRepresentative: TApi["update"]["representative"] = async (
         `/representatives/${representative.id}`,
         representative
       )
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
+const updateOrder: TApi["update"]["order"] = async (order) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["updateOrder"]> = initialResponse
+
+    try {
+      const req = await axios.put<TBackResponse>(`/orders/${order.id}`, order)
 
       if (req.data.success) {
         const data = req.data.data
@@ -409,6 +449,46 @@ const getRepresentative: TApi["get"]["representative"] = async ({ id }) => {
   })
 }
 
+const getOrders: TApi["get"]["orders"] = async () => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["orders"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/orders?pretty=yes`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
+const getOrder: TApi["get"]["order"] = async ({ id }) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["order"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/orders/${id}`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 // # Pages info
 const getProductFormPageInfo: TApi["pageInfo"]["productForm"] = async () => {
   return new Promise(async (resolve) => {
@@ -558,18 +638,38 @@ const deleteRepresentative: TApi["delete"]["representative"] = async ({
   })
 }
 
+const deleteOrder: TApi["delete"]["order"] = async ({ id }) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["deleteOrder"]> = initialResponse
+
+    try {
+      const req = await axios.delete<TBackResponse>(`/orders/${id}`)
+
+      if (req.data.success) {
+        res = generateResponse({})
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 export const Api: TApi = {
   new: {
     product: newProduct,
     model: newModel,
     client: newClient,
     representative: newRepresentative,
+    order: newOrder,
   },
   update: {
     product: updateProduct,
     model: updateModel,
     client: updateClient,
     representative: updateRepresentative,
+    order: updateOrder,
   },
   get: {
     colors: getColors,
@@ -582,12 +682,15 @@ export const Api: TApi = {
     client: getClient,
     representatives: getRepresentatives,
     representative: getRepresentative,
+    orders: getOrders,
+    order: getOrder,
   },
   delete: {
     product: deleteProduct,
     model: deleteModel,
     client: deleteClient,
     representative: deleteRepresentative,
+    order: deleteOrder,
   },
   pageInfo: {
     productForm: getProductFormPageInfo,

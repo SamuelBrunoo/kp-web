@@ -2,11 +2,14 @@ import Input from "../../component/Inpts"
 import TableActions from "../../component/Table/TableActions"
 import { TClient } from "../@types/data/client"
 import { TModel } from "../@types/data/model"
+import { TOrder } from "../@types/data/order"
 import { TProduct } from "../@types/data/product"
 import { formatCep } from "../helpers/formatters/cep"
 import { formatCnpj } from "../helpers/formatters/cnpj"
 import { formatCpf } from "../helpers/formatters/cpf"
+import { parseDate } from "../helpers/formatters/date"
 import { formatMoney } from "../helpers/formatters/money"
+import { getStatus } from "../helpers/parsers/getStatus"
 
 export const tableConfig: {
   [key: string]: TConfig
@@ -106,6 +109,57 @@ export const tableConfig: {
       actions: (item: TClient, deleteCallback) => (
         <TableActions
           table={"clients"}
+          id={item.id}
+          deleteCallback={deleteCallback}
+        />
+      ),
+    },
+    isExpandable: true,
+  },
+  orders: {
+    columns: [
+      { title: "Cliente", field: "clientName" },
+      { title: "Data do pedido", field: "orderDate" },
+      { title: "Valor", field: "value" },
+      { title: "Status", field: "status", align: "center" },
+      { title: "Controle", field: "actions", align: "center" },
+    ],
+    specialFields: {
+      clientName: (item: TOrder) => item.client.name,
+      orderDate: (item: TOrder) => parseDate(item.orderDate, "str"),
+      value: (item: TOrder) => formatMoney(item.value),
+      status: (item: TOrder) => getStatus("resume", item.status as any),
+      actions: (item: TOrder, deleteCallback) => (
+        <TableActions
+          table={"orders"}
+          id={item.id}
+          deleteCallback={deleteCallback}
+        />
+      ),
+    },
+    isExpandable: true,
+  },
+  orderDetailsProducts: {
+    columns: [
+      { title: "Modelo", field: "model" },
+      { title: "Cor / Variação", field: "color" },
+      { title: "Código", field: "code" },
+      { title: "Qnt", field: "quantity", align: "center" },
+      { title: "Valor Un.", field: "unitary" },
+      { title: "Valor Total", field: "total" },
+      { title: "Status", field: "status", align: "center" },
+    ],
+    specialFields: {
+      model: (item: TOrder["products"][number]) => item.model,
+      color: (item: TOrder["products"][number]) => item.color,
+      unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
+      status: (item: TOrder["products"][number]) =>
+        getStatus("orderProduct", item.status as any),
+      total: (item: TOrder["products"][number]) =>
+        formatMoney(item.price * item.quantity),
+      actions: (item: TOrder["products"][number], deleteCallback) => (
+        <TableActions
+          table={"orders"}
           id={item.id}
           deleteCallback={deleteCallback}
         />
