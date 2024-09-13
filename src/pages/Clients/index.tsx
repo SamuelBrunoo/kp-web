@@ -54,6 +54,9 @@ const ClientsPage = () => {
         config={tableConfig.clients}
         data={clients}
         actions={[deleteCallback]}
+        search={search}
+        searchFields={["name", "socialRole", "address.full"]}
+        expandComponent={(item) => <span>Em desenvolvimento...</span>}
       />
     </S.Content>
   )

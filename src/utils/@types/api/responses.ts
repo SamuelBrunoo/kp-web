@@ -3,6 +3,7 @@ import { TColor } from "../data/color"
 import { TModel } from "../data/model"
 import { TProduct } from "../data/product"
 import { TProductType } from "../data/productType"
+import { TRepresentative } from "../data/representative"
 
 // Success
 type TSuccessResponse<T> = {
@@ -37,18 +38,24 @@ export type TResData = {
   clients: { list: TClient[] }
   client: { client: TClient }
 
+  representatives: { list: TRepresentative[] }
+  representative: { client: TRepresentative }
+
   // New
   newProduct: { product: TProduct }
   newModel: { model: TModel }
   newClient: { client: TClient }
+  newRepresentative: { representative: TRepresentative }
 
   updateProduct: { product: TProduct }
   updateModel: { model: TModel }
   updateClient: { client: TClient }
+  updateRepresentative: { representative: TRepresentative }
 
   deleteProduct: {}
   deleteModel: {}
   deleteClient: {}
+  deleteRepresentative: {}
 
   pageInfo: {
     productForm: {
@@ -67,11 +74,13 @@ export type TResponses = {
     product: TDefaultRes<TResData["newProduct"]>
     model: TDefaultRes<TResData["newModel"]>
     client: TDefaultRes<TResData["newClient"]>
+    representative: TDefaultRes<TResData["newRepresentative"]>
   }
   update: {
     product: TDefaultRes<TResData["updateProduct"]>
     model: TDefaultRes<TResData["updateModel"]>
     client: TDefaultRes<TResData["updateClient"]>
+    representative: TDefaultRes<TResData["updateRepresentative"]>
   }
   get: {
     colors: TDefaultRes<TResData["colors"]>
@@ -82,11 +91,14 @@ export type TResponses = {
     model: TDefaultRes<TResData["model"]>
     clients: TDefaultRes<TResData["clients"]>
     client: TDefaultRes<TResData["client"]>
+    representatives: TDefaultRes<TResData["representatives"]>
+    representative: TDefaultRes<TResData["representative"]>
   }
   delete: {
     product: TDefaultRes<TResData["deleteProduct"]>
     model: TDefaultRes<TResData["deleteModel"]>
     client: TDefaultRes<TResData["deleteClient"]>
+    representative: TDefaultRes<TResData["deleteRepresentative"]>
   }
   pageInfo: {
     productForm: TDefaultRes<TResData["pageInfo"]["productForm"]>

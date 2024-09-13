@@ -6,6 +6,7 @@ export type TApi = {
     product: (p: TParams["new"]["product"]) => TResponses["new"]["product"]
     model: (p: TParams["new"]["model"]) => TResponses["new"]["model"]
     client: (p: TParams["new"]["client"]) => TResponses["new"]["client"]
+    representative: (p: TParams["new"]["representative"]) => TResponses["new"]["representative"]
   }
   update: {
     product: (
@@ -13,6 +14,7 @@ export type TApi = {
     ) => TResponses["update"]["product"]
     model: (p: TParams["update"]["model"]) => TResponses["update"]["model"]
     client: (p: TParams["update"]["client"]) => TResponses["update"]["client"]
+    representative: (p: TParams["update"]["representative"]) => TResponses["update"]["representative"]
   }
   get: {
     colors: (p: TParams["get"]["colors"]) => TResponses["get"]["colors"]
@@ -25,6 +27,8 @@ export type TApi = {
     model: (p: TParams["get"]["model"]) => TResponses["get"]["model"]
     clients: (p: TParams["get"]["clients"]) => TResponses["get"]["clients"]
     client: (p: TParams["get"]["client"]) => TResponses["get"]["client"]
+    representatives: (p: TParams["get"]["representatives"]) => TResponses["get"]["representatives"]
+    representative: (p: TParams["get"]["representative"]) => TResponses["get"]["representative"]
   }
   delete: {
     product: (
@@ -32,6 +36,7 @@ export type TApi = {
     ) => TResponses["delete"]["product"]
     model: (p: TParams["delete"]["model"]) => TResponses["delete"]["model"]
     client: (p: TParams["delete"]["client"]) => TResponses["delete"]["client"]
+    representative: (p: TParams["delete"]["representative"]) => TResponses["delete"]["representative"]
   }
   pageInfo: {
     productForm: (

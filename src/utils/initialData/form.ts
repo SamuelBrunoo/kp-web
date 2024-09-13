@@ -32,5 +32,6 @@ export const initialForm = {
     },
     email: "",
     phone: "",
+    representative: "",
   },
 }

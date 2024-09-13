@@ -92,6 +92,31 @@ const newClient: TApi["new"]["client"] = async (nClient) => {
   })
 }
 
+const newRepresentative: TApi["new"]["representative"] = async (
+  nRepresentative
+) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["newRepresentative"]> = initialResponse
+
+    try {
+      const req = await axios.post<TBackResponse>(
+        `/representatives`,
+        nRepresentative
+      )
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 // # Update
 
 const updateProduct: TApi["update"]["product"] = async (prod) => {
@@ -142,6 +167,31 @@ const updateClient: TApi["update"]["client"] = async (client) => {
       const req = await axios.put<TBackResponse>(
         `/clients/${client.id}`,
         client
+      )
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
+const updateRepresentative: TApi["update"]["representative"] = async (
+  representative
+) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["updateRepresentative"]> = initialResponse
+
+    try {
+      const req = await axios.put<TBackResponse>(
+        `/representatives/${representative.id}`,
+        representative
       )
 
       if (req.data.success) {
@@ -319,6 +369,46 @@ const getClient: TApi["get"]["client"] = async ({ id }) => {
   })
 }
 
+const getRepresentatives: TApi["get"]["representatives"] = async () => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["representatives"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/representatives?pretty=yes`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
+const getRepresentative: TApi["get"]["representative"] = async ({ id }) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["representative"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/representatives/${id}`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 // # Pages info
 const getProductFormPageInfo: TApi["pageInfo"]["productForm"] = async () => {
   return new Promise(async (resolve) => {
@@ -448,16 +538,38 @@ const deleteClient: TApi["delete"]["client"] = async ({ id }) => {
   })
 }
 
+const deleteRepresentative: TApi["delete"]["representative"] = async ({
+  id,
+}) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["deleteRepresentative"]> = initialResponse
+
+    try {
+      const req = await axios.delete<TBackResponse>(`/representatives/${id}`)
+
+      if (req.data.success) {
+        res = generateResponse({})
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 export const Api: TApi = {
   new: {
     product: newProduct,
     model: newModel,
     client: newClient,
+    representative: newRepresentative,
   },
   update: {
     product: updateProduct,
     model: updateModel,
     client: updateClient,
+    representative: updateRepresentative,
   },
   get: {
     colors: getColors,
@@ -468,11 +580,14 @@ export const Api: TApi = {
     model: getModel,
     clients: getClients,
     client: getClient,
+    representatives: getRepresentatives,
+    representative: getRepresentative,
   },
   delete: {
     product: deleteProduct,
     model: deleteModel,
     client: deleteClient,
+    representative: deleteRepresentative,
   },
   pageInfo: {
     productForm: getProductFormPageInfo,

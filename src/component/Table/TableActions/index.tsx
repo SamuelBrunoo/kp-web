@@ -38,6 +38,8 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
         return Api.delete.product
       case "models":
         return Api.delete.model
+      case "clients":
+        return Api.delete.client
       default:
         break
     }

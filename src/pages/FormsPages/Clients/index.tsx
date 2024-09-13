@@ -18,6 +18,7 @@ import { formatCpf } from "../../../utils/helpers/formatters/cpf"
 import { formatStateRegister } from "../../../utils/helpers/formatters/stateRegister"
 import { formatCep } from "../../../utils/helpers/formatters/cep"
 import { formatPhone } from "../../../utils/helpers/formatters/phone"
+import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 
 const ClientsForm = () => {
   const { id } = useParams()
@@ -36,6 +37,7 @@ const ClientsForm = () => {
       { key: "juridical", value: "Pessoa Jurídica" },
     ],
     states: [],
+    representatives: [],
   })
 
   const [clientType, setClientType] = useState("juridical")
@@ -108,31 +110,34 @@ const ClientsForm = () => {
 
   const loadData = useCallback(async () => {
     try {
-      if (id) {
-        const pInfo = await Api.get.client({ id })
-        setTimeout(() => {
-          if (pInfo.success) {
-            const c = parseClientData(pInfo.data.client)
+      const repReq = await Api.get.representatives({})
 
-            setClient(c)
-          }
-        }, 150)
-      }
+      if (repReq.success) {
+        setOptions((opts) => ({
+          ...opts,
+          states: states,
+          representatives: parseRoOption(repReq.data.list, "name", "id"),
+        }))
+
+        if (id) {
+          const pInfo = await Api.get.client({ id })
+          setTimeout(() => {
+            if (pInfo.success) {
+              const c = parseClientData(pInfo.data.client)
+
+              setClient(c)
+            }
+          }, 150)
+        }
+      } else throw new Error()
     } catch (error) {
       alert("Tente novamente mais tarde")
+      navigate(-1)
     }
   }, [])
 
   useEffect(() => {
     loadData()
-    setOptions((opts) => ({
-      ...opts,
-      states: states,
-    }))
-    setClient((c) => ({
-      ...c,
-      address: { ...c.address, state: states[0].key },
-    }))
   }, [loadData])
 
   useEffect(() => {
@@ -143,9 +148,11 @@ const ClientsForm = () => {
     if (!!client.address.neighborhood) str += `, ${client.address.neighborhood}`
 
     if (!!client.address.city) str += ` - ${client.address.city}`
-    if (!!client.address.state) str += `, ${client.address.state}`
+    if (!!client.address.city && !!client.address.state)
+      str += `, ${client.address.state}`
 
-    setClient((c) => ({ ...c, address: { ...c.address, full: str } }))
+    if (client.address.full !== str)
+      setClient((c) => ({ ...c, address: { ...c.address, full: str } }))
   }, [client.address])
 
   return (
@@ -167,17 +174,24 @@ const ClientsForm = () => {
       <S.FormGroup>
         <S.GroupTitle>Informações gerais</S.GroupTitle>
         <S.FormLine>
-          <Input.Default
-            label="Nome do cliente"
-            value={client.name}
-            onChange={(v) => handleField("name", v)}
-          />
           <Input.Select
             label="Tipo de cliente"
             onChange={setClientType}
             value={clientType}
             roOptions={options.clientType}
           />
+          <Input.Default
+            label="Nome do cliente"
+            value={client.name}
+            onChange={(v) => handleField("name", v)}
+          />
+          {clientType === "juridical" && (
+            <Input.Default
+              label="Nome da empresa"
+              value={client.socialRole}
+              onChange={(v) => handleField("socialRole", v)}
+            />
+          )}
         </S.FormLine>
         {clientType === "phisical" ? (
           <S.FormLine>
@@ -222,6 +236,14 @@ const ClientsForm = () => {
       <S.FormGroup>
         <S.GroupTitle>Informações de envio</S.GroupTitle>
         <S.FormLine>
+          <Input.Readonly
+            label="Endereço completo"
+            value={
+              client.address.full ?? "Seu endereço completo aparecerá aqui"
+            }
+          />
+        </S.FormLine>
+        <S.FormLine>
           <Input.Default
             label="Rua"
             onChange={(v) => handleField("address.street", v)}
@@ -256,10 +278,16 @@ const ClientsForm = () => {
             roOptions={options.states}
           />
         </S.FormLine>
+      </S.FormGroup>
+
+      <S.FormGroup>
+        <S.GroupTitle>Relações de Vendas</S.GroupTitle>
         <S.FormLine>
-          <Input.Readonly
-            label="Endereço completo"
-            value={client.address.full}
+          <Input.Select
+            label="Representante"
+            onChange={(v) => handleField("representative", v)}
+            value={client.representative}
+            roOptions={options.representatives}
           />
         </S.FormLine>
       </S.FormGroup>

@@ -3,10 +3,10 @@ import TableActions from "../../component/Table/TableActions"
 import { TClient } from "../@types/data/client"
 import { TModel } from "../@types/data/model"
 import { TProduct } from "../@types/data/product"
+import { formatCep } from "../helpers/formatters/cep"
 import { formatCnpj } from "../helpers/formatters/cnpj"
 import { formatCpf } from "../helpers/formatters/cpf"
 import { formatMoney } from "../helpers/formatters/money"
-import { formatStateRegister } from "../helpers/formatters/stateRegister"
 
 export const tableConfig: {
   [key: string]: TConfig
@@ -91,18 +91,18 @@ export const tableConfig: {
   clients: {
     columns: [
       { title: "Cliente", field: "name" },
-      { title: "Endereço", field: "address" },
+      { title: "Razão social", field: "socialRole" },
       { title: "CPF / CNPJ", field: "cpfCnpj" },
-      { title: "Insc. Estadual", field: "stateRegister" },
-      { title: "Pedidos feitos", field: "orders", align: "center" },
+      { title: "Endereço", field: "address" },
+      { title: "CEP", field: "cep" },
       { title: "", field: "actions" },
     ],
     specialFields: {
+      socialRole: (item: TClient) => item.socialRole ?? "-",
       address: (item: TClient) => item.address.full,
       cpfCnpj: (item: TClient) =>
         item.cpf ? formatCpf(item.cpf) : formatCnpj(item.cnpj ?? ""),
-      stateRegister: (item: TClient) => formatStateRegister(item.stateRegister),
-      orders: (item: TClient) => item.orders.length,
+      cep: (item: TClient) => formatCep(item.address.cep),
       actions: (item: TClient, deleteCallback) => (
         <TableActions
           table={"clients"}
@@ -111,6 +111,7 @@ export const tableConfig: {
         />
       ),
     },
+    isExpandable: true,
   },
 }
 
@@ -126,4 +127,5 @@ export type TConfig = {
   specialFields: {
     [key: string]: (item: any, prop2?: any) => any
   }
+  isExpandable?: boolean
 }
