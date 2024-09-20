@@ -11,9 +11,10 @@ export type TNewOrder = {
     products: number
     value: number
   }
-  deadline: string
+  deadline: string | Date
   representative: string
   payment: {
+    installments?: string
     type: TPayment
     paymentCode: string
     paymentNumber: string
@@ -37,6 +38,7 @@ export type TOrder = {
   deadline: string
   representative?: string
   payment: {
+    installments?: string
     type: TPayment
     paymentCode: string
     paymentNumber: string
@@ -48,9 +50,11 @@ export type TOrder = {
 
 type TOrderProduct = TProduct & {
   quantity: number
-  status: string
+  status: TOPStatus
 }
 
 export type TPayment = "pix" | "cash" | "slip"
 
 export type TShipping = "transporter" | "representative" | "mail"
+
+export type TOPStatus = "queued" | "lor" | "doing" | "done"

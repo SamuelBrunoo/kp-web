@@ -10,6 +10,7 @@ type Props = {
   setbykey?: boolean
   showValueFromKey?: boolean
   reverse?: boolean
+  avoidAutoSelect?: boolean
 }
 
 const SelectDefault = ({
@@ -20,6 +21,7 @@ const SelectDefault = ({
   setbykey,
   showValueFromKey,
   reverse,
+  avoidAutoSelect,
 }: Props) => {
   const [showing, setShowing] = useState(false)
   const [selected, setSelected] = useState<any>({ value: "" })
@@ -44,9 +46,19 @@ const SelectDefault = ({
     setOptions([...roOptions])
     const v = roOptions.find((o) => o.key === value)
 
-    if (value) setSelected(v)
-    else if (options.length === 0) setSelected(roOptions[0])
-  }, [setOptions, setbykey, roOptions, value, selected, options.length])
+    if (!avoidAutoSelect) {
+      if (value) setSelected(v)
+      else if (options.length === 0) setSelected(roOptions[0])
+    }
+  }, [
+    setOptions,
+    setbykey,
+    roOptions,
+    value,
+    selected,
+    options.length,
+    avoidAutoSelect,
+  ])
 
   useEffect(() => {
     const collapseOwnDropdown = () => {

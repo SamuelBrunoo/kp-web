@@ -46,6 +46,7 @@ export type TParams = {
     order: { id: string }
   }
   pageInfo: {
+    orderForm: {}
     productForm: {}
     models: {}
   }

@@ -12,6 +12,7 @@ declare module "styled-components" {
       blue: {
         darker: string
         main: string
+        pastel: string
       }
       green: {
         main: string

@@ -182,7 +182,7 @@ const ProductForm = () => {
     <S.Content>
       <PageHead
         title={"Produtos"}
-        subtitle="Cadastro de produto"
+        subtitle={`${id ? "Edição" : "Cadastro"} de produto`}
         buttons={[
           { role: "cancel", text: "Cancelar", onClick: handleCancel },
           {

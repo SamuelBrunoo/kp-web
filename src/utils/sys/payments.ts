@@ -1,5 +1,5 @@
 export const payments = {
   pix: "Pix",
-  cash: "Dineiro",
+  cash: "Dinheiro",
   slip: "Boleto",
 }

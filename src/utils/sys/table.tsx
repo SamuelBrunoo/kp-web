@@ -167,6 +167,33 @@ export const tableConfig: {
     },
     isExpandable: true,
   },
+  orderFormProducts: {
+    columns: [
+      { title: "Modelo", field: "model" },
+      { title: "Cor", field: "color" },
+      { title: "Código", field: "code" },
+      { title: "Qnt", field: "quantity", align: "center" },
+      { title: "Valor Un.", field: "unitary" },
+      { title: "Valor Total", field: "total" },
+      { title: "", field: "actions" },
+    ],
+    specialFields: {
+      model: (item: TOrder["products"][number]) => item.model,
+      color: (item: TOrder["products"][number]) => item.color,
+      unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
+      total: (item: TOrder["products"][number]) =>
+        formatMoney(item.price * item.quantity),
+      actions: (item: TOrder["products"][number], deleteCallback) => (
+        <TableActions
+          table={"orderFormProduct"}
+          id={item.id}
+          deleteCallback={deleteCallback}
+          noEdit={true}
+        />
+      ),
+    },
+    isExpandable: true,
+  },
 }
 
 type TColumn = {

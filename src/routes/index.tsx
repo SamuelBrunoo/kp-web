@@ -19,7 +19,7 @@ import ClientsForm from "../pages/FormsPages/Clients"
 
 // # Orders
 import OrdersPage from "../pages/Orders"
-// import OrdersForm from "../pages/FormsPages/Orders"
+import OrdersForm from "../pages/FormsPages/Orders"
 
 const Router = () => {
   return (
@@ -53,8 +53,8 @@ const Router = () => {
           <Route path="orders">
             <Route path={""} element={<OrdersPage />} />
             <Route path="single">
-              <Route path={""} element={<ClientsForm />} />
-              <Route path={":id"} element={<ClientsForm />} />
+              <Route path={""} element={<OrdersForm />} />
+              <Route path={":id"} element={<OrdersForm />} />
             </Route>
           </Route>
           <Route path="orders" element={<></>} />

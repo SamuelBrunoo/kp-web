@@ -530,6 +530,32 @@ const getProductFormPageInfo: TApi["pageInfo"]["productForm"] = async () => {
   })
 }
 
+const getOrderFormPageInfo: TApi["pageInfo"]["orderForm"] = async () => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["pageInfo"]["orderForm"]> =
+      initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>("/pageInfo/orderForm")
+
+      if (req.data.success) {
+        res = generateResponse(req.data.data)
+      } else
+        res = {
+          ...initialResponse,
+          error: {
+            message:
+              "Houve um erro ao carregar os dados. Tente novamente mais tarde",
+          },
+        }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 const getModelsPageInfo: TApi["pageInfo"]["models"] = async () => {
   return new Promise(async (resolve) => {
     let res: TDefaultBodyRes<TResData["pageInfo"]["models"]> = initialResponse
@@ -693,6 +719,7 @@ export const Api: TApi = {
     order: deleteOrder,
   },
   pageInfo: {
+    orderForm: getOrderFormPageInfo,
     productForm: getProductFormPageInfo,
     models: getModelsPageInfo,
   },

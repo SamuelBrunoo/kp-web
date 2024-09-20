@@ -159,7 +159,7 @@ const ClientsForm = () => {
     <S.Content>
       <PageHead
         title={"Clientes"}
-        subtitle="Cadastro de cliente"
+        subtitle={`${id ? "Edição" : "Cadastro"} de cliente`}
         buttons={[
           { role: "cancel", text: "Cancelar", onClick: handleCancel },
           {

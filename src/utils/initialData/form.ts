@@ -1,3 +1,27 @@
+import { TNewOrder } from "../@types/data/order"
+
+const order: TNewOrder = {
+  client: "",
+  orderDate: 0,
+  value: 0,
+  status: "",
+  products: [],
+  total: {
+    products: 0,
+    value: 0,
+  },
+  deadline: new Date(),
+  representative: "",
+  payment: {
+    type: "pix",
+    paymentCode: "",
+    paymentNumber: "",
+    status: "",
+  },
+  shippingType: "mail",
+  emmitter: "",
+}
+
 export const initialForm = {
   product: {
     type: "",
@@ -34,25 +58,5 @@ export const initialForm = {
     phone: "",
     representative: "",
   },
-  order: {
-    client: "",
-    orderDate: 0,
-    value: 0,
-    status: "",
-    products: [],
-    total: {
-      products: 0,
-      value: 0,
-    },
-    deadline: "",
-    representative: "",
-    payment: {
-      type: "",
-      paymentCode: "",
-      paymentNumber: "",
-      status: "",
-    },
-    shippingType: "",
-    emmitter: "",
-  },
+  order,
 }

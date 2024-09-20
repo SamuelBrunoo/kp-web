@@ -11,6 +11,7 @@ export const theme: DefaultTheme = {
     blue: {
       main: "",
       darker: "",
+      pastel: "#6573F2"
     },
     green: {
       main: "#D1EBD4",

@@ -1,5 +1,6 @@
 import { TClient } from "../data/client"
 import { TColor } from "../data/color"
+import { TEmmitter } from "../data/emmitter"
 import { TModel } from "../data/model"
 import { TOrder } from "../data/order"
 import { TProduct } from "../data/product"
@@ -43,7 +44,7 @@ export type TResData = {
   representative: { client: TRepresentative }
 
   orders: { list: TOrder[] }
-  order: { client: TOrder }
+  order: { order: TOrder }
 
   // New
   newProduct: { product: TProduct }
@@ -66,6 +67,15 @@ export type TResData = {
 
   pageInfo: {
     productForm: {
+      prodTypes: TProductType[]
+      models: TModel[]
+      colors: TColor[]
+    }
+    orderForm: {
+      clients: TClient[]
+      emmitters: TEmmitter[]
+      representatives: TRepresentative[]
+      products: TProduct[]
       prodTypes: TProductType[]
       models: TModel[]
       colors: TColor[]
@@ -114,6 +124,7 @@ export type TResponses = {
   }
   pageInfo: {
     productForm: TDefaultRes<TResData["pageInfo"]["productForm"]>
+    orderForm: TDefaultRes<TResData["pageInfo"]["orderForm"]>
     models: TDefaultRes<TResData["pageInfo"]["models"]>
   }
 }

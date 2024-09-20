@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const SelectArea = styled.div<{ $qt: number; $reverse: boolean }>`
+export const SelectArea = styled.div<{ $qt?: number; $reverse?: boolean }>`
   position: relative;
   overflow: visible;
   height: 48px;
@@ -26,7 +26,7 @@ export const SelectArea = styled.div<{ $qt: number; $reverse: boolean }>`
     position: relative;
     background: transparent;
     width: 100%;
-    bottom: -${({ $qt }) => ($qt <= 5 ? $qt * 36 : 5 * 36) + 8}px;
+    bottom: -${({ $qt }) => ($qt ? ($qt <= 5 ? $qt * 36 : 5 * 36) + 8 : 0)}px;
     height: 12px;
   }
 `

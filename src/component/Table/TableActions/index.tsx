@@ -5,12 +5,26 @@ import { Api } from "../../../api"
 import { useNavigate } from "react-router-dom"
 
 type Props = {
-  table: "products" | "models" | "modelVariations" | "clients" | "orders"
+  table:
+    | "products"
+    | "models"
+    | "modelVariations"
+    | "clients"
+    | "orders"
+    | "orderFormProduct"
   id: string
-  deleteCallback?: (params?: any) => void
+  deleteCallback?: (params?: any, p2?: any) => void
+  noEdit?: boolean
+  noDelete?: boolean
 }
 
-const TableActions = ({ table, id, deleteCallback }: Props) => {
+const TableActions = ({
+  table,
+  id,
+  deleteCallback,
+  noEdit,
+  noDelete,
+}: Props) => {
   const navigate = useNavigate()
 
   const handleEdit = () => {
@@ -43,6 +57,8 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
         return Api.delete.client
       case "orders":
         return Api.delete.order
+      case "orderFormProduct":
+        return true
       default:
         break
     }
@@ -53,9 +69,12 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
 
     if (fn) {
       try {
-        const req = await fn({ id })
-        if (req.success && deleteCallback) deleteCallback(id)
-        // confirm modal
+        if (typeof fn === "boolean" && deleteCallback) deleteCallback(id)
+        else if (typeof fn !== "boolean") {
+          // confirm modal
+          const req = await fn({ id })
+          if (req.success && deleteCallback) deleteCallback(id)
+        }
       } catch (error) {
         // alert message
       }
@@ -65,12 +84,16 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
   return (
     <S.Wrapper className="actions-area">
       <S.Content>
-        <S.Action onClick={handleEdit} $role={"edit"}>
-          {icons.edit}
-        </S.Action>
-        <S.Action onClick={handleDelete} $role={"trash"}>
-          {icons.trash}
-        </S.Action>
+        {!noEdit && (
+          <S.Action onClick={handleEdit} $role={"edit"}>
+            {icons.edit}
+          </S.Action>
+        )}
+        {!noDelete && (
+          <S.Action onClick={handleDelete} $role={"trash"}>
+            {icons.trash}
+          </S.Action>
+        )}
       </S.Content>
     </S.Wrapper>
   )
