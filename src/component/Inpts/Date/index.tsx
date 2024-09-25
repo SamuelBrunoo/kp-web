@@ -1,7 +1,10 @@
 import { useRef, useState } from "react"
-import * as S from "../stylesSelect"
+import * as C from "../stylesSelect"
+import * as S from "./styles"
 import icons from "../../../assets/icons"
 import { parseDate } from "../../../utils/helpers/formatters/date"
+import { DatePicker } from "@mui/x-date-pickers"
+import dayjs from "dayjs"
 
 type Props = {
   label?: string
@@ -20,16 +23,29 @@ const DateInput = ({ label, value, onChange }: Props) => {
     setShowing(!showing)
   }
 
+  const handleDate = (val: any) => {
+    const time = new Date(val).getTime()
+    onChange(time)
+    togglePicker()
+  }
+
   return (
-    <S.SelectArea ref={wrapperRef}>
-      {label && <S.Label>{label}</S.Label>}
+    <C.SelectArea ref={wrapperRef}>
+      {label && <C.Label>{label}</C.Label>}
       <S.DataArea ref={dataRef} onClick={togglePicker}>
-        <S.Left>
-          <S.SelectedInfo>{parseDate(value, "ddmmyyyy")}</S.SelectedInfo>
-        </S.Left>
+        <C.Left>
+          <C.SelectedInfo>{parseDate(value, "ddmmyyyy")}</C.SelectedInfo>
+        </C.Left>
         {icons.calendar}
       </S.DataArea>
-    </S.SelectArea>
+      <S.PickerArea>
+        <DatePicker
+          open={showing}
+          onChange={handleDate}
+          minDate={dayjs(new Date())}
+        />
+      </S.PickerArea>
+    </C.SelectArea>
   )
 }
 

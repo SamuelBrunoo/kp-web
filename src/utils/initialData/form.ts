@@ -2,9 +2,9 @@ import { TNewOrder } from "../@types/data/order"
 
 const order: TNewOrder = {
   client: "",
-  orderDate: 0,
+  orderDate: new Date().getTime(),
   value: 0,
-  status: "",
+  status: "queued",
   products: [],
   total: {
     products: 0,

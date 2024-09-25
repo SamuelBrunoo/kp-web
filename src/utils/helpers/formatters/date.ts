@@ -15,6 +15,8 @@ export const parseDate = (date: Date | number | string, format?: TFormats) => {
       return formatDatebrdate(d)
     case "str":
       return formatStrDate(d)
+    case "usa":
+      return formatUsaDate(d)
     default:
       return ""
   }
@@ -45,6 +47,7 @@ const formatDateDDMMYYYY = (date: Date) => {
 
   return `${pad(day)}/${pad(month)}/${year}`
 }
+
 const formatDatebrdate = (date: Date) => {
   const [day, month, year, hour, minute] = [
     date.getDate(),
@@ -55,4 +58,14 @@ const formatDatebrdate = (date: Date) => {
   ]
 
   return `${pad(day)}/${pad(month)}/${year} - ${hour}:${minute}`
+}
+
+const formatUsaDate = (date: Date) => {
+  const [day, month, year] = [
+    date.getDate(),
+    date.getMonth() + 1,
+    date.getFullYear(),
+  ]
+
+  return `${year}-${pad(month)}-${pad(day)}`
 }

@@ -28,7 +28,6 @@ import { TColor } from "../../../utils/@types/data/color"
 import { TModel } from "../../../utils/@types/data/model"
 import { formatMoney } from "../../../utils/helpers/formatters/money"
 import AdditionalInfo from "../../../component/AdditionalInfo"
-import { formatStateRegister } from "../../../utils/helpers/formatters/stateRegister"
 import { parseDate } from "../../../utils/helpers/formatters/date"
 
 const OrdersForm = () => {
@@ -46,7 +45,16 @@ const OrdersForm = () => {
     clients: [],
     representatives: [],
     payments: [],
+    paymentStatus: [
+      { key: "awaiting", value: "Aguardando" },
+      { key: "paid", value: "Pago" },
+    ],
     emmitters: [],
+    shippingTypes: [
+      { key: "mail", value: "Correios" },
+      { key: "representative", value: "Representante" },
+      { key: "transporter", value: "Transportadora" },
+    ],
   })
 
   const [prodTypes, setProdTypes] = useState<TProductType[]>([])
@@ -73,15 +81,36 @@ const OrdersForm = () => {
     }
   }
 
-  const handleField = useCallback((field: string, value: any) => {
-    if (field === "client") {
-      setSelectedClient(clients.find((c) => c.id === value) as TClient)
-    } else if (field === "payment") {
-      field = "payment.type"
-    }
+  const handleField = useCallback(
+    (field: string, value: any) => {
+      if (field === "client") {
+        const c = clients.find((c) => c.id === value) as TClient
 
-    setOrder((c) => ({ ...c, [field]: value }))
-  }, [])
+        setSelectedClient(c)
+      } else if (field === "installments") {
+        setOrder((ord) => ({
+          ...ord,
+          payment: { ...ord.payment, installments: value },
+        }))
+        return
+      } else if (field === "payment") {
+        setOrder((ord) => ({
+          ...ord,
+          payment: { ...ord.payment, type: value },
+        }))
+        return
+      } else if (field === "paymentStatus") {
+        setOrder((ord) => ({
+          ...ord,
+          payment: { ...ord.payment, status: value },
+        }))
+        return
+      }
+
+      setOrder((c) => ({ ...c, [field]: value }))
+    },
+    [clients, order]
+  )
 
   const toggleModal = () => setShowingModal(!showingModal)
 
@@ -119,7 +148,28 @@ const OrdersForm = () => {
     setShowingModal(!showingModal)
   }
 
+  const calcTotal = () => {
+    let v = 0
+
+    order.products.forEach((p) => {
+      const prodSum = p.quantity * p.price
+      v += prodSum
+    })
+
+    return v
+  }
+
   // # Initial loading
+
+  useEffect(() => {
+    const total = calcTotal()
+    const prodsQnt = order.products.reduce((sum, p) => sum + p.quantity, 0)
+    setOrder((ord) => ({
+      ...ord,
+      value: total,
+      totals: { products: prodsQnt, value: total },
+    }))
+  }, [order.products])
 
   const loadData = useCallback(async () => {
     try {
@@ -155,11 +205,21 @@ const OrdersForm = () => {
 
         if (id) {
           const orderInfo = await Api.get.order({ id })
-          setTimeout(() => {
-            if (orderInfo.success) {
-              setOrder(orderInfo.data.order)
-            }
-          }, 150)
+
+          if (orderInfo.success) {
+            setTimeout(() => {
+              const data = orderInfo.data.order
+
+              setOrder(data)
+
+              handleField("emmitter", data.emmitter)
+              const c = pageInfo.clients.find(
+                (c) => c.id === (data.client as any)
+              ) as TClient
+
+              setSelectedClient(c)
+            }, 150)
+          }
         }
       } else throw new Error()
     } catch (error) {
@@ -242,6 +302,13 @@ const OrdersForm = () => {
             roOptions={options.representatives}
             avoidAutoSelect={true}
           />
+          <Input.Select
+            label="Método de entrega"
+            onChange={(v) => handleField("shippingType", v)}
+            value={order.shippingType}
+            roOptions={options.shippingTypes}
+            avoidAutoSelect={true}
+          />
         </S.FormLine>
         <S.FormLine>
           <Input.Select
@@ -249,6 +316,12 @@ const OrdersForm = () => {
             onChange={(v) => handleField("payment", v)}
             value={order.payment.type}
             roOptions={options.payments}
+          />
+          <Input.Select
+            label="Status do pagamento"
+            onChange={(v) => handleField("paymentStatus", v)}
+            value={order.payment.status}
+            roOptions={options.paymentStatus}
           />
           <Input.Readonly
             label="Valor total"
@@ -304,6 +377,11 @@ const OrdersForm = () => {
         <S.AdditionalInfosArea>
           <S.AIRow>
             <AdditionalInfo
+              label={"Cliente"}
+              value={selectedClient?.name ?? ""}
+              size={6}
+            />
+            <AdditionalInfo
               icon={"location"}
               label={"Endereço"}
               value={selectedClient?.address.full as string}
@@ -321,37 +399,16 @@ const OrdersForm = () => {
         <S.AdditionalInfosArea>
           <S.AIRow>
             <AdditionalInfo
-              icon={"bookmark"}
-              label={"CPF / CNPJ"}
-              value={
-                selectedClient?.type === "phisical"
-                  ? formatCpf(selectedClient?.cpf ?? "")
-                  : formatCnpj(selectedClient?.cnpj ?? "")
-              }
-              size={3}
-            />
-            <AdditionalInfo
-              icon={"bookmark"}
-              label={"Insc. Estadual"}
-              value={formatStateRegister(selectedClient?.stateRegister ?? "")}
-              size={3}
-            />
-            <AdditionalInfo
               icon={"calendar"}
               label={"Prazo"}
               value={parseDate(order.deadline, "ddmmyyyy")}
-              size={3}
+              size={6}
             />
-          </S.AIRow>
-        </S.AdditionalInfosArea>
-
-        <S.AdditionalInfosArea>
-          <S.AIRow>
             <AdditionalInfo
               icon={"dollarCircle"}
               label={"Valor total"}
               value={formatMoney(order.value)}
-              size={3}
+              size={6}
             />
             <AdditionalInfo
               icon={"dollarCircle"}
@@ -364,20 +421,22 @@ const OrdersForm = () => {
 
         <S.AdditionalInfosArea>
           <S.AIRow>
-            {order.representative && (
-              <AdditionalInfo
-                label={"Representante"}
-                value={order.representative}
-                size={3}
-              />
-            )}
             <AdditionalInfo
               label={"Emissora"}
               value={
                 options.emmitters.find((e) => e.key === order.emmitter)
                   ?.value as string
               }
-              size={3}
+              size={6}
+            />
+            <AdditionalInfo
+              label={"Representante"}
+              value={
+                options.representatives.find(
+                  (r) => r.key === order.representative
+                )?.value ?? "Não definido"
+              }
+              size={6}
             />
           </S.AIRow>
         </S.AdditionalInfosArea>

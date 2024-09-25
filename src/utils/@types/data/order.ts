@@ -5,7 +5,7 @@ export type TNewOrder = {
   client: string
   orderDate: number
   value: number
-  status: string
+  status: TOPStatus
   products: TOrderProduct[]
   total: {
     products: number
@@ -29,7 +29,7 @@ export type TOrder = {
   client: TClient
   orderDate: number
   value: number
-  status: string
+  status: TOPStatus
   products: TOrderProduct[]
   total: {
     products: number

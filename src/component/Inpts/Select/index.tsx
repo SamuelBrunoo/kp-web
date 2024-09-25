@@ -46,9 +46,9 @@ const SelectDefault = ({
     setOptions([...roOptions])
     const v = roOptions.find((o) => o.key === value)
 
-    if (!avoidAutoSelect) {
-      if (value) setSelected(v)
-      else if (options.length === 0) setSelected(roOptions[0])
+    if (value) setSelected(v)
+    else if (options.length === 0) {
+      if (!avoidAutoSelect) setSelected(roOptions[0])
     }
   }, [
     setOptions,
