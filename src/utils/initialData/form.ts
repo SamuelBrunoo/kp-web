@@ -10,7 +10,7 @@ const order: TNewOrder = {
     products: 0,
     value: 0,
   },
-  deadline: new Date(),
+  deadline: new Date().getTime(),
   representative: "",
   payment: {
     type: "pix",

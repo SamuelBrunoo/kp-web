@@ -118,6 +118,7 @@ export const tableConfig: {
   },
   orders: {
     columns: [
+      { title: "Nº", field: "code" },
       { title: "Cliente", field: "clientName" },
       { title: "Data do pedido", field: "orderDate" },
       { title: "Valor", field: "value" },
@@ -189,6 +190,30 @@ export const tableConfig: {
           id={item.id}
           deleteCallback={deleteCallback}
           noEdit={true}
+        />
+      ),
+    },
+    isExpandable: true,
+  },
+  productionLine: {
+    columns: [
+      { title: "Pedido", field: "orderCode" },
+      { title: "Cliente", field: "clientName" },
+      { title: "Data do pedido", field: "orderDate" },
+      { title: "Valor", field: "value" },
+      { title: "Status", field: "status", align: "center" },
+      { title: "Controle", field: "actions", align: "center" },
+    ],
+    specialFields: {
+      clientName: (item: TOrder) => item.client.name,
+      orderDate: (item: TOrder) => parseDate(item.orderDate, "str"),
+      value: (item: TOrder) => formatMoney(item.value),
+      status: (item: TOrder) => getStatus("resume", item.status as any),
+      actions: (item: TOrder, deleteCallback) => (
+        <TableActions
+          table={"orders"}
+          id={item.id}
+          deleteCallback={deleteCallback}
         />
       ),
     },

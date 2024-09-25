@@ -167,7 +167,7 @@ const OrdersForm = () => {
     setOrder((ord) => ({
       ...ord,
       value: total,
-      totals: { products: prodsQnt, value: total },
+      total: { products: prodsQnt, value: total },
     }))
   }, [order.products])
 
@@ -303,11 +303,10 @@ const OrdersForm = () => {
             avoidAutoSelect={true}
           />
           <Input.Select
-            label="Método de entrega"
-            onChange={(v) => handleField("shippingType", v)}
-            value={order.shippingType}
-            roOptions={options.shippingTypes}
-            avoidAutoSelect={true}
+            label="Emissora"
+            onChange={(v) => handleField("emmitter", v)}
+            value={order.emmitter}
+            roOptions={options.emmitters}
           />
         </S.FormLine>
         <S.FormLine>
@@ -323,10 +322,7 @@ const OrdersForm = () => {
             value={order.payment.status}
             roOptions={options.paymentStatus}
           />
-          <Input.Readonly
-            label="Valor total"
-            value={formatMoney(order.value)}
-          />
+          {/* TODO: Table increment installments */}
           {order.payment.type === "slip" && (
             <>
               <Input.Default
@@ -338,16 +334,24 @@ const OrdersForm = () => {
           )}
         </S.FormLine>
         <S.FormLine>
-          <Input.Select
-            label="Emissora"
-            onChange={(v) => handleField("emmitter", v)}
-            value={order.emmitter}
-            roOptions={options.emmitters}
+          <Input.Date
+            label="Data do pedido"
+            onChange={(v) => handleField("orderDate", v)}
+            value={order.orderDate}
           />
           <Input.Date
             label="Prazo"
             onChange={(v) => handleField("deadline", v)}
             value={order.deadline}
+          />
+        </S.FormLine>
+        <S.FormLine>
+          <Input.Select
+            label="Método de entrega"
+            onChange={(v) => handleField("shippingType", v)}
+            value={order.shippingType}
+            roOptions={options.shippingTypes}
+            avoidAutoSelect={true}
           />
         </S.FormLine>
       </S.FormGroup>

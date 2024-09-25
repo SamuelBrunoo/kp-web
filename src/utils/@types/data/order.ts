@@ -11,7 +11,7 @@ export type TNewOrder = {
     products: number
     value: number
   }
-  deadline: string | Date
+  deadline: number | string | Date
   representative: string
   payment: {
     installments?: string
@@ -26,6 +26,7 @@ export type TNewOrder = {
 
 export type TOrder = {
   id: string
+  code: string
   client: TClient
   orderDate: number
   value: number
