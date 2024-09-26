@@ -29,7 +29,12 @@ const OrderDetailsTable = ({
         <S.TableHead>
           <S.RowItem className="normal noHover">
             {config.columns.map((col, k) => (
-              <S.TCol key={k} $size={col.size} $align={col.align}>
+              <S.TCol
+                key={k}
+                $size={col.size}
+                $align={col.align}
+                $width={col.width}
+              >
                 {col.title}
               </S.TCol>
             ))}
@@ -95,6 +100,7 @@ const RowItem = (props: TRowItemProps) => {
               key={k}
               $hasPointer={expandComponent && k !== config.columns.length - 1}
               $align={col.align}
+              $width={col.width}
               onClick={
                 expandComponent && k !== config.columns.length - 1
                   ? toggleExpand

@@ -22,9 +22,11 @@ declare module "styled-components" {
       }
       orange: {
         main: string
+        pastel: string
       }
       red: {
         main: string
+        pastel: string
       }
       white: {
         main: string

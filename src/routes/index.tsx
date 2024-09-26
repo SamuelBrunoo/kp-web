@@ -21,6 +21,9 @@ import ClientsForm from "../pages/FormsPages/Clients"
 import OrdersPage from "../pages/Orders"
 import OrdersForm from "../pages/FormsPages/Orders"
 
+// # Manufacturing
+import ProductionLinesPage from "../pages/ProductionLines"
+
 const Router = () => {
   return (
     <BrowserRouter>
@@ -57,8 +60,7 @@ const Router = () => {
               <Route path={":id"} element={<OrdersForm />} />
             </Route>
           </Route>
-          <Route path="orders" element={<></>} />
-          <Route path="manufacturing" element={<></>} />
+          <Route path="manufacturing" element={<ProductionLinesPage />} />
         </Route>
 
         {/* sys routes */}

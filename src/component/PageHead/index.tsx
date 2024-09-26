@@ -6,7 +6,7 @@ type Props = {
   subtitle?: string
   search?: string
   onChangeSearch?: (v: string) => void
-  buttons: TButton[]
+  buttons?: TButton[]
 }
 
 type TButton = {
@@ -37,18 +37,19 @@ const PageHead = ({
           </S.SearchArea>
         )}
         {subtitle !== undefined && <S.SubTitle>{subtitle}</S.SubTitle>}
-        {buttons.map((btn, k) => (
-          <S.Button key={k} $role={btn.role} onClick={btn.onClick}>
-            {btn.role === "new"
-              ? icons.add
-              : btn.role === "update"
-              ? icons.check
-              : btn.role === "cancel"
-              ? icons.cancel
-              : null}
-            <span>{btn.text}</span>
-          </S.Button>
-        ))}
+        {buttons &&
+          buttons.map((btn, k) => (
+            <S.Button key={k} $role={btn.role} onClick={btn.onClick}>
+              {btn.role === "new"
+                ? icons.add
+                : btn.role === "update"
+                ? icons.check
+                : btn.role === "cancel"
+                ? icons.cancel
+                : null}
+              <span>{btn.text}</span>
+            </S.Button>
+          ))}
       </S.Main>
     </S.Wrapper>
   )

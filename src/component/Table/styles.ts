@@ -19,12 +19,17 @@ export const TableHead = styled.thead`
   border-collapse: collapse;
 `
 
-export const TCol = styled.th<{ $size?: string | number; $align?: string }>`
+export const TCol = styled.th<{
+  $size?: string | number
+  $align?: string
+  $width?: string
+}>`
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 400;
   padding: 12px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.green.lighter};
+  width: ${({ $width }) => $width ?? "unset"};
 `
 
 export const TableBody = styled.tbody<{ $noHover?: boolean }>`
@@ -102,7 +107,11 @@ export const REContainer = styled.div`
   padding: 0 12px;
 `
 
-export const ItemData = styled.td<{ $align?: string; $hasPointer?: boolean }>`
+export const ItemData = styled.td<{
+  $align?: string
+  $hasPointer?: boolean
+  $width?: string
+}>`
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 300;
@@ -111,4 +120,5 @@ export const ItemData = styled.td<{ $align?: string; $hasPointer?: boolean }>`
   border-right: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.green.lighter};
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
+  width: ${({ $width }) => $width ?? "unset"};
 `

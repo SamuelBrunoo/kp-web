@@ -5,6 +5,7 @@ import { TModel } from "../data/model"
 import { TOrder } from "../data/order"
 import { TProduct } from "../data/product"
 import { TProductType } from "../data/productType"
+import { TProductionLine } from "../data/productionLine"
 import { TRepresentative } from "../data/representative"
 
 // Success
@@ -46,24 +47,30 @@ export type TResData = {
   orders: { list: TOrder[] }
   order: { order: TOrder }
 
+  productionLines: { list: TProductionLine[] }
+  productionLine: { productionLine: TProductionLine }
+
   // New
   newProduct: { product: TProduct }
   newModel: { model: TModel }
   newClient: { client: TClient }
   newRepresentative: { representative: TRepresentative }
   newOrder: { representative: TOrder }
+  newProductionLine: { productionLine: TProductionLine }
 
   updateProduct: { product: TProduct }
   updateModel: { model: TModel }
   updateClient: { client: TClient }
   updateRepresentative: { representative: TRepresentative }
   updateOrder: { order: TOrder }
+  updateProductionLine: { productionLine: TProductionLine }
 
   deleteProduct: {}
   deleteModel: {}
   deleteClient: {}
   deleteRepresentative: {}
   deleteOrder: {}
+  deleteProductionLine: {}
 
   pageInfo: {
     productForm: {
@@ -93,6 +100,7 @@ export type TResponses = {
     client: TDefaultRes<TResData["newClient"]>
     representative: TDefaultRes<TResData["newRepresentative"]>
     order: TDefaultRes<TResData["newOrder"]>
+    productionLine: TDefaultRes<TResData["newProductionLine"]>
   }
   update: {
     product: TDefaultRes<TResData["updateProduct"]>
@@ -100,6 +108,7 @@ export type TResponses = {
     client: TDefaultRes<TResData["updateClient"]>
     representative: TDefaultRes<TResData["updateRepresentative"]>
     order: TDefaultRes<TResData["updateOrder"]>
+    productionLine: TDefaultRes<TResData["updateProductionLine"]>
   }
   get: {
     colors: TDefaultRes<TResData["colors"]>
@@ -114,6 +123,8 @@ export type TResponses = {
     representative: TDefaultRes<TResData["representative"]>
     orders: TDefaultRes<TResData["orders"]>
     order: TDefaultRes<TResData["order"]>
+    productionLines: TDefaultRes<TResData["productionLines"]>
+    productionLine: TDefaultRes<TResData["productionLine"]>
   }
   delete: {
     product: TDefaultRes<TResData["deleteProduct"]>
@@ -121,6 +132,7 @@ export type TResponses = {
     client: TDefaultRes<TResData["deleteClient"]>
     representative: TDefaultRes<TResData["deleteRepresentative"]>
     order: TDefaultRes<TResData["deleteOrder"]>
+    productionLine: TDefaultRes<TResData["deleteProductionLine"]>
   }
   pageInfo: {
     productForm: TDefaultRes<TResData["pageInfo"]["productForm"]>

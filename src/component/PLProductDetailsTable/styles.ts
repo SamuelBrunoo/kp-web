@@ -43,6 +43,10 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
 `
 
 export const RowItem = styled.tr`
+  td {
+    padding: 4px;
+  }
+
   &.totals {
     td {
       padding-top: 36px;
@@ -96,7 +100,7 @@ export const ItemData = styled.td<{
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 300;
-  padding: 4px;
+  padding: 0;
   border: none;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   width: ${({ $width }) => $width ?? "unset"};
@@ -109,7 +113,7 @@ export const ResumeProductsData = styled.td<{
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 500;
-  padding: 4px;
+  padding: 0;
   border: none;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   color: ${({ theme }) => theme.colors.green.strong};

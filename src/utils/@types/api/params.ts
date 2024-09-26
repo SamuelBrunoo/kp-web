@@ -3,6 +3,7 @@ import { TModel, TNewModel } from "../data/model"
 import { TClient, TNewClient } from "../data/client"
 import { TNewRepresentative, TRepresentative } from "../data/representative"
 import { TNewOrder, TOrder } from "../data/order"
+import { TNewProductLine, TProductionLine } from "../data/productionLine"
 
 export type TParams = {
   new: {
@@ -11,6 +12,7 @@ export type TParams = {
     client: TNewClient
     representative: TNewRepresentative
     order: TNewOrder
+    productionLine: TNewProductLine
   }
   update: {
     product: TProduct
@@ -18,6 +20,7 @@ export type TParams = {
     client: TClient
     representative: TRepresentative
     order: TOrder
+    productionLine: TProductionLine
   }
   get: {
     colors: {}
@@ -37,6 +40,9 @@ export type TParams = {
 
     orders: {}
     order: { id: string }
+
+    productionLines: {}
+    productionLine: { id: string }
   }
   delete: {
     product: { id: string }
@@ -44,6 +50,7 @@ export type TParams = {
     client: { id: string }
     representative: { id: string }
     order: { id: string }
+    productionLine: { id: string }
   }
   pageInfo: {
     orderForm: {}

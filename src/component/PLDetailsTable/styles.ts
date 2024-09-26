@@ -26,7 +26,7 @@ export const TCol = styled.th<{
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 400;
-  padding: 12px 4px;
+  padding: 12px 8px;
   color: ${({ theme }) => theme.colors.green.strong};
   width: ${({ $width }) => $width ?? "unset"};
 `
@@ -43,6 +43,19 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
 `
 
 export const RowItem = styled.tr`
+  td {
+    padding: 8px;
+
+    &:nth-child(1) {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+    &:nth-last-child(1) {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+  }
+
   &.totals {
     td {
       padding-top: 36px;
@@ -96,7 +109,7 @@ export const ItemData = styled.td<{
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 300;
-  padding: 4px;
+  padding: 0;
   border: none;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   width: ${({ $width }) => $width ?? "unset"};
@@ -109,7 +122,7 @@ export const ResumeProductsData = styled.td<{
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 500;
-  padding: 4px;
+  padding: 0;
   border: none;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   color: ${({ theme }) => theme.colors.green.strong};

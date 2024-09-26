@@ -489,6 +489,46 @@ const getOrder: TApi["get"]["order"] = async ({ id }) => {
   })
 }
 
+const getProductionLines: TApi["get"]["productionLines"] = async () => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["productionLines"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/productionLines?pretty=yes`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
+const getProductionLine: TApi["get"]["productionLine"] = async ({ id }) => {
+  return new Promise(async (resolve) => {
+    let res: TDefaultBodyRes<TResData["productionLine"]> = initialResponse
+
+    try {
+      const req = await axios.get<TBackResponse>(`/productionLines/${id}`)
+
+      if (req.data.success) {
+        const data = req.data.data
+
+        res = generateResponse(data)
+      } else res = { ...initialResponse, error: req.data.error }
+    } catch (error) {
+      res = defaultErrors.connection as any
+    }
+
+    resolve(res)
+  })
+}
+
 // # Pages info
 const getProductFormPageInfo: TApi["pageInfo"]["productForm"] = async () => {
   return new Promise(async (resolve) => {
@@ -710,6 +750,8 @@ export const Api: TApi = {
     representative: getRepresentative,
     orders: getOrders,
     order: getOrder,
+    productionLines: getProductionLines,
+    productionLine: getProductionLine,
   },
   delete: {
     product: deleteProduct,

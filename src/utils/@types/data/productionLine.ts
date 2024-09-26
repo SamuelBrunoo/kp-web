@@ -1,18 +1,65 @@
-export type TProductionLine = {
+import { TOPStatus } from "./order"
+
+// # Firebase
+
+export type TFBLineProductGroup = {
   id: string
-  order: string
-  client: string
-  date: string
-  products: TLineProduct[]
+  status: TOPStatus
+  list: TFBLineProduct[]
 }
 
-type TLineProduct = {
+export type TFBLineProduct = {
+  productionId: string
+  inCharge: string
+  status: TOPStatus
+}
+
+// # New
+
+export type TNewProductLine = {
+  order: TProductionOrder
+  status: string
+  quantity: number
+  products: TFBLineProductGroup[]
+}
+
+// # Client
+
+export type TProductionLine = {
+  id: string
+  order: TProductionOrder
+  status: TOPStatus
+  quantity: number
+  products: TLineProductGroup[]
+}
+
+export type TProductionOrder = {
+  id: string
+  code: string
+  client: {
+    id: string
+    name: string
+    socialRole: string
+  }
+  orderDate: number
+  deadline: number
+}
+
+export type TLineProductGroup = {
+  id: string
   type: string
   model: string
   color: string
-  doing: string
-  qnt: number
-  status: TProductionStatus
+  list: TLineProduct[]
+  status: TOPStatus
 }
 
-type TProductionStatus = "going" | "queue" | "lack" | "done"
+export type TLineProduct = {
+  index: number
+  productionId: string
+  inCharge: {
+    id: string
+    name: string
+  }
+  status: TOPStatus
+}

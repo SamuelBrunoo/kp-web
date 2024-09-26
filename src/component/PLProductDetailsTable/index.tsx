@@ -1,31 +1,28 @@
 import * as S from "./styles"
 import { TConfig } from "../../utils/sys/table"
 import { useState } from "react"
+import { TProductionLine } from "../../utils/@types/data/productionLine"
 
 type Props = {
   config: TConfig
-  data: any[]
+  data: TProductionLine["products"][number]["list"]
   actions?: any[]
   noHover?: boolean
-  search?: string
-  searchFields?: string[]
   expandComponent?: (item: any) => JSX.Element
 }
 
-const Table = ({
+const PLProductDetailsTable = ({
   config,
   data,
-  noHover,
   actions,
-  search,
-  searchFields,
+  noHover,
   expandComponent,
 }: Props) => {
   return (
     <S.Wrapper>
       <S.Table>
         <S.TableHead>
-          <S.RowItem>
+          <S.RowItem className="normal noHover">
             {config.columns.map((col, k) => (
               <S.TCol
                 key={k}
@@ -39,33 +36,15 @@ const Table = ({
           </S.RowItem>
         </S.TableHead>
         <S.TableBody $noHover={noHover}>
-          {data
-            .filter((item) => {
-              let ok = false
-
-              if (!!search) {
-                searchFields?.forEach((sf) => {
-                  if (!ok) {
-                    const v = sf.includes(".")
-                      ? item[sf.split(".")[0]][sf.split(".")[1]]
-                      : item[sf]
-
-                    ok = String(v).toLowerCase().includes(search.toLowerCase())
-                  }
-                })
-              } else ok = true
-
-              return ok
-            })
-            .map((item, k) => (
-              <RowItem
-                key={k}
-                item={item}
-                config={config}
-                actions={actions}
-                expandComponent={expandComponent}
-              />
-            ))}
+          {data.map((item, k) => (
+            <RowItem
+              key={k}
+              item={item}
+              config={config}
+              actions={actions}
+              expandComponent={expandComponent}
+            />
+          ))}
         </S.TableBody>
       </S.Table>
     </S.Wrapper>
@@ -82,13 +61,13 @@ type TRowItemProps = {
 const RowItem = (props: TRowItemProps) => {
   const { item, config, actions, expandComponent } = props
 
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded] = useState(true)
 
-  const toggleExpand = () => setIsExpanded(!isExpanded)
+  const toggleExpand = () => {} // setIsExpanded(!isExpanded)
 
   return (
     <>
-      <S.RowItem className={isExpanded ? "highlighted" : ""}>
+      <S.RowItem className={"normal noHover"}>
         {config.columns.map((col, k) => {
           let content: any = null
 
@@ -114,7 +93,7 @@ const RowItem = (props: TRowItemProps) => {
         })}
       </S.RowItem>
       {config.isExpandable && expandComponent && (
-        <S.RowExpandable className={isExpanded ? "highlighted noBg" : "noBg"}>
+        <S.RowExpandable className={"normal noHover"}>
           <S.REWrapper colSpan={6}>
             <S.REBox $visible={isExpanded}>
               <S.REContainer>{expandComponent(item)}</S.REContainer>
@@ -126,4 +105,4 @@ const RowItem = (props: TRowItemProps) => {
   )
 }
 
-export default Table
+export default PLProductDetailsTable

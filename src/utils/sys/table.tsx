@@ -1,9 +1,11 @@
 import Input from "../../component/Inpts"
+import StatusIndicator from "../../component/StatusIndicator"
 import TableActions from "../../component/Table/TableActions"
 import { TClient } from "../@types/data/client"
 import { TModel } from "../@types/data/model"
 import { TOrder } from "../@types/data/order"
 import { TProduct } from "../@types/data/product"
+import { TProductionLine } from "../@types/data/productionLine"
 import { formatCep } from "../helpers/formatters/cep"
 import { formatCnpj } from "../helpers/formatters/cnpj"
 import { formatCpf } from "../helpers/formatters/cpf"
@@ -11,8 +13,21 @@ import { parseDate } from "../helpers/formatters/date"
 import { formatMoney } from "../helpers/formatters/money"
 import { getStatus } from "../helpers/parsers/getStatus"
 
+type TTableConfigs =
+  | "colors"
+  | "products"
+  | "models"
+  | "modelVariations"
+  | "clients"
+  | "orders"
+  | "orderDetailsProducts"
+  | "orderFormProducts"
+  | "productionLines"
+  | "productProductionGroup"
+  | "productProduction"
+
 export const tableConfig: {
-  [key: string]: TConfig
+  [key in TTableConfigs]: TConfig
 } = {
   colors: {
     columns: [
@@ -148,14 +163,15 @@ export const tableConfig: {
       { title: "Qnt", field: "quantity", align: "center" },
       { title: "Valor Un.", field: "unitary" },
       { title: "Valor Total", field: "total" },
-      { title: "Status", field: "status", align: "center" },
+      { title: "Status", field: "status", align: "center", width: "152px" },
     ],
     specialFields: {
       model: (item: TOrder["products"][number]) => item.model,
       color: (item: TOrder["products"][number]) => item.color,
       unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
-      status: (item: TOrder["products"][number]) =>
-        getStatus("orderProduct", item.status as any),
+      status: (item: TOrder["products"][number]) => (
+        <StatusIndicator status={item.status} />
+      ),
       total: (item: TOrder["products"][number]) =>
         formatMoney(item.price * item.quantity),
       actions: (item: TOrder["products"][number], deleteCallback) => (
@@ -195,29 +211,58 @@ export const tableConfig: {
     },
     isExpandable: true,
   },
-  productionLine: {
+  productionLines: {
     columns: [
       { title: "Pedido", field: "orderCode" },
       { title: "Cliente", field: "clientName" },
       { title: "Data do pedido", field: "orderDate" },
-      { title: "Valor", field: "value" },
-      { title: "Status", field: "status", align: "center" },
-      { title: "Controle", field: "actions", align: "center" },
+      { title: "Produzindo", field: "quantity", align: "center" },
+      { title: "Status", field: "status", align: "center", width: "152px" },
     ],
     specialFields: {
-      clientName: (item: TOrder) => item.client.name,
-      orderDate: (item: TOrder) => parseDate(item.orderDate, "str"),
-      value: (item: TOrder) => formatMoney(item.value),
-      status: (item: TOrder) => getStatus("resume", item.status as any),
-      actions: (item: TOrder, deleteCallback) => (
-        <TableActions
-          table={"orders"}
-          id={item.id}
-          deleteCallback={deleteCallback}
-        />
+      orderCode: (item: TProductionLine) => item.order.code,
+      clientName: (item: TProductionLine) =>
+        item.order.client.name ?? item.order.client.socialRole,
+      orderDate: (item: TProductionLine) =>
+        parseDate(item.order.orderDate, "str"),
+      status: (item: TProductionLine) => (
+        <StatusIndicator status={item.status} />
       ),
     },
     isExpandable: true,
+  },
+  productProductionGroup: {
+    columns: [
+      { title: "Tipo", field: "type" },
+      { title: "Modelo", field: "model" },
+      { title: "Cor/Variação", field: "color" },
+      { title: "Qnt", field: "quantity", align: "center" },
+      { title: "Status", field: "status", align: "center", width: "152px" },
+    ],
+    specialFields: {
+      quantity: (item: TProductionLine["products"][number]) => item.list.length,
+      status: (item: TProductionLine["products"][number]) => (
+        <StatusIndicator status={item.status} />
+      ),
+    },
+    isExpandable: true,
+  },
+  productProduction: {
+    columns: [
+      { title: "Nº", field: "productIndex" },
+      { title: "Responsável", field: "inCharge" },
+      { title: "Status", field: "status", align: "center", width: "152px" },
+    ],
+    specialFields: {
+      productIndex: (
+        item: TProductionLine["products"][number]["list"][number]
+      ) => String(item.index).padStart(3, "0"),
+      inCharge: (item: TProductionLine["products"][number]["list"][number]) =>
+        item.inCharge.name ?? "Não atribuído",
+      status: (item: TProductionLine["products"][number]["list"][number]) => (
+        <StatusIndicator status={item.status} />
+      ),
+    },
   },
 }
 
@@ -226,6 +271,7 @@ type TColumn = {
   field: string
   size?: string | number
   align?: "left" | "center" | "right"
+  width?: string
 }
 
 export type TConfig = {

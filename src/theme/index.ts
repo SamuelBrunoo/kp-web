@@ -11,7 +11,7 @@ export const theme: DefaultTheme = {
     blue: {
       main: "",
       darker: "",
-      pastel: "#6573F2"
+      pastel: "#6573F2",
     },
     green: {
       main: "#D1EBD4",
@@ -21,9 +21,11 @@ export const theme: DefaultTheme = {
     },
     orange: {
       main: "#FABB1B",
+      pastel: "rgba(250, 187, 27, 0.3)",
     },
     red: {
       main: "#F92525",
+      pastel: "rgba(255, 153, 153, 0.3)",
     },
     white: {
       main: "#FFFFFF",

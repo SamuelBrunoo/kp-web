@@ -41,6 +41,12 @@ export type TApi = {
     ) => TResponses["get"]["representative"]
     orders: (p: TParams["get"]["orders"]) => TResponses["get"]["orders"]
     order: (p: TParams["get"]["order"]) => TResponses["get"]["order"]
+    productionLines: (
+      p: TParams["get"]["productionLines"]
+    ) => TResponses["get"]["productionLines"]
+    productionLine: (
+      p: TParams["get"]["productionLine"]
+    ) => TResponses["get"]["productionLine"]
   }
   delete: {
     product: (

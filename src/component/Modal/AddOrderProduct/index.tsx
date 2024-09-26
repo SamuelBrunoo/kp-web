@@ -135,11 +135,13 @@ const MAddOrderProduct = ({ showing, closeFn, data, onSave }: Props) => {
 
       setOptions((opts) => ({ ...opts, types: tOpts }))
 
-      const t = tOpts.sort((a, b) =>
-        a.value.toLowerCase().localeCompare(b.value)
-      )[0].key
+      // # set 1st alphabetical option
 
-      setInfo((inf) => ({ ...inf, type: t }))
+      // const t = tOpts.sort((a, b) =>
+      //   a.value.toLowerCase().localeCompare(b.value)
+      // )[0].key
+
+      setInfo((inf) => ({ ...inf, type: "pendant" }))
     }
   }, [data])
 
