@@ -8,10 +8,10 @@ const Aside = () => {
   const [page, setPage] = useState("")
 
   useEffect(() => {
-    const splitted = location.pathname.split("/dashboard")
-    const val = splitted.length > 1 ? splitted[1].slice(1) : location.pathname
+    const splitted = location.pathname.split("/dashboard")[1].split("/", 10)
+    const val = splitted[1] ?? "dash"
 
-    setPage(!!val ? val : "dash")
+    setPage(val)
   }, [location.pathname])
 
   return (

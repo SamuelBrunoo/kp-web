@@ -9,6 +9,7 @@ import Table from "../../component/Table"
 
 import { Api } from "../../api"
 import { TClient } from "../../utils/@types/data/client"
+import ExpansibleRow from "../../component/ExpandRow"
 
 const ClientsPage = () => {
   const navigate = useNavigate()
@@ -56,7 +57,7 @@ const ClientsPage = () => {
         actions={[deleteCallback]}
         search={search}
         searchFields={["name", "socialRole", "address.full"]}
-        expandComponent={(item) => <span>Em desenvolvimento...</span>}
+        expandComponent={ExpansibleRow.ClientExpand}
       />
     </S.Content>
   )
