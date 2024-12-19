@@ -15,7 +15,7 @@ type TSuccessResponse<T> = {
 }
 
 // Error
-type TErrorResponse = {
+export type TErrorResponse = {
   success: false
   error: {
     message: string

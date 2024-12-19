@@ -3,6 +3,7 @@ import icons from "../../../assets/icons"
 import { Api } from "../../../api"
 
 import { useNavigate } from "react-router-dom"
+import getStore from "../../../store"
 
 type Props = {
   table:
@@ -26,6 +27,8 @@ const TableActions = ({
   noDelete,
 }: Props) => {
   const navigate = useNavigate()
+
+  const { controllers } = getStore()
 
   const handleEdit = () => {
     let url = ""
@@ -74,9 +77,19 @@ const TableActions = ({
           // confirm modal
           const req = await fn({ id })
           if (req.success && deleteCallback) deleteCallback(id)
+          else {
+            if (!req.success) throw new Error(req.error.message)
+            else
+              throw new Error("Ops! Houve um erro, tente novamente mais tarde")
+          }
         }
       } catch (error) {
         // alert message
+        controllers.feedback.setData({
+          message: (error as any).message,
+          state: "error",
+          visible: true,
+        })
       }
     }
   }

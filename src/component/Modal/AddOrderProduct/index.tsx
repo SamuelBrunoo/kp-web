@@ -14,6 +14,7 @@ import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { TRoOption } from "../../../utils/@types/sys/roOptions"
 import { TModel } from "../../../utils/@types/data/model"
 import icons from "../../../assets/icons"
+import { TNewOrder } from "../../../utils/@types/data/order"
 
 type Props = TDefaultProps & {
   onSave: (product: TProduct, quantity: number) => void
@@ -22,6 +23,7 @@ type Props = TDefaultProps & {
     products: TProduct[]
     models: TModel[]
     colors: TColor[]
+    orderProducts: TNewOrder["products"]
   }
 }
 
@@ -43,7 +45,7 @@ const MAddOrderProduct = ({ showing, closeFn, data, onSave }: Props) => {
 
   const handleClose = () => {
     setProduct(undefined)
-    setInfo({ type: "", model: "", color: "", quantity: "0" })
+    setInfo({ type: "", model: "", color: "", quantity: "1" })
     setOptions({ types: [], models: [], colors: [] })
     closeFn()
   }
@@ -55,6 +57,7 @@ const MAddOrderProduct = ({ showing, closeFn, data, onSave }: Props) => {
   const handleAdd = () => {
     if (product) {
       onSave(product, Number(info.quantity) ?? 1)
+      handleClose()
     }
   }
 
@@ -73,7 +76,23 @@ const MAddOrderProduct = ({ showing, closeFn, data, onSave }: Props) => {
     if (m && c) {
       const fullCode = `${m.code}${c.code}`
       const p = data.products.find((p) => p.code === fullCode)
-      setProduct(p)
+      const orderProdData = data.orderProducts.find((p) => p.code === fullCode)
+      const pData: TNewOrder["products"][number] | TProduct | undefined =
+        orderProdData && p
+          ? {
+              ...p,
+              storage: !p?.storage.has
+                ? p?.storage
+                : {
+                    ...p?.storage,
+                    quantity:
+                      p?.storage.quantity - orderProdData?.quantity > -1
+                        ? p?.storage.quantity - orderProdData?.quantity
+                        : 0,
+                  },
+            }
+          : p
+      setProduct(pData)
     }
   }, [info.color])
 

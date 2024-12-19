@@ -1,4 +1,5 @@
 import { TNewOrder } from "../@types/data/order"
+import { getMinDeadline } from "../helpers/date"
 
 const order: TNewOrder = {
   client: "",
@@ -6,19 +7,21 @@ const order: TNewOrder = {
   value: 0,
   status: "queued",
   products: [],
+  productsIds: [],
   total: {
     products: 0,
     value: 0,
   },
-  deadline: new Date().getTime(),
+  deadline: getMinDeadline(14),
   representative: "",
   payment: {
+    installments: "0",
     type: "pix",
     paymentCode: "",
     paymentNumber: "",
     status: "",
   },
-  shippingType: "mail",
+  shippingType: "transporter",
   emmitter: "",
 }
 

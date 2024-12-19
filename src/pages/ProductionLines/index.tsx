@@ -11,11 +11,11 @@ import ExpansibleRow from "../../component/ExpandRow"
 import { TProductionLine } from "../../utils/@types/data/productionLine"
 
 const ProductionLinesPage = () => {
-  const [orders, setOrders] = useState<TProductionLine[]>([])
+  const [productionLines, setProductionLines] = useState<TProductionLine[]>([])
   const [search, setSearch] = useState("")
 
   const deleteCallback = (id: string) => {
-    setOrders((mdls) => mdls.filter((m) => m.id !== id))
+    setProductionLines((pls) => pls.filter((m) => m.id !== id))
   }
 
   const loadData = useCallback(async () => {
@@ -23,7 +23,7 @@ const ProductionLinesPage = () => {
       const req = await Api.get.productionLines({})
       if (req.success) {
         const list = req.data.list
-        setOrders(list)
+        setProductionLines(list)
       } else throw new Error(req.error.message)
     } catch (error) {
       // feedbackError
@@ -48,7 +48,7 @@ const ProductionLinesPage = () => {
       {/* Table */}
       <Table
         config={tableConfig.productionLines}
-        data={orders}
+        data={productionLines}
         actions={[deleteCallback]}
         search={search}
         searchFields={["orderCode", "clientName"]}

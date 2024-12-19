@@ -4,15 +4,9 @@ import { TClient } from "../../../utils/@types/data/client"
 import { formatCep } from "../../../utils/helpers/formatters/cep"
 import { formatCnpj } from "../../../utils/helpers/formatters/cnpj"
 import { formatCpf } from "../../../utils/helpers/formatters/cpf"
-import { parseDate } from "../../../utils/helpers/formatters/date"
-import { formatMoney } from "../../../utils/helpers/formatters/money"
 import { formatStateRegister } from "../../../utils/helpers/formatters/stateRegister"
-import { getStatus } from "../../../utils/helpers/parsers/getStatus"
-import { payments } from "../../../utils/sys/payments"
-import { tableConfig } from "../../../utils/sys/table"
 
 import AdditionalInfo from "../../AdditionalInfo"
-import OrderDetailsTable from "../../OrderDetailsTable"
 import { formatPhone } from "../../../utils/helpers/formatters/phone"
 
 const ClientExpand = (client: TClient) => {

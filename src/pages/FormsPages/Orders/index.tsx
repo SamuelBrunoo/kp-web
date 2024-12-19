@@ -29,11 +29,15 @@ import { TModel } from "../../../utils/@types/data/model"
 import { formatMoney } from "../../../utils/helpers/formatters/money"
 import AdditionalInfo from "../../../component/AdditionalInfo"
 import { parseDate } from "../../../utils/helpers/formatters/date"
+import { validateNewOrder } from "../../../utils/helpers/validators/order"
+import getStore from "../../../store"
 
 const OrdersForm = () => {
   const { id } = useParams()
 
   const navigate = useNavigate()
+
+  const { controllers } = getStore()
 
   const [order, setOrder] = useState<TNewOrder | TOrder>(
     initialForm.order as any
@@ -71,13 +75,37 @@ const OrdersForm = () => {
   }
 
   const handleSave = async () => {
-    if (id) {
-      // edit ...
-      const update = await Api.update.order(order as TOrder)
-      if (update.success) navigate(-1)
+    const check = validateNewOrder(order)
+
+    if (!check.hasErrors) {
+      if (id) {
+        // edit ...
+        const update = await Api.update.order(order as TOrder)
+        if (update.success) {
+          controllers.feedback.setData({
+            message: "Pedido editado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        }
+      } else {
+        const create = await Api.new.order(order as TNewOrder)
+        if (create.success) {
+          controllers.feedback.setData({
+            message: "Pedido adicionado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        }
+      }
     } else {
-      const create = await Api.new.order(order as TNewOrder)
-      if (create.success) navigate(-1)
+      controllers.feedback.setData({
+        message: check.message,
+        state: "error",
+        visible: true,
+      })
     }
   }
 
@@ -132,7 +160,19 @@ const OrdersForm = () => {
 
     // if id already included, sum qnts.
 
-    setOrder((ord) => ({ ...ord, products: [...ord.products, obj] }))
+    const listIndex = order.products.findIndex((op) => op.id === product.id)
+    if (listIndex === -1) {
+      setOrder((ord) => ({ ...ord, products: [...ord.products, obj] }))
+    } else {
+      setOrder((ord) => ({
+        ...ord,
+        products: ord.products.map((op) =>
+          op.id !== product.id
+            ? op
+            : { ...op, quantity: op.quantity + quantity }
+        ),
+      }))
+    }
 
     toggleModal()
   }
@@ -243,6 +283,7 @@ const OrdersForm = () => {
           colors,
           models,
           products: productsList,
+          orderProducts: order.products,
         }}
       />
 

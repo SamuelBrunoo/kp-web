@@ -16,9 +16,13 @@ import { initialForm } from "../../../utils/initialData/form"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { TProductType } from "../../../utils/@types/data/productType"
 import { TNewProduct, TProduct } from "../../../utils/@types/data/product"
+import getStore from "../../../store"
+import Button from "../../../component/Button"
 
 const ProductForm = () => {
   const { id } = useParams()
+
+  const { controllers } = getStore()
 
   const navigate = useNavigate()
 
@@ -51,11 +55,37 @@ const ProductForm = () => {
       // edit ...
       const update = await Api.update.product(product as TProduct)
 
-      if (update.success) navigate(-1)
+      if (update.success) {
+        controllers.feedback.setData({
+          message: "Produto atualizado com sucesso",
+          state: "success",
+          visible: true,
+        })
+        navigate(-1)
+      } else {
+        controllers.feedback.setData({
+          message: update.error.message,
+          state: "alert",
+          visible: true,
+        })
+      }
     } else {
       const create = await Api.new.product(product as TNewProduct)
 
-      if (create.success) navigate(-1)
+      if (create.success) {
+        controllers.feedback.setData({
+          message: "Produto cadastrado com sucesso",
+          state: "success",
+          visible: true,
+        })
+        navigate(-1)
+      } else {
+        controllers.feedback.setData({
+          message: create.error.message,
+          state: "alert",
+          visible: true,
+        })
+      }
     }
   }
 
@@ -139,6 +169,27 @@ const ProductForm = () => {
     }
   }, [options.models])
 
+  const handleDelete = async () => {
+    if (id) {
+      const req = await Api.delete.product({ id })
+
+      if (req.success) {
+        controllers.feedback.setData({
+          message: "Produto deletado com sucesso",
+          state: "success",
+          visible: true,
+        })
+        navigate(-1)
+      } else {
+        controllers.feedback.setData({
+          message: "Ops! Houve um problema. Tente novamente mais tarde.",
+          state: "alert",
+          visible: true,
+        })
+      }
+    }
+  }
+
   // # Initial loading
 
   const loadData = useCallback(async () => {
@@ -168,6 +219,12 @@ const ProductForm = () => {
             }
           }, 150)
         }
+      } else {
+        controllers.feedback.setData({
+          message: pageInfo.error.message,
+          state: "error",
+          visible: true,
+        })
       }
     } catch (error) {
       alert("Tente novamente mais tarde")
@@ -241,6 +298,19 @@ const ProductForm = () => {
           )}
         </S.FormLine>
       </S.FormGroup>
+
+      {id && (
+        <S.FormGroup>
+          <S.FormLine>
+            <Button
+              text="Deletar"
+              color="red"
+              type="primary"
+              action={handleDelete}
+            />
+          </S.FormLine>
+        </S.FormGroup>
+      )}
     </S.Content>
   )
 }

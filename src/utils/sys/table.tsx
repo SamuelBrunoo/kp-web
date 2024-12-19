@@ -83,7 +83,7 @@ export const tableConfig: {
       price: (item: TModel) => formatMoney(item.price),
       actions: (item: TModel, deleteCallback) => (
         <TableActions
-          table={"products"}
+          table={"models"}
           id={item.id}
           deleteCallback={deleteCallback}
         />
@@ -216,6 +216,7 @@ export const tableConfig: {
       { title: "Pedido", field: "orderCode" },
       { title: "Cliente", field: "clientName" },
       { title: "Data do pedido", field: "orderDate" },
+      { title: "Prazo de entrega", field: "deadline" },
       { title: "Produzindo", field: "quantity", align: "center" },
       { title: "Status", field: "status", align: "center", width: "152px" },
     ],
@@ -225,6 +226,8 @@ export const tableConfig: {
         item.order.client.name ?? item.order.client.socialRole,
       orderDate: (item: TProductionLine) =>
         parseDate(item.order.orderDate, "str"),
+      deadline: (item: TProductionLine) =>
+        parseDate(item.order.deadline, "str"),
       status: (item: TProductionLine) => (
         <StatusIndicator status={item.status} />
       ),

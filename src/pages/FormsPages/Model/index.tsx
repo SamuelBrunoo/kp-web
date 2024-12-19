@@ -13,9 +13,12 @@ import { tableConfig } from "../../../utils/sys/table"
 import PageHead from "../../../component/PageHead"
 import Input from "../../../component/Inpts"
 import Table from "../../../component/Table"
+import getStore from "../../../store"
 
 const ModelForm = () => {
   const { id } = useParams()
+
+  const { controllers } = getStore()
 
   const navigate = useNavigate()
 
@@ -55,7 +58,20 @@ const ModelForm = () => {
 
       const update = await Api.update.model({ ...model, colors: cls } as TModel)
 
-      if (update.success) navigate(-1)
+      if (update.success) {
+        controllers.feedback.setData({
+          message: "Modelo atualizado com sucesso",
+          state: "success",
+          visible: true,
+        })
+        navigate(-1)
+      } else {
+        controllers.feedback.setData({
+          message: "Ops! Houve um problema. Tente novamente mais tarde.",
+          state: "alert",
+          visible: true,
+        })
+      }
     } else {
       const cls = allowedColors
         .map((ac) => (ac.checked ? ac.code : null))
@@ -63,7 +79,14 @@ const ModelForm = () => {
 
       const create = await Api.new.model({ ...model, colors: cls } as TNewModel)
 
-      if (create.success) navigate(-1)
+      if (create.success) {
+        controllers.feedback.setData({
+          message: "Modelo adicionado com sucesso",
+          state: "success",
+          visible: true,
+        })
+        navigate(-1)
+      }
     }
   }
 

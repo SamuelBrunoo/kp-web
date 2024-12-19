@@ -7,6 +7,7 @@ export type TNewOrder = {
   value: number
   status: TOPStatus
   products: TOrderProduct[]
+  productsIds: string[]
   total: {
     products: number
     value: number
@@ -32,6 +33,7 @@ export type TOrder = {
   value: number
   status: TOPStatus
   products: TOrderProduct[]
+  productsIds: string[]
   total: {
     products: number
     value: number

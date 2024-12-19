@@ -21,7 +21,7 @@ const Aside = () => {
           <S.UserArea>
             <S.UserProfile />
             <S.UserData>
-              <S.UserName>Keila linda</S.UserName>
+              <S.UserName>Keila Coelho</S.UserName>
               <S.UserEmail>keeilacooelho@hotmail.com</S.UserEmail>
             </S.UserData>
           </S.UserArea>
