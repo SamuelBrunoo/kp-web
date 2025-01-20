@@ -150,8 +150,6 @@ const ProductForm = () => {
 
       const parsedOptions = parseRoOption(mColors, "name", "code")
 
-      console.log(m)
-
       setOptions((o) => ({
         ...o,
         colors: parsedOptions,

@@ -139,7 +139,6 @@ const ModelForm = () => {
         }
       }
     } catch (error) {
-      console.log(error)
       alert("Tente novamente mais tarde")
     }
   }, [id, options.storage])

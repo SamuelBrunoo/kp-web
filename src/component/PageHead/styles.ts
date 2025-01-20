@@ -9,7 +9,9 @@ export const Wrapper = styled.div`
 export const Title = styled.h1`
   margin: 0;
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Poppins";
+  color: ${({ theme }) => theme.colors.green[260]};
 `
 
 export const Main = styled.div`
@@ -24,9 +26,6 @@ export const SearchArea = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 4px 12px;
-  border-radius: 6px;
-  background-color: ${({ theme }) => theme.colors.green[260]};
   align-self: stretch;
 
   color: ${({ theme }) => theme.colors.neutral[500]};

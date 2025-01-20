@@ -1,12 +1,23 @@
 import * as S from "./styles"
-import icons from "../../assets/icons"
+import Input from "../Inpts"
+import { TRoOption } from "../../utils/@types/sys/roOptions"
+import Button from "../Button"
 
 type Props = {
   title: string
   subtitle?: string
   search?: string
   onChangeSearch?: (v: string) => void
+  onFilterChange?: (filter: string, v: string) => void
+  filters?: TFilter[]
   buttons?: TButton[]
+}
+
+export type TFilter = {
+  name: string
+  label: string
+  value: any
+  options: TRoOption[]
 }
 
 type TButton = {
@@ -19,37 +30,50 @@ const PageHead = ({
   title,
   subtitle,
   search,
+  onFilterChange,
   onChangeSearch,
+  filters,
   buttons,
 }: Props) => {
+  const handleFilter = (filterKey: string, value: string) => {
+    onFilterChange && onFilterChange(filterKey, value)
+  }
+
+  const handleSearch = () => {
+    // ...
+  }
+
   return (
     <S.Wrapper>
       <S.Title>{title}</S.Title>
       <S.Main>
-        {search !== undefined && onChangeSearch !== undefined && (
-          <S.SearchArea>
-            <icons.search />
-            <S.SearchInput
+        {subtitle && <S.SubTitle>{subtitle}</S.SubTitle>}
+        <S.SearchArea>
+          {search !== undefined && onChangeSearch !== undefined && (
+            <Input.PageSearch
               placeholder="Pesquisar..."
               value={search}
-              onChange={(e) => onChangeSearch(e.target.value)}
+              onChange={onChangeSearch}
             />
-          </S.SearchArea>
-        )}
-        {subtitle !== undefined && <S.SubTitle>{subtitle}</S.SubTitle>}
-        {buttons &&
-          buttons.map((btn, k) => (
-            <S.Button key={k} $role={btn.role} onClick={btn.onClick}>
-              {btn.role === "new" ? (
-                <icons.add />
-              ) : btn.role === "update" ? (
-                <icons.check />
-              ) : btn.role === "cancel" ? (
-                <icons.cancel />
-              ) : null}
-              <span>{btn.text}</span>
-            </S.Button>
-          ))}
+          )}
+          {filters &&
+            filters.map((filter, k) => (
+              <Input.PageSearchSelect
+                key={k}
+                onChange={(v) => handleFilter(filter.name, v)}
+                roOptions={filter.options}
+                value={filter.value}
+                label={filter.label}
+              />
+            ))}
+        </S.SearchArea>
+
+        <Button
+          action={handleSearch}
+          color="green"
+          text="Buscar"
+          type="primary"
+        />
       </S.Main>
     </S.Wrapper>
   )

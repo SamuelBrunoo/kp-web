@@ -73,7 +73,7 @@ export const tableConfig: {
       { title: "Código", field: "code" },
       { title: "Cores", field: "colors", align: "center" },
       { title: "Estoque", field: "storage", align: "center" },
-      { title: "Preço", field: "price" },
+      { title: "Preço Base", field: "price" },
       { title: "", field: "actions" },
     ],
     specialFields: {

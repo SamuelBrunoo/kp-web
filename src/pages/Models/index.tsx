@@ -18,10 +18,16 @@ const ModelsPage = () => {
 
   const [models, setModels] = useState<TModel[]>([])
   const [search, setSearch] = useState("")
+  const [filters, setFilters] = useState<{ [key: string]: string }>({
+    type: "all",
+  })
 
   const handleNew = () => {
     navigate("single")
   }
+
+  const handleFilter = (filter: string, value: string) =>
+    setFilters((ftrs) => ({ ...ftrs, [filter]: value }))
 
   const deleteCallback = async (id: string) => {
     try {
@@ -73,6 +79,19 @@ const ModelsPage = () => {
         title={"Modelos"}
         search={search}
         onChangeSearch={setSearch}
+        filters={[
+          {
+            name: "type",
+            label: "Tipo",
+            options: [
+              { key: "all", value: "Todos" },
+              { key: "pendants", value: "Pingentes" },
+              { key: "clamps", value: "Abraçadeiras" },
+            ],
+            value: filters.type,
+          },
+        ]}
+        onFilterChange={handleFilter}
         buttons={[{ role: "new", text: "Novo", onClick: handleNew }]}
       />
 

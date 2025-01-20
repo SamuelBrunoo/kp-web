@@ -10,8 +10,6 @@ export const Wrapper = styled.div`
 `
 
 export const Table = styled.table`
-  border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors.green[260]};
   border-spacing: 0;
 `
 
@@ -24,12 +22,12 @@ export const TCol = styled.th<{
   $align?: string
   $width?: string
 }>`
+  width: ${({ $width }) => $width ?? "unset"};
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
   font-weight: 400;
-  padding: 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.green[260]};
-  width: ${({ $width }) => $width ?? "unset"};
+  padding: 13px 12px;
+  color: ${({ theme }) => theme.colors.green[260]};
 `
 
 export const TableBody = styled.tbody<{ $noHover?: boolean }>`

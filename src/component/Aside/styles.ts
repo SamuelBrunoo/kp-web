@@ -3,6 +3,7 @@ import styled from "styled-components"
 export const Component = styled.div`
   padding: 10px;
   max-width: 240px;
+  border-right: 1px solid ${({ theme }) => theme.colors.green[200]};
 `
 
 export const Container = styled.div`
