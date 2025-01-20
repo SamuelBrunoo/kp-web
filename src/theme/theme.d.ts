@@ -1,37 +1,44 @@
 import "./styled-components"
 
+type TMultiToneColor = {
+  100: string
+  130: string
+  160: string
+  200: string
+  230: string
+  260: string
+  300: string
+  330: string
+  360: string
+  400: string
+  430: string
+  460: string
+  500: string
+  530: string
+  560: string
+  600: string
+  630: string
+  660: string
+}
+
 declare module "styled-components" {
   export interface DefaultTheme {
     colors: {
-      black: {
-        main: string
+      neutral: {
+        100: string
+        200: string
+        300: string
+        400: string
+        500: string
+        600: string
+        700: string
+        800: string
+        900: string
       }
-      grey: {
-        main: string
-      }
-      blue: {
-        darker: string
-        main: string
-        pastel: string
-      }
-      green: {
-        main: string
-        light: string
-        lighter: string
-        strong: string
-      }
-      orange: {
-        main: string
-        pastel: string
-      }
-      red: {
-        main: string
-        pastel: string
-      }
-      white: {
-        main: string
-        secondary: string
-      }
+      green: TMultiToneColor
+      orange: TMultiToneColor
+      blue: TMultiToneColor
+      red: TMultiToneColor
     }
     bp: {
       large: number

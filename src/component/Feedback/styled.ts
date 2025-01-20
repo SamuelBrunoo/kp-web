@@ -19,15 +19,15 @@ export const Box = styled.div<{
   border-radius: 24px;
   background-color: ${({ $color, theme }) =>
     $color === "green"
-      ? theme.colors.green.strong
+      ? theme.colors.green[360]
       : $color === "orange"
-      ? theme.colors.orange.main
+      ? theme.colors.orange[560]
       : "#D8484A"};
   box-shadow: 0 3px 16px rgba(0, 0, 0, 0.08);
 
   span {
     font-size: 12px;
-    color: ${({ theme }) => theme.colors.white.main};
+    color: ${({ theme }) => theme.colors.neutral[900]};
     text-align: center;
   }
 

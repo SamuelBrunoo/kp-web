@@ -23,7 +23,7 @@ const ColorCheckbox = ({ checked, onChange }: Props) => {
       }}
       onClick={handleClick}
     >
-      {checked && icons.check}
+      {checked && <icons.check />}
     </div>
   )
 }

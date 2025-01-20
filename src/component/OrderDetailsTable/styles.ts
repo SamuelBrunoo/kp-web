@@ -27,7 +27,7 @@ export const TCol = styled.th<{
   font-size: 14px;
   font-weight: 400;
   padding: 12px 4px;
-  color: ${({ theme }) => theme.colors.green.strong};
+  color: ${({ theme }) => theme.colors.green[360]};
   width: ${({ $width }) => $width ?? "unset"};
 `
 
@@ -112,5 +112,5 @@ export const ResumeProductsData = styled.td<{
   padding: 4px;
   border: none;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
-  color: ${({ theme }) => theme.colors.green.strong};
+  color: ${({ theme }) => theme.colors.green[360]};
 `

@@ -22,7 +22,7 @@ export const Main = styled.div`
 `
 
 export const InfoName = styled.span`
-  color: ${({ theme }) => theme.colors.green.strong};
+  color: ${({ theme }) => theme.colors.green[360]};
   font-weight: 500;
   font-size: 14px;
 `

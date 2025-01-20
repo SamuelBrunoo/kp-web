@@ -6,7 +6,7 @@ export const DataArea = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  color: ${({ theme }) => theme.colors.black.main};
+  color: ${({ theme }) => theme.colors.neutral[100]};
   cursor: pointer;
   flex: 1;
   transition: color 0.3s;

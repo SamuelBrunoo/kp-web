@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 export const ModalBox = styled.div`
-  background-color: ${({ theme }) => theme.colors.white.main};
+  background-color: ${({ theme }) => theme.colors.neutral[900]};
   width: fit-content;
   min-width: 540px;
   border-radius: 12px;

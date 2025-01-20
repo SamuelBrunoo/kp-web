@@ -1,35 +1,54 @@
-import icons from "../../assets/icons"
+import Icons from "../../assets/icons"
+import { TSideMenuItem } from "../@types/components/sidemenu"
 
-export const menu = [
-  { title: "Início", icon: icons.home, slug: "dash", link: "/dashboard" },
+export const menu: TSideMenuItem[] = [
+  {
+    title: "Início",
+    icon: Icons.home,
+    slug: "dash",
+    link: "/dashboard",
+    submenus: [],
+  },
   {
     title: "Modelos",
-    icon: icons.prods,
+    icon: Icons.prods,
     slug: "models",
-    link: "/dashboard/models",
+    link: "/models",
+    submenus: [],
   },
   {
     title: "Produtos",
-    icon: icons.prods,
+    icon: Icons.prods,
     slug: "products",
-    link: "/dashboard/products",
+    link: "/products",
+    submenus: [],
   },
   {
     title: "Clientes",
-    icon: icons.clients,
+    icon: Icons.clients,
     slug: "clients",
-    link: "/dashboard/clients",
+    link: "/clients",
+    submenus: [],
+  },
+  {
+    title: "Representantes",
+    icon: Icons.delegate,
+    slug: "delegates",
+    link: "/delegates",
+    submenus: [],
   },
   {
     title: "Pedidos",
-    icon: icons.orders,
+    icon: Icons.orders,
     slug: "orders",
-    link: "/dashboard/orders",
+    link: "/orders",
+    submenus: [],
   },
   {
     title: "Montagem",
-    icon: icons.delegate,
-    slug: "manufacturing",
-    link: "/dashboard/manufacturing",
+    icon: Icons.orders,
+    slug: "production",
+    link: "/production",
+    submenus: [],
   },
 ]

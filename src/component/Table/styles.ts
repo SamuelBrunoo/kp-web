@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
 
 export const Table = styled.table`
   border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors.green.lighter};
+  border: 1px solid ${({ theme }) => theme.colors.green[260]};
   border-spacing: 0;
 `
 
@@ -28,7 +28,7 @@ export const TCol = styled.th<{
   font-size: 14px;
   font-weight: 400;
   padding: 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.green.lighter};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.green[260]};
   width: ${({ $width }) => $width ?? "unset"};
 `
 
@@ -40,7 +40,7 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
 
     &:not(.noHover):hover {
       ${({ $noHover, theme }) =>
-        $noHover ? "" : `background-color: ${theme.colors.green.lighter};`}
+        $noHover ? "" : `background-color: ${theme.colors.green[260]};`}
 
       .actions-area {
         opacity: 1;
@@ -118,7 +118,6 @@ export const ItemData = styled.td<{
   padding: 12px;
   border-left: none;
   border-right: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.green.lighter};
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   width: ${({ $width }) => $width ?? "unset"};
 `

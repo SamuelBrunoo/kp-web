@@ -26,10 +26,10 @@ export const SearchArea = styled.div`
   gap: 12px;
   padding: 4px 12px;
   border-radius: 6px;
-  background-color: ${({ theme }) => theme.colors.green.lighter};
+  background-color: ${({ theme }) => theme.colors.green[260]};
   align-self: stretch;
 
-  color: ${({ theme }) => theme.colors.grey.main};
+  color: ${({ theme }) => theme.colors.neutral[500]};
 
   svg {
     width: 16px;
@@ -42,14 +42,14 @@ export const SearchInput = styled.input`
   border: none;
   background: none;
   outline: none;
-  color: ${({ theme }) => theme.colors.black.main};
+  color: ${({ theme }) => theme.colors.neutral[100]};
   font-size: 13px;
   font-weight: 400;
   padding: 4px;
   border-radius: 4px;
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors.grey.main};
+    color: ${({ theme }) => theme.colors.neutral[500]};
   }
 `
 
@@ -69,14 +69,14 @@ export const Button = styled.button<{ $role: "new" | "update" | "cancel" }>`
   outline: none;
   background-color: ${({ $role, theme }) =>
     $role === "new"
-      ? theme.colors.green.strong
+      ? theme.colors.green[360]
       : $role === "cancel"
-      ? theme.colors.orange.main
-      : theme.colors.green.strong};
+      ? theme.colors.orange[560]
+      : theme.colors.green[360]};
   border: none;
   box-sizing: border-box;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.white.main};
+  color: ${({ theme }) => theme.colors.neutral[900]};
 
   svg {
     width: 16px;

@@ -5,7 +5,7 @@ export const SelectArea = styled.div<{ $qt?: number; $reverse?: boolean }>`
   overflow: visible;
   height: 48px;
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.blue.main};
+  background-color: ${({ theme }) => theme.colors.blue[500]};
   align-self: flex-end;
   min-width: 240px;
 
@@ -37,7 +37,7 @@ export const DataArea = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  color: ${({ theme }) => theme.colors.black.main};
+  color: ${({ theme }) => theme.colors.neutral[100]};
   cursor: pointer;
   flex: 1;
   transition: color 0.3s;
@@ -45,7 +45,7 @@ export const DataArea = styled.div`
 
   svg {
     transition: transform 0.3s;
-    fill: ${({ theme }) => theme.colors.black.main};
+    fill: ${({ theme }) => theme.colors.neutral[100]};
     transform: rotate(0deg);
     width: 14px;
     height: 14px;
@@ -65,7 +65,7 @@ export const Left = styled.div`
 `
 
 export const Label = styled.span`
-  color: ${({ theme }) => theme.colors.grey.main};
+  color: ${({ theme }) => theme.colors.neutral[500]};
   white-space: nowrap;
   margin-left: 8px;
   transition: top 0.3s, font-size 0.3s, color 0.3s;
@@ -88,7 +88,7 @@ export const OptionsArea = styled.div<{ $reverse: boolean }>`
   right: 0;
   left: 0px;
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.white.main};
+  background-color: ${({ theme }) => theme.colors.neutral[900]};
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   max-height: 180px;
@@ -108,10 +108,10 @@ export const Option = styled.div`
   font-size: 12px;
   font-weight: 300;
   white-space: nowrap;
-  color: ${({ theme }) => theme.colors.grey.main};
+  color: ${({ theme }) => theme.colors.neutral[500]};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.green.lighter};
-    color: ${({ theme }) => theme.colors.black.main};
+    background-color: ${({ theme }) => theme.colors.green[260]};
+    color: ${({ theme }) => theme.colors.neutral[100]};
   }
 `

@@ -19,29 +19,29 @@ import { ReactComponent as Location } from "./location.svg"
 import { ReactComponent as Search } from "./search.svg"
 import { ReactComponent as Trash } from "./trash.svg"
 
-const icons = {
-  clients: <Clients />,
-  delegate: <Delegate />,
-  employees: <Employees />,
-  financial: <Financial />,
-  home: <Home />,
-  orders: <Orders />,
-  prods: <Prods />,
+const Icons = {
+  clients: Clients,
+  delegate: Delegate,
+  employees: Employees,
+  financial: Financial,
+  home: Home,
+  orders: Orders,
+  prods: Prods,
 
-  bookmark: <Bookmark />,
-  calendar: <Calendar />,
-  dollarBox: <DollarBox />,
-  dollarCircle: <DollarCircle />,
-  location: <Location />,
+  bookmark: Bookmark,
+  calendar: Calendar,
+  dollarBox: DollarBox,
+  dollarCircle: DollarCircle,
+  location: Location,
 
-  // system
-  add: <Add />,
-  cancel: <Cancel />,
-  check: <Check />,
-  dropdown: <Dropdown />,
-  edit: <Edit />,
-  search: <Search />,
-  trash: <Trash />,
+  // sm
+  add: Add,
+  cancel: Cancel,
+  check: Check,
+  dropdown: Dropdown,
+  edit: Edit,
+  search: Search,
+  trash: Trash,
 }
 
-export default icons
+export default Icons

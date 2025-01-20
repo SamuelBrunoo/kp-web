@@ -17,7 +17,7 @@ export const InfoGroup = styled.div`
 export const IGTitle = styled.span`
   font-size: 14px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.black.main};
+  color: ${({ theme }) => theme.colors.neutral[100]};
 `
 
 export const AdditionalInfosArea = styled.div`

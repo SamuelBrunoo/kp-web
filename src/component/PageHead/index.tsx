@@ -28,7 +28,7 @@ const PageHead = ({
       <S.Main>
         {search !== undefined && onChangeSearch !== undefined && (
           <S.SearchArea>
-            {icons.search}
+            <icons.search />
             <S.SearchInput
               placeholder="Pesquisar..."
               value={search}
@@ -40,13 +40,13 @@ const PageHead = ({
         {buttons &&
           buttons.map((btn, k) => (
             <S.Button key={k} $role={btn.role} onClick={btn.onClick}>
-              {btn.role === "new"
-                ? icons.add
-                : btn.role === "update"
-                ? icons.check
-                : btn.role === "cancel"
-                ? icons.cancel
-                : null}
+              {btn.role === "new" ? (
+                <icons.add />
+              ) : btn.role === "update" ? (
+                <icons.check />
+              ) : btn.role === "cancel" ? (
+                <icons.cancel />
+              ) : null}
               <span>{btn.text}</span>
             </S.Button>
           ))}

@@ -105,7 +105,7 @@ const SelectDefault = ({
               : selected?.value}
           </S.SelectedInfo>
         </S.Left>
-        {icons.dropdown}
+        <icons.dropdown />
       </S.DataArea>
       <S.OptionsArea
         ref={dropRef}

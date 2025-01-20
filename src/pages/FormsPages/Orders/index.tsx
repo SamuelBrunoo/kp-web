@@ -15,7 +15,6 @@ import { TClient } from "../../../utils/@types/data/client"
 import { formatCep } from "../../../utils/helpers/formatters/cep"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { TNewOrder, TOrder } from "../../../utils/@types/data/order"
-import icons from "../../../assets/icons"
 import Table from "../../../component/Table"
 import { tableConfig } from "../../../utils/sys/table"
 import { formatCpf } from "../../../utils/helpers/formatters/cpf"
@@ -400,10 +399,10 @@ const OrdersForm = () => {
       <S.FormGroup $fullSize={true}>
         <S.GroupTitle>Produtos</S.GroupTitle>
         <S.FormLine>
-          <S.Button $role={"add"} onClick={toggleProductsModal}>
-            {icons.add}
-            <span>Adicionar produto</span>
-          </S.Button>
+          {/* <S.Button $role={"add"} onClick={toggleProductsModal}>
+            {icons.add} */}
+          <span>Adicionar produto</span>
+          {/* </S.Button> */}
         </S.FormLine>
         <S.FormLine $fullSize={true}>
           <div style={{ width: "100%" }}>

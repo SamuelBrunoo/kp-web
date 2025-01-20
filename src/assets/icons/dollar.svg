@@ -1,9 +1,9 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_250_5016)">
-<path d="M12 23.1426C18.1541 23.1426 23.1429 18.1539 23.1429 11.9998C23.1429 5.84576 18.1541 0.856934 12 0.856934C5.84601 0.856934 0.857178 5.84576 0.857178 11.9998C0.857178 18.1539 5.84601 23.1426 12 23.1426Z" stroke="#31E521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M14.9174 8.95251C14.8171 8.66862 14.6623 8.41045 14.4655 8.19061C14.047 7.72299 13.4387 7.42871 12.7618 7.42871H10.9926C9.86575 7.42871 8.95227 8.34219 8.95227 9.469C8.95227 10.4278 9.6199 11.2573 10.5566 11.4622L13.2502 12.0514C14.2996 12.281 15.0475 13.2109 15.0475 14.285C15.0475 15.5474 14.0242 16.5716 12.7618 16.5716H11.238C10.2428 16.5716 9.39612 15.9355 9.08233 15.0478" stroke="#31E521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M12 7.42829V5.14258" stroke="#31E521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M12 18.8565V16.5708" stroke="#31E521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 23.1426C18.1541 23.1426 23.1429 18.1539 23.1429 11.9998C23.1429 5.84576 18.1541 0.856934 12 0.856934C5.84601 0.856934 0.857178 5.84576 0.857178 11.9998C0.857178 18.1539 5.84601 23.1426 12 23.1426Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.9174 8.95251C14.8171 8.66862 14.6623 8.41045 14.4655 8.19061C14.047 7.72299 13.4387 7.42871 12.7618 7.42871H10.9926C9.86575 7.42871 8.95227 8.34219 8.95227 9.469C8.95227 10.4278 9.6199 11.2573 10.5566 11.4622L13.2502 12.0514C14.2996 12.281 15.0475 13.2109 15.0475 14.285C15.0475 15.5474 14.0242 16.5716 12.7618 16.5716H11.238C10.2428 16.5716 9.39612 15.9355 9.08233 15.0478" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 7.42829V5.14258" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 18.8565V16.5708" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 <defs>
 <clipPath id="clip0_250_5016">

@@ -13,7 +13,6 @@ import { TColor } from "../../../utils/@types/data/color"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { TRoOption } from "../../../utils/@types/sys/roOptions"
 import { TModel } from "../../../utils/@types/data/model"
-import icons from "../../../assets/icons"
 import { TNewOrder } from "../../../utils/@types/data/order"
 
 type Props = TDefaultProps & {
@@ -50,16 +49,16 @@ const MAddOrderProduct = ({ showing, closeFn, data, onSave }: Props) => {
     closeFn()
   }
 
-  const handleCancel = () => {
-    handleClose()
-  }
+  // const handleCancel = () => {
+  //   handleClose()
+  // }
 
-  const handleAdd = () => {
-    if (product) {
-      onSave(product, Number(info.quantity) ?? 1)
-      handleClose()
-    }
-  }
+  // const handleAdd = () => {
+  //   if (product) {
+  //     onSave(product, Number(info.quantity) ?? 1)
+  //     handleClose()
+  //   }
+  // }
 
   // Operations
 
@@ -224,18 +223,18 @@ const MAddOrderProduct = ({ showing, closeFn, data, onSave }: Props) => {
             </S.FormLine>
           </S.FormGroup>
           <S.Buttons>
-            <S.Button $role="cancel" onClick={handleCancel}>
-              {icons.cancel}
-              <span>Cancelar</span>
-            </S.Button>
+            {/* <S.Button $role="cancel" onClick={handleCancel}>
+              {icons.cancel} */}
+            <span>Cancelar</span>
+            {/* </S.Button>
             <S.Button
               $role="save"
               onClick={product && handleAdd}
               disabled={!product}
             >
-              {icons.check}
-              <span>Salvar</span>
-            </S.Button>
+              {icons.check} */}
+            <span>Salvar</span>
+            {/* </S.Button> */}
           </S.Buttons>
         </S.Content>
       </DS.ModalBox>

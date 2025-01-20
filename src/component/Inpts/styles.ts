@@ -12,7 +12,7 @@ export const InputArea = styled.div<{
 
   span {
     color: ${({ $hasError, theme }) =>
-      $hasError ? theme.colors.red.main : "transparent"};
+      $hasError ? theme.colors.red[460] : "transparent"};
     transition: color 0.3s;
     position: absolute;
     margin-left: 4px;
@@ -65,7 +65,7 @@ export const InpLine = styled.div`
   }
 
   span {
-    color: ${({ theme }) => theme.colors.black.main};
+    color: ${({ theme }) => theme.colors.neutral[100]};
     position: static;
   }
 `
@@ -73,7 +73,7 @@ export const InpLine = styled.div`
 export const Label = styled.label<{ $hasError: boolean }>`
   position: absolute;
   color: ${({ $hasError, theme }) =>
-    $hasError ? theme.colors.red.main : theme.colors.grey.main};
+    $hasError ? theme.colors.red[460] : theme.colors.neutral[500]};
   white-space: nowrap;
   top: 25px;
   left: 10px;
@@ -90,7 +90,7 @@ export const ValueArea = styled.div`
 
 export const Input = styled.input<{ $hasError: boolean }>`
   color: ${({ $hasError, theme }) =>
-    $hasError ? theme.colors.red.main : theme.colors.black.main};
+    $hasError ? theme.colors.red[460] : theme.colors.neutral[100]};
   font-size: inherit;
   font-weight: 300;
   white-space: nowrap;
@@ -104,7 +104,7 @@ export const Input = styled.input<{ $hasError: boolean }>`
 `
 
 export const Value = styled.span`
-  color: ${({ theme }) => theme.colors.black.main};
+  color: ${({ theme }) => theme.colors.neutral[100]};
   font-size: inherit;
   font-weight: 300;
   white-space: nowrap;
@@ -119,7 +119,7 @@ export const DropArea = styled.div<{ $visible: boolean }>`
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  background-color: ${({ theme }) => theme.colors.white.main};
+  background-color: ${({ theme }) => theme.colors.neutral[900]};
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   overflow-y: auto;

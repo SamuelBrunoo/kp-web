@@ -9,23 +9,23 @@ export const Box = styled.div<{ $status: TOPStatus }>`
   border-radius: 6px;
   background-color: ${({ $status, theme }) =>
     $status === "lor"
-      ? theme.colors.red.pastel
+      ? theme.colors.red[630]
       : $status === "done"
-      ? theme.colors.green.lighter
+      ? theme.colors.green[630]
       : $status === "doing"
-      ? theme.colors.blue.pastel
+      ? theme.colors.blue[630]
       : $status === "queued"
-      ? theme.colors.orange.pastel
+      ? theme.colors.orange[530]
       : "currentColor"};
   color: ${({ $status, theme }) =>
     $status === "lor"
-      ? theme.colors.red.main
+      ? theme.colors.red[600]
       : $status === "done"
-      ? theme.colors.green.strong
+      ? theme.colors.green[630]
       : $status === "doing"
-      ? theme.colors.blue.main
+      ? theme.colors.blue[400]
       : $status === "queued"
-      ? theme.colors.orange.main
+      ? theme.colors.orange[400]
       : "currentColor"};
 `
 

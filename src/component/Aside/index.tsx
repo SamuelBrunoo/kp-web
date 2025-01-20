@@ -1,7 +1,8 @@
 import * as S from "./styles"
 import { menu } from "../../utils/sys/menu"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
+import SideMenuItem from "../SidemenuItem"
 
 const Aside = () => {
   const location = useLocation()
@@ -19,7 +20,6 @@ const Aside = () => {
       <S.Container>
         <S.MainContent>
           <S.UserArea>
-            <S.UserProfile />
             <S.UserData>
               <S.UserName>Keila Coelho</S.UserName>
               <S.UserEmail>keeilacooelho@hotmail.com</S.UserEmail>
@@ -27,15 +27,11 @@ const Aside = () => {
           </S.UserArea>
           <S.MenuArea>
             {menu.map((item, k) => (
-              <S.MenuItem
+              <SideMenuItem
                 key={k}
-                className={item.slug === page ? "active" : ""}
-              >
-                <Link to={item.link}>
-                  {item.icon}
-                  <S.MenuTitle>{item.title}</S.MenuTitle>
-                </Link>
-              </S.MenuItem>
+                menuInfo={item}
+                active={page.includes(item.slug)}
+              />
             ))}
           </S.MenuArea>
         </S.MainContent>

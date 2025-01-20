@@ -22,5 +22,5 @@ export const Action = styled.button<{ $role: "edit" | "trash" }>`
   border: none;
 
   color: ${({ $role, theme }) =>
-    $role === "edit" ? theme.colors.orange.main : theme.colors.red.main};
+    $role === "edit" ? theme.colors.orange[560] : theme.colors.red[460]};
 `

@@ -17,33 +17,13 @@ export const FormGroup = styled.div<{ $fullSize?: boolean }>`
 export const GroupTitle = styled.span`
   font-size: 16px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.black.main};
+  color: ${({ theme }) => theme.colors.neutral[100]};
 `
 
 export const FormLine = styled.div<{ $fullSize?: boolean }>`
   display: flex;
   gap: 16px;
   width: ${({ $fullSize }) => ($fullSize ? "100%" : "fit-content")};
-`
-
-export const Button = styled.button<{ $role: "add" | "include" }>`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  outline: none;
-  background-color: ${({ $role, theme }) =>
-    $role === "add" ? theme.colors.green.strong : theme.colors.blue.main};
-  border: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.white.main};
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
 `
 
 // Order Resume
