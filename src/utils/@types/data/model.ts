@@ -11,6 +11,19 @@ export type TModel = {
   price: number
 }
 
+export type TPageListModel = {
+  id: string
+  code: string
+  colors: number
+  name: string
+  price: number
+  type: string
+  storage: {
+    has: boolean
+    quantity: number
+  }
+}
+
 export type TNewModel = {
   code: string
   type: string

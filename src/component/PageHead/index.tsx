@@ -2,6 +2,7 @@ import * as S from "./styles"
 import Input from "../Inpts"
 import { TRoOption } from "../../utils/@types/sys/roOptions"
 import Button from "../Button"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   title: string
@@ -35,8 +36,14 @@ const PageHead = ({
   filters,
   buttons,
 }: Props) => {
+  const navigate = useNavigate()
+
   const handleFilter = (filterKey: string, value: string) => {
     onFilterChange && onFilterChange(filterKey, value)
+  }
+
+  const handleCreate = () => {
+    navigate("single")
   }
 
   const handleSearch = () => {
@@ -45,9 +52,21 @@ const PageHead = ({
 
   return (
     <S.Wrapper>
-      <S.Title>{title}</S.Title>
+      <S.HeaderTop>
+        <S.HeaderTopLeft>
+          <S.Title>{title}</S.Title>
+          {subtitle && <S.SubTitle>{subtitle}</S.SubTitle>}
+        </S.HeaderTopLeft>
+
+        <Button
+          color="green"
+          type="secondary"
+          text="Novo"
+          action={handleCreate}
+          role="new"
+        />
+      </S.HeaderTop>
       <S.Main>
-        {subtitle && <S.SubTitle>{subtitle}</S.SubTitle>}
         <S.SearchArea>
           {search !== undefined && onChangeSearch !== undefined && (
             <Input.PageSearch

@@ -20,20 +20,23 @@ export const Button = styled.button<{
         ? theme.colors.red[300]
         : theme.colors.blue[300]
       : "transparent"};
-  border: 1px solid
-    ${({ $type, $color, theme }) =>
-      $type !== "tertiary"
-        ? $color === "green"
-          ? theme.colors.green[300]
-          : $color === "orange"
-          ? theme.colors.orange[300]
-          : $color === "red"
-          ? theme.colors.red[300]
-          : theme.colors.blue[300]
-        : "transparent"};
+  border: 1px solid transparent;
   box-sizing: border-box;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.neutral[800]};
+
+  color: ${({ $type, $color, theme }) => {
+    const colorRelation = {
+      green: theme.colors.green[300],
+      orange: theme.colors.orange[300],
+      red: theme.colors.red[300],
+      blue: theme.colors.blue[300],
+    }
+
+    const color =
+      $type === "primary" ? theme.colors.neutral[800] : colorRelation[$color]
+
+    return color
+  }};
 
   svg {
     width: 16px;
@@ -42,16 +45,5 @@ export const Button = styled.button<{
 
   span {
     font-size: 14px;
-
-    ${({ $type, $color, theme }) =>
-      $type !== "tertiary"
-        ? $color === "green"
-          ? theme.colors.neutral[800]
-          : $color === "orange"
-          ? theme.colors.orange[300]
-          : $color === "red"
-          ? theme.colors.red[300]
-          : theme.colors.blue[300]
-        : "transparent"};
   }
 `

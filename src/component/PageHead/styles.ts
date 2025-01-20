@@ -6,12 +6,32 @@ export const Wrapper = styled.div`
   gap: 24px;
 `
 
+export const HeaderTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`
+
+export const HeaderTopLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+`
+
 export const Title = styled.h1`
   margin: 0;
   font-size: 24px;
   font-weight: 600;
   font-family: "Poppins";
   color: ${({ theme }) => theme.colors.green[260]};
+`
+
+export const SubTitle = styled.h2`
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.orange[360]};
 `
 
 export const Main = styled.div`
@@ -50,13 +70,6 @@ export const SearchInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.colors.neutral[500]};
   }
-`
-
-export const SubTitle = styled.h2`
-  margin: 0;
-  font-size: 18px;
-  font-weight: 400;
-  flex: 1;
 `
 
 export const Button = styled.button<{ $role: "new" | "update" | "cancel" }>`
