@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import * as S from "./styles"
 
 import { useNavigate } from "react-router-dom"
-import { TProduct } from "../../utils/@types/data/product"
+import { TPageListProduct } from "../../utils/@types/data/product"
 import { tableConfig } from "../../utils/sys/table"
 
 import PageHead from "../../component/PageHead"
@@ -13,7 +13,7 @@ import { Api } from "../../api"
 const ProductsPage = () => {
   const navigate = useNavigate()
 
-  const [products, setProducts] = useState<TProduct[]>([])
+  const [products, setProducts] = useState<TPageListProduct[]>([])
   const [search, setSearch] = useState("")
 
   const handleNewProduct = () => {
@@ -26,13 +26,13 @@ const ProductsPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.get.products({})
+      const req = await Api.products.getProductsPageList({})
 
-      if (req.success) {
+      if (req.ok) {
         const { list } = req.data
 
         setProducts(list)
-      } else throw new Error(req.error.message)
+      } else throw new Error(req.error)
     } catch (error) {
       // feedbackError
     }

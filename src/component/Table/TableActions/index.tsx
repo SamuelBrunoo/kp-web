@@ -1,6 +1,5 @@
 import * as S from "./styles"
 import icons from "../../../assets/icons"
-import { Api } from "../../../api"
 
 import { useNavigate } from "react-router-dom"
 import getStore from "../../../store"
@@ -52,18 +51,18 @@ const TableActions = ({
 
   const getDeleteEndpoint = () => {
     switch (table) {
-      case "products":
-        return Api.delete.product
-      case "models":
-        return Api.delete.model
-      case "clients":
-        return Api.delete.client
-      case "orders":
-        return Api.delete.order
+      // case "products":
+      //   return Api.delete.product
+      // case "models":
+      //   return Api.delete.model
+      // case "clients":
+      //   return Api.delete.client
+      // case "orders":
+      //   return Api.delete.order
       case "orderFormProduct":
         return true
       default:
-        break
+        return ({ id }: { id: string }): any => {}
     }
   }
 
@@ -76,9 +75,9 @@ const TableActions = ({
         else if (typeof fn !== "boolean") {
           // confirm modal
           const req = await fn({ id })
-          if (req.success && deleteCallback) deleteCallback(id)
+          if (req.ok && deleteCallback) deleteCallback(id)
           else {
-            if (!req.success) throw new Error(req.error.message)
+            if (!req.ok) throw new Error(req.error)
             else
               throw new Error("Ops! Houve um erro, tente novamente mais tarde")
           }

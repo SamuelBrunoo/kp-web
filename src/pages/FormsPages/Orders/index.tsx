@@ -79,8 +79,8 @@ const OrdersForm = () => {
     if (!check.hasErrors) {
       if (id) {
         // edit ...
-        const update = await Api.update.order(order as TOrder)
-        if (update.success) {
+        const update = await Api.orders.updateOrder({ order: order as TOrder })
+        if (update.ok) {
           controllers.feedback.setData({
             message: "Pedido editado com sucesso",
             state: "success",
@@ -89,8 +89,10 @@ const OrdersForm = () => {
           navigate(-1)
         }
       } else {
-        const create = await Api.new.order(order as TNewOrder)
-        if (create.success) {
+        const create = await Api.orders.createOrder({
+          newOrder: order as TNewOrder,
+        })
+        if (create.ok) {
           controllers.feedback.setData({
             message: "Pedido adicionado com sucesso",
             state: "success",
@@ -212,9 +214,9 @@ const OrdersForm = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.pageInfo.orderForm({})
+      const req = await Api.orders.formBare({})
 
-      if (req.success) {
+      if (req.ok) {
         const pageInfo = req.data
 
         handleField("payment", "pix")
@@ -243,9 +245,9 @@ const OrdersForm = () => {
         }))
 
         if (id) {
-          const orderInfo = await Api.get.order({ id })
+          const orderInfo = await Api.orders.getOrder({ id })
 
-          if (orderInfo.success) {
+          if (orderInfo.ok) {
             setTimeout(() => {
               const data = orderInfo.data.order
 

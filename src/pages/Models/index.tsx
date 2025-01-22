@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import * as S from "./styles"
 
 import { useNavigate } from "react-router-dom"
-import { TModel } from "../../utils/@types/data/model"
+import { TPageListModel } from "../../utils/@types/data/model"
 import { tableConfig } from "../../utils/sys/table"
 
 import PageHead from "../../component/PageHead"
@@ -16,7 +16,7 @@ const ModelsPage = () => {
 
   const { controllers } = getStore()
 
-  const [models, setModels] = useState<TModel[]>([])
+  const [models, setModels] = useState<TPageListModel[]>([])
   const [search, setSearch] = useState("")
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     type: "all",
@@ -31,9 +31,9 @@ const ModelsPage = () => {
 
   const deleteCallback = async (id: string) => {
     try {
-      const req = await Api.delete.model({ id: id })
+      const req = await Api.models.deleteModel({ id: id })
 
-      if (req.success) {
+      if (req.ok) {
         setModels((mdls) => mdls.filter((m) => m.id !== id))
 
         controllers.feedback.setData({
@@ -41,7 +41,7 @@ const ModelsPage = () => {
           state: "error",
           visible: true,
         })
-      } else throw new Error(req.error.message)
+      } else throw new Error(req.error)
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -55,11 +55,11 @@ const ModelsPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.get.models({})
-      if (req.success) {
+      const req = await Api.models.getModelsPageList({})
+      if (req.ok) {
         const list = req.data.list
         setModels(list)
-      } else throw new Error(req.error.message)
+      } else throw new Error(req.error)
     } catch (error) {
       controllers.feedback.setData({
         message: error as string,
@@ -85,8 +85,8 @@ const ModelsPage = () => {
             label: "Tipo",
             options: [
               { key: "all", value: "Todos" },
-              { key: "pendants", value: "Pingentes" },
-              { key: "clamps", value: "Abraçadeiras" },
+              { key: "pendants", value: "Pingente" },
+              { key: "tableNecklace", value: "Colar de mesa" },
             ],
             value: filters.type,
           },

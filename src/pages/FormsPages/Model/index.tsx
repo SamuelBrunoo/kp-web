@@ -24,7 +24,7 @@ const ModelForm = () => {
 
   const [model, setModel] = useState<Partial<TModel>>(initialForm.model as any)
   const [allowedColors, setAllowedColors] = useState<any[]>([])
-  const [variations, setVariations] = useState<any[]>([])
+  const [variations] = useState<any[]>([])
 
   // Page control
 
@@ -56,9 +56,11 @@ const ModelForm = () => {
         .map((ac) => (ac.checked ? ac.code : null))
         .filter((ac) => ac)
 
-      const update = await Api.update.model({ ...model, colors: cls } as TModel)
+      const update = await Api.models.updateModel({
+        model: { ...model, colors: cls } as TModel,
+      })
 
-      if (update.success) {
+      if (update.ok) {
         controllers.feedback.setData({
           message: "Modelo atualizado com sucesso",
           state: "success",
@@ -77,9 +79,11 @@ const ModelForm = () => {
         .map((ac) => (ac.checked ? ac.code : null))
         .filter((ac) => ac)
 
-      const create = await Api.new.model({ ...model, colors: cls } as TNewModel)
+      const create = await Api.models.createModel({
+        newModel: { ...model, colors: cls } as TNewModel,
+      })
 
-      if (create.success) {
+      if (create.ok) {
         controllers.feedback.setData({
           message: "Modelo adicionado com sucesso",
           state: "success",
@@ -98,10 +102,10 @@ const ModelForm = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const reqProdTypes = await Api.get.productTypes({})
-      const reqColors = await Api.get.colors({})
+      const reqProdTypes = await Api.productTypes.getProductTypes({})
+      const reqColors = await Api.colors.getColors({})
 
-      if (reqProdTypes.success && reqColors.success) {
+      if (reqProdTypes.ok && reqColors.ok) {
         const piProdTypes = reqProdTypes.data.list
         const piColors = reqColors.data.list
 
@@ -113,13 +117,13 @@ const ModelForm = () => {
         setOptions((o) => ({ ...o, ...opts }))
 
         if (id) {
-          const pInfo = await Api.get.model({ id })
+          const pInfo = await Api.models.getModel({ id })
 
-          if (pInfo.success) {
-            const { model: modelData, variations: variationsList } = pInfo.data
+          if (pInfo.ok) {
+            const { model: modelData } = pInfo.data
 
             setModel(modelData)
-            setVariations(variationsList)
+            // setVariations(variationsList)
 
             setAllowedColors(
               piColors.map((c) => ({

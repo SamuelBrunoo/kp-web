@@ -36,13 +36,13 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
   const getDeleteEndpoint = () => {
     switch (table) {
       case "products":
-        return Api.delete.product
+        return Api.products.deleteProduct
       case "models":
-        return Api.delete.model
+        return Api.models.deleteModel
       case "clients":
-        return Api.delete.client
+        return Api.clients.deleteClient
       case "orders":
-        return Api.delete.order
+        return Api.orders.deleteOrder
       default:
         break
     }
@@ -54,7 +54,7 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
     if (fn) {
       try {
         const req = await fn({ id })
-        if (req.success && deleteCallback) deleteCallback(id)
+        if (req.ok && deleteCallback) deleteCallback(id)
         // confirm modal
       } catch (error) {
         // alert message

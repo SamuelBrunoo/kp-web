@@ -27,11 +27,11 @@ const ClientsPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.get.clients({})
-      if (req.success) {
+      const req = await Api.clients.getClients({})
+      if (req.ok) {
         const list = req.data.list
         setClients(list)
-      } else throw new Error(req.error.message)
+      } else throw new Error(req.error)
     } catch (error) {
       // feedbackError
     }

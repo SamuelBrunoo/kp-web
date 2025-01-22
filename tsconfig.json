@@ -17,7 +17,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "useUnknownInCatchVariables": false,
     "jsx": "react-jsx",
     "outDir": "build"

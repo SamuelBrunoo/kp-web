@@ -73,11 +73,15 @@ const ClientsForm = () => {
   const handleSave = async () => {
     if (id) {
       // edit ...
-      const update = await Api.update.client(client as TClient)
-      if (update.success) navigate(-1)
+      const update = await Api.clients.updateClient({
+        client: client as TClient,
+      })
+      if (update.ok) navigate(-1)
     } else {
-      const create = await Api.new.client(getNewClientData())
-      if (create.success) navigate(-1)
+      const create = await Api.clients.createClient({
+        newClient: getNewClientData(),
+      })
+      if (create.ok) navigate(-1)
     }
   }
 
@@ -110,9 +114,9 @@ const ClientsForm = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const repReq = await Api.get.representatives({})
+      const repReq = await Api.representatives.getRepresentatives({})
 
-      if (repReq.success) {
+      if (repReq.ok) {
         setOptions((opts) => ({
           ...opts,
           states: states,
@@ -120,10 +124,10 @@ const ClientsForm = () => {
         }))
 
         if (id) {
-          const pInfo = await Api.get.client({ id })
+          const pInfo = await Api.clients.getClient({ id })
           setTimeout(() => {
-            if (pInfo.success) {
-              const c = parseClientData(pInfo.data.client)
+            if (pInfo.ok) {
+              const c = parseClientData(pInfo.data)
 
               setClient(c)
             }

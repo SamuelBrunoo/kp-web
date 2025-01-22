@@ -1,18 +1,18 @@
 import axios from "axios"
-import { TApi } from "../utils/@types/api"
+import { TApi } from "./types"
+import { jwtDecode } from "jwt-decode"
+
+// Api
+
+import { apiModels } from "./api/models"
 import { TDefaultBodyRes, TErrorResponse } from "../utils/@types/api/responses"
-
-// Controllers
-import * as ClientController from "./dataControllers/client"
-import * as ColorController from "./dataControllers/colors"
-import * as ModelController from "./dataControllers/model"
-import * as OrderController from "./dataControllers/order"
-import * as ProductController from "./dataControllers/product"
-import * as ProductLineController from "./dataControllers/productLine"
-import * as ProductTypeController from "./dataControllers/productType"
-import * as RepresentativeController from "./dataControllers/representative"
-
-axios.defaults.baseURL = process.env.REACT_APP_BACKURL
+import { apiClients } from "./api/clients"
+import { apiColors } from "./api/colors"
+import { apiProducts } from "./api/products"
+import { apiOrders } from "./api/orders"
+import { apiProductionLines } from "./api/productLine.ts"
+import { apiRepresentatives } from "./api/representative"
+import { apiProductTypes } from "./api/productTypes"
 
 export const initialResponse: TErrorResponse = {
   success: false,
@@ -37,51 +37,59 @@ export const generateResponse = <T>(info: any): TDefaultBodyRes<T> => {
   }
 }
 
+const backUrl = process.env.REACT_APP_API_BASE_URL
+
+axios.defaults.baseURL = backUrl
+
+const checkTokenExpiration = (token: string) => {
+  try {
+    const decoded = jwtDecode(token)
+
+    const now = +new Date().getTime().toFixed(0)
+
+    const exp = (decoded.exp as number) * 1000
+
+    return now > exp
+  } catch (error) {
+    return true
+  }
+}
+
+axios.interceptors.request.use(function (config) {
+  try {
+    const localToken = localStorage.getItem("token")
+
+    if (localToken) {
+      if (localToken === "undefined") {
+        localStorage.removeItem("token")
+
+        window.location.reload()
+      } else {
+        const isTokenExpired = checkTokenExpiration(localToken)
+
+        if (isTokenExpired) {
+          localStorage.removeItem("token")
+
+          window.location.reload()
+        } else config.headers.Authorization = `Bearer ${localToken}`
+      }
+    }
+
+    return config
+  } catch (error) {
+    return config
+  }
+})
+
 export const service = axios
 
-// --- API ---
-
 export const Api: TApi = {
-  new: {
-    product: ProductController.newProduct,
-    model: ModelController.newModel,
-    client: ClientController.newClient,
-    representative: RepresentativeController.newRepresentative,
-    order: OrderController.newOrder,
-  },
-  update: {
-    product: ProductController.updateProduct,
-    model: ModelController.updateModel,
-    client: ClientController.updateClient,
-    representative: RepresentativeController.updateRepresentative,
-    order: OrderController.updateOrder,
-  },
-  get: {
-    colors: ColorController.getColors,
-    products: ProductController.getProducts,
-    product: ProductController.getProduct,
-    productTypes: ProductTypeController.getProductTypes,
-    models: ModelController.getModels,
-    model: ModelController.getModel,
-    clients: ClientController.getClients,
-    client: ClientController.getClient,
-    representatives: RepresentativeController.getRepresentatives,
-    representative: RepresentativeController.getRepresentative,
-    orders: OrderController.getOrders,
-    order: OrderController.getOrder,
-    productionLines: ProductLineController.getProductionLines,
-    productionLine: ProductLineController.getProductionLine,
-  },
-  delete: {
-    product: ProductController.deleteProduct,
-    model: ModelController.deleteModel,
-    client: ClientController.deleteClient,
-    representative: RepresentativeController.deleteRepresentative,
-    order: OrderController.deleteOrder,
-  },
-  pageInfo: {
-    orderForm: OrderController.getOrderFormPageInfo,
-    productForm: ProductController.getProductFormPageInfo,
-    models: ModelController.getModelsPageInfo,
-  },
+  models: apiModels,
+  clients: apiClients,
+  colors: apiColors,
+  orders: apiOrders,
+  productionLines: apiProductionLines,
+  products: apiProducts,
+  productTypes: apiProductTypes,
+  representatives: apiRepresentatives,
 }

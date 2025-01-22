@@ -53,9 +53,11 @@ const ProductForm = () => {
   const handleSave = async () => {
     if (id) {
       // edit ...
-      const update = await Api.update.product(product as TProduct)
+      const update = await Api.products.updateProduct({
+        product: product as TProduct,
+      })
 
-      if (update.success) {
+      if (update.ok) {
         controllers.feedback.setData({
           message: "Produto atualizado com sucesso",
           state: "success",
@@ -64,15 +66,17 @@ const ProductForm = () => {
         navigate(-1)
       } else {
         controllers.feedback.setData({
-          message: update.error.message,
+          message: update.error,
           state: "alert",
           visible: true,
         })
       }
     } else {
-      const create = await Api.new.product(product as TNewProduct)
+      const create = await Api.products.createProduct({
+        newProduct: product as TNewProduct,
+      })
 
-      if (create.success) {
+      if (create.ok) {
         controllers.feedback.setData({
           message: "Produto cadastrado com sucesso",
           state: "success",
@@ -81,7 +85,7 @@ const ProductForm = () => {
         navigate(-1)
       } else {
         controllers.feedback.setData({
-          message: create.error.message,
+          message: create.error,
           state: "alert",
           visible: true,
         })
@@ -169,9 +173,9 @@ const ProductForm = () => {
 
   const handleDelete = async () => {
     if (id) {
-      const req = await Api.delete.product({ id })
+      const req = await Api.products.deleteProduct({ id })
 
-      if (req.success) {
+      if (req.ok) {
         controllers.feedback.setData({
           message: "Produto deletado com sucesso",
           state: "success",
@@ -192,9 +196,9 @@ const ProductForm = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const pageInfo = await Api.pageInfo.productForm({})
+      const pageInfo = await Api.products.formBare({})
 
-      if (pageInfo.success) {
+      if (pageInfo.ok) {
         const opts = {
           prodTypes: parseRoOption(pageInfo.data.prodTypes, "name", "code"),
           models: parseRoOption(pageInfo.data.models, "name", "code"),
@@ -208,10 +212,10 @@ const ProductForm = () => {
         setColors(pageInfo.data.colors)
 
         if (id) {
-          const pInfo = await Api.get.product({ id })
+          const pInfo = await Api.products.getProduct({ id })
           setTimeout(() => {
-            if (pInfo.success) {
-              const p = pInfo.data.product
+            if (pInfo.ok) {
+              const p = pInfo.data
 
               setProduct(p)
             }
@@ -219,7 +223,7 @@ const ProductForm = () => {
         }
       } else {
         controllers.feedback.setData({
-          message: pageInfo.error.message,
+          message: pageInfo.error,
           state: "error",
           visible: true,
         })

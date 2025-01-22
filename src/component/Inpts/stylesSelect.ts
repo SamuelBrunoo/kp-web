@@ -3,11 +3,11 @@ import styled from "styled-components"
 export const SelectArea = styled.div<{ $qt?: number; $reverse?: boolean }>`
   position: relative;
   overflow: visible;
-  height: 48px;
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.blue[500]};
-  align-self: flex-end;
+  height: 100%;
+  /* flex: 1; */
+  align-self: stretch;
   min-width: 240px;
+  max-width: 420px;
 
   ${({ $reverse }) =>
     $reverse
@@ -19,16 +19,6 @@ export const SelectArea = styled.div<{ $qt?: number; $reverse?: boolean }>`
       }
     }
   `}
-
-  &::after {
-    display: none;
-    content: "";
-    position: relative;
-    background: transparent;
-    width: 100%;
-    bottom: -${({ $qt }) => ($qt ? ($qt <= 5 ? $qt * 36 : 5 * 36) + 8 : 0)}px;
-    height: 12px;
-  }
 `
 
 export const DataArea = styled.div`
@@ -37,11 +27,13 @@ export const DataArea = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 24px;
+  height: 100%;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.neutral[800]};
   color: ${({ theme }) => theme.colors.neutral[100]};
   cursor: pointer;
   flex: 1;
   transition: color 0.3s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   svg {
     transition: transform 0.3s;

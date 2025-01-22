@@ -27,11 +27,11 @@ const OrdersPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.get.orders({})
-      if (req.success) {
+      const req = await Api.orders.getPageListOrders({})
+      if (req.ok) {
         const list = req.data.list
         setOrders(list)
-      } else throw new Error(req.error.message)
+      } else throw new Error(req.error)
     } catch (error) {
       // feedbackError
     }

@@ -20,11 +20,11 @@ const ProductionLinesPage = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.get.productionLines({})
-      if (req.success) {
+      const req = await Api.productionLines.getProductionLines({})
+      if (req.ok) {
         const list = req.data.list
         setProductionLines(list)
-      } else throw new Error(req.error.message)
+      } else throw new Error(req.error)
     } catch (error) {
       // feedbackError
     }

@@ -44,26 +44,6 @@ export const updateModel: TApi["update"]["model"] = async (model) => {
   })
 }
 
-// export const getModelsPageList: TApi["get"]["modelsPageList"] = async () => {
-//   return new Promise(async (resolve) => {
-//     let res: TDefaultBodyRes<TResData["models"]> = initialResponse
-
-//     try {
-//       const req = await service.get<TBackResponse>(`/models?pretty=yes`)
-
-//       if (req.data.success) {
-//         const data = req.data.data
-
-//         res = generateResponse(data)
-//       } else res = { ...initialResponse, error: req.data.error }
-//     } catch (error) {
-//       res = defaultErrors.connection as any
-//     }
-
-//     resolve(res)
-//   })
-// }
-
 export const getModels: TApi["get"]["models"] = async () => {
   return new Promise(async (resolve) => {
     let res: TDefaultBodyRes<TResData["models"]> = initialResponse

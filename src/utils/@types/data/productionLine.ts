@@ -33,6 +33,13 @@ export type TProductionLine = {
   products: TLineProductGroup[]
 }
 
+export type TNewProductionLine = {
+  order: TProductionOrder
+  status: string
+  quantity: number
+  products: TFBLineProductGroup[]
+}
+
 export type TProductionOrder = {
   id: string
   code: string
