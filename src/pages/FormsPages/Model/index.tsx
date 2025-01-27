@@ -5,7 +5,11 @@ import { Api } from "../../../api"
 import * as S from "./styles"
 
 import { TRoOption } from "../../../utils/@types/sys/roOptions"
-import { TModel, TNewModel } from "../../../utils/@types/data/model"
+import {
+  TModel,
+  TModelDetails,
+  TNewModel,
+} from "../../../utils/@types/data/model"
 import { initialForm } from "../../../utils/initialData/form"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { tableConfig } from "../../../utils/sys/table"
@@ -14,6 +18,8 @@ import PageHead from "../../../component/PageHead"
 import Input from "../../../component/Inpts"
 import Table from "../../../component/Table"
 import getStore from "../../../store"
+import Button from "../../../component/Button"
+import { TColor } from "../../../utils/@types/data/color"
 
 const ModelForm = () => {
   const { id } = useParams()
@@ -23,8 +29,10 @@ const ModelForm = () => {
   const navigate = useNavigate()
 
   const [model, setModel] = useState<Partial<TModel>>(initialForm.model as any)
-  const [allowedColors, setAllowedColors] = useState<any[]>([])
-  const [variations] = useState<any[]>([])
+  const [allowedColors, setAllowedColors] = useState<
+    (TColor & { checked: boolean })[]
+  >([])
+  const [variations, setVariations] = useState<TModelDetails["variations"]>([])
 
   // Page control
 
@@ -102,50 +110,40 @@ const ModelForm = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const reqProdTypes = await Api.productTypes.getProductTypes({})
-      const reqColors = await Api.colors.getColors({})
+      const params = id ? { modelId: id } : null
 
-      if (reqProdTypes.ok && reqColors.ok) {
-        const piProdTypes = reqProdTypes.data.list
-        const piColors = reqColors.data.list
+      const req = await Api.formBare.model(params ?? {})
 
-        const opts = {
-          prodTypes: parseRoOption(piProdTypes, "name", "code"),
-          colors: parseRoOption(piColors, "name", "code"),
+      if (req.ok) {
+        const modelInfo = req.data.model
+
+        if (modelInfo) setModel(modelInfo.model)
+
+        const newOptions: { [key: string]: TRoOption[] } = {
+          prodTypes: parseRoOption(req.data.prodTypes, "name", "code"),
+          colors: parseRoOption(req.data.colors, "name", "code"),
         }
 
-        setOptions((o) => ({ ...o, ...opts }))
+        setOptions((opts) => ({
+          ...opts,
+          ...newOptions,
+        }))
 
-        if (id) {
-          const pInfo = await Api.models.getModel({ id })
-
-          if (pInfo.ok) {
-            const { model: modelData } = pInfo.data
-
-            setModel(modelData)
-            // setVariations(variationsList)
-
-            setAllowedColors(
-              piColors.map((c) => ({
-                ...c,
-                checked: modelData.colors.includes(c.code),
-              }))
-            )
-          }
-        } else {
-          setModel((p) => ({
-            ...p,
-            hasStorage: options.storage[0].key,
-            type: opts.prodTypes[0]?.key,
+        setAllowedColors(
+          req.data.colors.map((c) => ({
+            ...c,
+            checked: modelInfo
+              ? modelInfo.model.colors.includes(c.code)
+              : false,
           }))
+        )
 
-          setAllowedColors(piColors.map((c) => ({ ...c, checked: true })))
-        }
+        setVariations(req.data.model ? req.data.model.variations : [])
+      } else {
+        // ...
       }
-    } catch (error) {
-      alert("Tente novamente mais tarde")
-    }
-  }, [id, options.storage])
+    } catch (error) {}
+  }, [id])
 
   useEffect(() => {
     loadData()
@@ -163,7 +161,7 @@ const ModelForm = () => {
           data={allowedColors
             .sort((a, b) => a.name.localeCompare(b.name))
             .slice(i * 6, (i + 1) * 6)}
-          actions={[toggleColor]}
+          actions={{ toggleColor }}
           noHover={true}
         />
       )
@@ -176,26 +174,24 @@ const ModelForm = () => {
     <S.Content>
       <PageHead
         title={"Modelos"}
+        forForm={true}
         subtitle={`${id ? "Edição" : "Cadastro"}`}
-        buttons={[
-          { role: "cancel", text: "Cancelar", onClick: handleCancel },
-          {
-            role: id ? "update" : "new",
-            text: id ? "Salvar" : "Cadastrar",
-            onClick: handleSave,
-          },
-        ]}
       />
 
       {/* form */}
       <S.FormGroup>
         <S.GroupTitle>Informações gerais</S.GroupTitle>
-        <S.FormLine>
+        <S.FormLine
+          style={{
+            alignItems: "flex-end",
+          }}
+        >
           <Input.Select
             label="Tipo"
             onChange={(v) => handleField("type", v)}
             value={model.type}
             roOptions={options.prodTypes}
+            showValueFromKey={true}
           />
           <Input.Default
             label="Nome do modelo"
@@ -223,7 +219,13 @@ const ModelForm = () => {
 
       <S.FormGroup>
         <S.GroupTitle>Cores</S.GroupTitle>
-        <S.FormLine style={{ minWidth: "100%" }}>
+        <S.FormLine
+          style={{
+            minWidth: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           {renderColorsControl()}
         </S.FormLine>
       </S.FormGroup>
@@ -231,9 +233,28 @@ const ModelForm = () => {
       <S.FormGroup>
         <S.GroupTitle>Variações do modelo</S.GroupTitle>
         <S.FormLine style={{ minWidth: "100%" }}>
-          <Table config={tableConfig.modelVariations} data={variations} />
+          <Table
+            config={tableConfig.modelVariations}
+            data={variations}
+            noHover={true}
+          />
         </S.FormLine>
       </S.FormGroup>
+
+      <S.ButtonsArea>
+        <Button
+          color="orange"
+          action={handleCancel}
+          text="Cancelar"
+          type="primary"
+        />
+        <Button
+          color="green"
+          action={handleSave}
+          text={!id ? "Cadastrar" : "Atualizar"}
+          type="primary"
+        />
+      </S.ButtonsArea>
     </S.Content>
   )
 }

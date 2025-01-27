@@ -55,7 +55,7 @@ const ProductsPage = () => {
       <Table
         config={tableConfig.products}
         data={products}
-        actions={[deleteCallback]}
+        actions={{ deleteCallback }}
       />
     </S.Content>
   )

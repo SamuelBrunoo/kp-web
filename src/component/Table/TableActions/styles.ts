@@ -5,6 +5,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s;
+  width: fit-content;
 `
 
 export const Content = styled.div`

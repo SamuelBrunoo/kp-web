@@ -62,7 +62,7 @@ const ModelsPage = () => {
       } else throw new Error(req.error)
     } catch (error) {
       controllers.feedback.setData({
-        message: error as string,
+        message: error.message,
         state: "error",
         visible: true,
       })
@@ -99,7 +99,7 @@ const ModelsPage = () => {
       <Table
         config={tableConfig.models}
         data={models}
-        actions={[deleteCallback]}
+        actions={{ deleteCallback }}
       />
     </S.Content>
   )

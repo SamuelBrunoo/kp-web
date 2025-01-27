@@ -14,7 +14,7 @@ export const getProductTypes: TApi["productTypes"]["getProductTypes"] = async (f
           params: filters,
         })
         .then((res) => {
-          const info = res.data
+          const info = res.data.data
 
           if (info) {
             resolve({

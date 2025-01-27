@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import * as S from "../stylesSelect"
 import icons from "../../../assets/icons"
+import { TRoOption } from "../../../utils/@types/sys/roOptions"
 
 type Props = {
   label?: string
@@ -24,7 +25,10 @@ const SelectDefault = ({
   avoidAutoSelect,
 }: Props) => {
   const [showing, setShowing] = useState(false)
-  const [selected, setSelected] = useState<any>({ value: "" })
+  const [selected, setSelected] = useState<TRoOption | undefined>({
+    key: "",
+    value: "",
+  })
   const [options, setOptions] = useState<any[]>([])
 
   // # Refs
@@ -84,6 +88,20 @@ const SelectDefault = ({
     }
   }, [dropRef, showing])
 
+  // Renders
+
+  const renderText = () => {
+    let text = ""
+
+    if (setbykey) {
+      if (selected) text = selected.key
+    } else {
+      if (selected) text = selected.value
+    }
+
+    return text
+  }
+
   return (
     <S.SelectArea
       ref={wrapperRef}
@@ -97,13 +115,7 @@ const SelectDefault = ({
         className={showing ? "turnedIcon" : ""}
       >
         <S.Left>
-          <S.SelectedInfo>
-            {showValueFromKey && setbykey
-              ? selected.value
-              : setbykey && selected.key
-              ? (selected?.key as string).toUpperCase()
-              : selected?.value}
-          </S.SelectedInfo>
+          <S.SelectedInfo>{renderText()}</S.SelectedInfo>
         </S.Left>
         <icons.dropdown />
       </S.DataArea>

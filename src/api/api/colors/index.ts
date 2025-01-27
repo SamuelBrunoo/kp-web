@@ -14,7 +14,7 @@ export const getColors: TApi["colors"]["getColors"] = async (filters) => {
           params: filters,
         })
         .then((res) => {
-          const info = res.data
+          const info = res.data.data
 
           if (info) {
             resolve({
@@ -38,8 +38,7 @@ export const getColors: TApi["colors"]["getColors"] = async (filters) => {
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível listar as cores. Tente novamente mais tarde.",
+        error: "Não foi possível listar as cores. Tente novamente mais tarde.",
       })
     }
   })
@@ -85,7 +84,6 @@ export const getColor: TApi["colors"]["getColor"] = async ({ id }) => {
     }
   })
 }
-
 
 export type TApi_Colors = {
   getColors: (

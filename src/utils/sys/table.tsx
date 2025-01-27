@@ -2,6 +2,7 @@ import Input from "../../component/Inpts"
 import StatusIndicator from "../../component/StatusIndicator"
 import TableActions from "../../component/Table/TableActions"
 import { TClient } from "../@types/data/client"
+import { TColor } from "../@types/data/color"
 import { TModel } from "../@types/data/model"
 import { TOrder } from "../@types/data/order"
 import { TProduct } from "../@types/data/product"
@@ -32,14 +33,16 @@ export const tableConfig: {
   colors: {
     columns: [
       { title: "Cor", field: "name" },
-      { title: "Permite", field: "allow" },
+      { title: "Permite", field: "allow", align: "center" },
     ],
     specialFields: {
-      allow: (item: any, onChange: (colorCode: string) => void) => (
-        <Input.ColorCheckbox
-          checked={item.checked}
-          onChange={() => onChange(item.code)}
-        />
+      allow: (item: TColor & { checked: boolean }, { callbacks }) => (
+        <div style={{ margin: "auto", width: "fit-content", maxWidth: 420 }}>
+          <Input.ColorCheckbox
+            checked={item.checked}
+            onChange={() => callbacks.toggleColor(item.code)}
+          />
+        </div>
       ),
     },
   },
@@ -77,7 +80,6 @@ export const tableConfig: {
       { title: "", field: "actions" },
     ],
     specialFields: {
-      colors: (item: TModel) => item.colors.length,
       storage: (item: TModel) =>
         item.storage.has ? item.storage.quantity : "Não possui",
       price: (item: TModel) => formatMoney(item.price),
@@ -280,7 +282,7 @@ type TColumn = {
 export type TConfig = {
   columns: TColumn[]
   specialFields: {
-    [key: string]: (item: any, prop2?: any) => any
+    [key: string]: (item: any, callbacks?: any) => any
   }
   isExpandable?: boolean
 }

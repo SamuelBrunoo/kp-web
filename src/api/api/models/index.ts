@@ -127,11 +127,11 @@ export const getModels: TApi["models"]["getModels"] = async () => {
   })
 }
 
-export const getModel: TApi["models"]["getModel"] = async () => {
+export const getModel: TApi["models"]["getModel"] = async ({id}) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .delete(`${baseURL}`, {
+        .get(`${baseURL}/${id}`, {
           params: {},
         })
         .then((res) => {
@@ -174,13 +174,13 @@ export const getModelsPageList: TApi["models"]["getModelsPageList"] = async (
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}`, {
+        .get(`${baseURL}/listPage`, {
           params: filters,
         })
         .then((res) => {
-          const info = res.data
+          if (res.data.success) {
+            const info = res.data.data
 
-          if (info) {
             resolve({
               ok: true,
               data: info,
@@ -188,8 +188,7 @@ export const getModelsPageList: TApi["models"]["getModelsPageList"] = async (
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar os modelos. Tente novamente mais tarde.",
+              error: res.data.error,
             })
           }
         })

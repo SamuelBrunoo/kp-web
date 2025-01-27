@@ -34,6 +34,7 @@ export const DataArea = styled.div`
   cursor: pointer;
   flex: 1;
   transition: color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   svg {
     transition: transform 0.3s;
@@ -56,8 +57,9 @@ export const Left = styled.div`
   font-size: 12px;
 `
 
-export const Label = styled.span`
-  color: ${({ theme }) => theme.colors.neutral[500]};
+export const Label = styled.span<{ $hasError?: boolean }>`
+  color: ${({ $hasError, theme }) =>
+    $hasError ? theme.colors.red[460] : theme.colors.green[360]};
   white-space: nowrap;
   margin-left: 8px;
   transition: top 0.3s, font-size 0.3s, color 0.3s;

@@ -411,7 +411,7 @@ const OrdersForm = () => {
             <Table
               config={tableConfig.orderFormProducts}
               data={order.products}
-              actions={[deleteCallback]}
+              actions={{ deleteCallback }}
             />
           </div>
         </S.FormLine>

@@ -54,7 +54,7 @@ const ClientsPage = () => {
       <Table
         config={tableConfig.clients}
         data={clients}
-        actions={[deleteCallback]}
+        actions={{ deleteCallback }}
         search={search}
         searchFields={["name", "socialRole", "address.full"]}
         expandComponent={ExpansibleRow.ClientExpand}

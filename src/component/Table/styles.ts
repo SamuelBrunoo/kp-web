@@ -35,10 +35,12 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
 
   tr {
     transition: background-color 0.3s, opacity 0.3s;
+    border-radius: 4px;
+    overflow: hidden;
 
     &:not(.noHover):hover {
       ${({ $noHover, theme }) =>
-        $noHover ? "" : `background-color: ${theme.colors.green[260]};`}
+        $noHover ? "" : `background-color: ${theme.colors.neutral[800]};`}
 
       .actions-area {
         opacity: 1;
@@ -47,7 +49,7 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
 
     &.noBg,
     &.noBg:hover {
-      background-color: transparent;
+      opacity: 0.4;
     }
   }
 
@@ -58,7 +60,9 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
   }
 `
 
-export const RowItem = styled.tr`
+export const RowItem = styled.tr<{ $noHover?: boolean }>`
+  cursor: ${({ $noHover }) => ($noHover ? "unset" : "pointer")};
+
   &:nth-last-child(1) {
     td {
       border: none;

@@ -54,7 +54,7 @@ const OrdersPage = () => {
       <Table
         config={tableConfig.orders}
         data={orders}
-        actions={[deleteCallback]}
+        actions={{ deleteCallback }}
         search={search}
         searchFields={["clientName", "value"]}
         expandComponent={ExpansibleRow.OrderExpand}

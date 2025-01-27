@@ -1,3 +1,4 @@
+import * as S from "./styles"
 import icons from "../../../assets/icons"
 
 type Props = {
@@ -11,20 +12,7 @@ const ColorCheckbox = ({ checked, onChange }: Props) => {
   }
 
   return (
-    <div
-      style={{
-        display: "grid",
-        placeItems: "center",
-        width: 32,
-        height: 32,
-        borderRadius: 4,
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        cursor: "pointer",
-      }}
-      onClick={handleClick}
-    >
-      {checked && <icons.check />}
-    </div>
+    <S.Element onClick={handleClick}>{checked && <icons.check />}</S.Element>
   )
 }
 

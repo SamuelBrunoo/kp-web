@@ -12,6 +12,7 @@ type Props = {
   onFilterChange?: (filter: string, v: string) => void
   filters?: TFilter[]
   buttons?: TButton[]
+  forForm?: boolean
 }
 
 export type TFilter = {
@@ -35,6 +36,7 @@ const PageHead = ({
   onChangeSearch,
   filters,
   buttons,
+  forForm,
 }: Props) => {
   const navigate = useNavigate()
 
@@ -66,34 +68,36 @@ const PageHead = ({
           role="new"
         />
       </S.HeaderTop>
-      <S.Main>
-        <S.SearchArea>
-          {search !== undefined && onChangeSearch !== undefined && (
-            <Input.PageSearch
-              placeholder="Pesquisar..."
-              value={search}
-              onChange={onChangeSearch}
-            />
-          )}
-          {filters &&
-            filters.map((filter, k) => (
-              <Input.PageSearchSelect
-                key={k}
-                onChange={(v) => handleFilter(filter.name, v)}
-                roOptions={filter.options}
-                value={filter.value}
-                label={filter.label}
+      {!forForm && (
+        <S.Main>
+          <S.SearchArea>
+            {search !== undefined && onChangeSearch !== undefined && (
+              <Input.PageSearch
+                placeholder="Pesquisar..."
+                value={search}
+                onChange={onChangeSearch}
               />
-            ))}
-        </S.SearchArea>
+            )}
+            {filters &&
+              filters.map((filter, k) => (
+                <Input.PageSearchSelect
+                  key={k}
+                  onChange={(v) => handleFilter(filter.name, v)}
+                  roOptions={filter.options}
+                  value={filter.value}
+                  label={filter.label}
+                />
+              ))}
+          </S.SearchArea>
 
-        <Button
-          action={handleSearch}
-          color="green"
-          text="Buscar"
-          type="primary"
-        />
-      </S.Main>
+          <Button
+            action={handleSearch}
+            color="green"
+            text="Buscar"
+            type="primary"
+          />
+        </S.Main>
+      )}
     </S.Wrapper>
   )
 }

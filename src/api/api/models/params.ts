@@ -10,7 +10,9 @@ export type TApi_Params_Models = {
       model: TModel
     }
     getModels: {}
-    getModel: {}
+    getModel: {
+      id: string
+    }
     getModelsPageList: TDefaultFilters
     deleteModel: { id: string }
   }

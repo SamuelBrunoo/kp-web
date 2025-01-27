@@ -13,6 +13,7 @@ import { apiOrders } from "./api/orders"
 import { apiProductionLines } from "./api/productLine.ts"
 import { apiRepresentatives } from "./api/representative"
 import { apiProductTypes } from "./api/productTypes"
+import { apiFormBare } from "./api/formBare"
 
 export const initialResponse: TErrorResponse = {
   success: false,
@@ -84,6 +85,8 @@ axios.interceptors.request.use(function (config) {
 export const service = axios
 
 export const Api: TApi = {
+  formBare: apiFormBare,
+
   models: apiModels,
   clients: apiClients,
   colors: apiColors,

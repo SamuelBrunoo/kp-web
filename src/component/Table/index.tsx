@@ -5,7 +5,9 @@ import { useState } from "react"
 type Props = {
   config: TConfig
   data: any[]
-  actions?: any[]
+  actions?: {
+    [key: string]: (...props: any[]) => void | any
+  }
   noHover?: boolean
   search?: string
   searchFields?: string[]
@@ -64,6 +66,7 @@ const Table = ({
                 config={config}
                 actions={actions}
                 expandComponent={expandComponent}
+                noHover={noHover}
               />
             ))}
         </S.TableBody>
@@ -75,12 +78,13 @@ const Table = ({
 type TRowItemProps = {
   item: any
   config: TConfig
-  actions: any
+  actions: Props["actions"]
   expandComponent?: any
+  noHover?: boolean
 }
 
 const RowItem = (props: TRowItemProps) => {
-  const { item, config, actions, expandComponent } = props
+  const { item, config, actions, expandComponent, noHover } = props
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -88,12 +92,19 @@ const RowItem = (props: TRowItemProps) => {
 
   return (
     <>
-      <S.RowItem className={isExpanded ? "highlighted" : ""}>
+      <S.RowItem className={isExpanded ? "highlighted" : ""} $noHover={noHover}>
         {config.columns.map((col, k) => {
           let content: any = null
 
-          content = config.specialFields[col.field]
-            ? config.specialFields[col.field](item, ...(actions ?? []))
+          const field = config.specialFields[col.field]
+
+          content = field
+            ? field(item, {
+                data: {
+                  size: col.size as number,
+                },
+                callbacks: { ...actions },
+              })
             : item[col.field]
 
           return (

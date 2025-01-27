@@ -49,7 +49,7 @@ const ProductionLinesPage = () => {
       <Table
         config={tableConfig.productionLines}
         data={productionLines}
-        actions={[deleteCallback]}
+        actions={{ deleteCallback }}
         search={search}
         searchFields={["orderCode", "clientName"]}
         expandComponent={ExpansibleRow.ProductionLineExpand}
