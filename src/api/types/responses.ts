@@ -1,7 +1,9 @@
 export type TDefaultRes<T> =
   | {
       ok: false
-      error: string
+      error: {
+        message: string
+      }
     }
   | {
       ok: true

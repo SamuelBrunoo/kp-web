@@ -1,12 +1,16 @@
-import { ThemeProvider } from "styled-components"
-import Router from "./routes"
+import { useEffect } from "react"
 import { theme } from "./theme"
+import Router from "./routes"
+
 import { LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import "dayjs/locale/pt-br"
 import Feedback from "./component/Feedback"
 import getStore from "./store"
-import { useEffect } from "react"
+import { ThemeProvider } from "styled-components"
+
+import { ThemeProvider as MuiThemeProvider } from "@mui/material"
+import { muiTheme } from "./theme/muiTheme"
 
 function App() {
   const { controllers, feedback } = getStore()
@@ -24,10 +28,12 @@ function App() {
 
   return (
     <LocalizationProvider adapterLocale="pt-br" dateAdapter={AdapterDayjs}>
-      <ThemeProvider theme={theme}>
-        <Feedback data={feedback} />
-        <Router />
-      </ThemeProvider>
+      <MuiThemeProvider theme={muiTheme}>
+        <ThemeProvider theme={theme}>
+          <Feedback data={feedback} />
+          <Router />
+        </ThemeProvider>
+      </MuiThemeProvider>
     </LocalizationProvider>
   )
 }

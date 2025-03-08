@@ -1,13 +1,16 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { defaultErrors } from "../../../api"
 
-export const getApiError = (data: AxiosResponse | AxiosError) => {
+export const getApiError = (data: AxiosResponse | AxiosError): any => {
   try {
-    if (axios.isAxiosError(data) && data.response?.status === 400) {
+    if (
+      axios.isAxiosError(data) &&
+      String(data.response?.status).startsWith("4")
+    ) {
       const backData = data.response?.data as any
 
       return {
-        success: false,
+        ok: false,
         error: {
           message: backData.error,
         },

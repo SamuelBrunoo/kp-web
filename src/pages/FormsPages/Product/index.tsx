@@ -66,7 +66,7 @@ const ProductForm = () => {
         navigate(-1)
       } else {
         controllers.feedback.setData({
-          message: update.error,
+          message: update.error.message,
           state: "alert",
           visible: true,
         })
@@ -85,7 +85,7 @@ const ProductForm = () => {
         navigate(-1)
       } else {
         controllers.feedback.setData({
-          message: create.error,
+          message: create.error.message,
           state: "alert",
           visible: true,
         })
@@ -223,7 +223,7 @@ const ProductForm = () => {
         }
       } else {
         controllers.feedback.setData({
-          message: pageInfo.error,
+          message: pageInfo.error.message,
           state: "error",
           visible: true,
         })

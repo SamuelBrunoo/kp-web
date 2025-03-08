@@ -77,7 +77,7 @@ const TableActions = ({
           const req = await fn({ id })
           if (req.ok && deleteCallback) deleteCallback(id)
           else {
-            if (!req.ok) throw new Error(req.error)
+            if (!req.ok) throw new Error(req.error.message)
             else
               throw new Error("Ops! Houve um erro, tente novamente mais tarde")
           }

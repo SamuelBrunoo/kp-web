@@ -24,22 +24,28 @@ export const createOrder: TApi["orders"]["createOrder"] = async ({
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível cadastrar o pedido. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível cadastrar o pedido. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível cadastrar o pedido. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível cadastrar o pedido. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível cadastrar o pedido. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível cadastrar o pedido. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -61,22 +67,28 @@ export const updateOrder: TApi["orders"]["updateOrder"] = async ({ order }) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -102,22 +114,28 @@ export const getPageListOrders: TApi["orders"]["getPageListOrders"] = async (
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -141,22 +159,28 @@ export const getOrders: TApi["orders"]["getOrders"] = async (filters) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível listar os pedidos. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -180,22 +204,28 @@ export const getOrder: TApi["orders"]["getOrder"] = async ({ id }) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível obter as informações do pedido. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível obter as informações do pedido. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível obter as informações do pedido. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível obter as informações do pedido. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível obter as informações do pedido. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível obter as informações do pedido. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -217,21 +247,28 @@ export const deleteOrder: TApi["orders"]["getOrder"] = async ({ id }) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível excluir o pedido. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível excluir o pedido. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível excluir o pedido. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível excluir o pedido. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error: "Não foi possível excluir o pedido. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível excluir o pedido. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -253,22 +290,28 @@ export const formBare: TApi["orders"]["formBare"] = async () => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível receber as informações. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível receber as informações. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível receber as informações. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível receber as informações. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível receber as informações. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível receber as informações. Tente novamente mais tarde.",
+        },
       })
     }
   })

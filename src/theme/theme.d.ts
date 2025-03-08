@@ -1,6 +1,6 @@
 import "./styled-components"
 
-type TMultiToneColor = {
+export type TMultiToneColor = {
   100: string
   130: string
   160: string

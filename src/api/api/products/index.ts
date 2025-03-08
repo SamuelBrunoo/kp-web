@@ -24,22 +24,28 @@ export const createProduct: TApi["products"]["createProduct"] = async ({
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -63,22 +69,28 @@ export const updateProduct: TApi["products"]["updateProduct"] = async ({
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível atualizar o produto. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível atualizar o produto. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível atualizar o produto. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível atualizar o produto. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível atualizar o produto. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível atualizar o produto. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -102,22 +114,28 @@ export const getProducts: TApi["products"]["getProducts"] = async (filters) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar os produtos. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível listar os produtos. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível listar os produtos. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível listar os produtos. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível listar os produtos. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível listar os produtos. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -143,22 +161,28 @@ export const getProduct: TApi["products"]["getProduct"] = async ({ id }) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -185,22 +209,28 @@ export const getProductsPageList: TApi["products"]["getProductsPageList"] =
             } else {
               resolve({
                 ok: false,
-                error:
-                  "Não foi possível listar os produtos. Tente novamente mais tarde.",
+                error: {
+                  message:
+                    "Não foi possível listar os produtos. Tente novamente mais tarde.",
+                },
               })
             }
           })
           .catch((err: AxiosError) => {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar os produtos. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível listar os produtos. Tente novamente mais tarde.",
+              },
             })
           })
       } catch (error) {
         reject({
-          error:
-            "Não foi possível listar os produtos. Tente novamente mais tarde.",
+          error: {
+            message:
+              "Não foi possível listar os produtos. Tente novamente mais tarde.",
+          },
         })
       }
     })
@@ -228,22 +258,28 @@ export const deleteProduct: TApi["products"]["deleteProduct"] = async ({
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível excluir o produto. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível excluir o produto. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível excluir o produto. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível excluir o produto. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível excluir o produto. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível excluir o produto. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -265,22 +301,28 @@ export const formBare: TApi["products"]["formBare"] = async () => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível receber as informações. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível receber as informações. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível receber as informações. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível receber as informações. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível receber as informações. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível receber as informações. Tente novamente mais tarde.",
+        },
       })
     }
   })

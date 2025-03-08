@@ -32,16 +32,19 @@ export const SelectedArea = styled.div<{
   align-items: center;
   justify-content: space-between;
   min-width: 240px;
-  width: fit-content;
+  /* width: fit-content; */
   cursor: ${({ $cursorNormal }) => ($cursorNormal ? "unset" : "pointer")};
   transition: background-color 0.3s, border-color 0.3s;
 `
 
-export const Left = styled.div`
+export const Left = styled.div<{
+  $cursorNormal?: boolean
+}>`
   display: flex;
   flex-direction: column;
   gap: 4px;
   flex: 1;
+  cursor: ${({ $cursorNormal }) => ($cursorNormal ? "unset" : "pointer")};
 `
 
 export const InpLine = styled.div<{ $hasError?: boolean }>`
@@ -50,7 +53,7 @@ export const InpLine = styled.div<{ $hasError?: boolean }>`
   padding: 16px 0 0;
   flex: 1;
   width: 100%;
-  font-size: 12px;
+  font-size: 14px;
 
   span {
     font-size: 0.875em;
@@ -99,7 +102,7 @@ export const Input = styled.input<{ $hasError: boolean }>`
   white-space: nowrap;
   outline: none;
   border: none;
-  padding: 8px;
+  padding: 9px 10px;
   border-radius: 4px;
   flex: 1;
   transition: color 0.3s;

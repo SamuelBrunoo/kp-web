@@ -12,9 +12,11 @@ type Props = {
     message: string
   }
   placeholder?: string
+  type?: "email" | "password"
+  onEnter?: () => void
 }
 
-const InputModal = ({
+const Input = ({
   label,
   value,
   onChange,
@@ -22,6 +24,8 @@ const InputModal = ({
   error,
   isNumber,
   placeholder,
+  type,
+  onEnter,
 }: Props) => {
   const inputRef = useRef<null | HTMLInputElement>(null)
 
@@ -40,29 +44,34 @@ const InputModal = ({
 
   return (
     <S.InputArea $disabled={disabled} $hasError={error?.state ?? false}>
-      <S.SelectedArea
+      {/* <S.SelectedArea
         onClick={disabled ? undefined : handleClick}
         $hasError={error?.state ?? false}
-      >
-        <S.Left>
-          <S.InpLine>
-            <S.Label $hasError={error?.state ?? false}>{label}</S.Label>
-            <S.Input
-              ref={inputRef}
-              value={value}
-              onFocus={(e) => (disabled ? e.currentTarget.blur() : undefined)}
-              onChange={
-                !disabled ? (e) => handleValue(e.target.value) : () => {}
-              }
-              $hasError={error?.state ?? false}
-              placeholder={placeholder}
-            />
-          </S.InpLine>
-        </S.Left>
-      </S.SelectedArea>
+        > */}
+      <S.Left onClick={disabled ? undefined : handleClick}>
+        <S.InpLine>
+          <S.Label $hasError={error?.state ?? false}>{label}</S.Label>
+          <S.Input
+            ref={inputRef}
+            value={value}
+            onFocus={(e) => (disabled ? e.currentTarget.blur() : undefined)}
+            onChange={!disabled ? (e) => handleValue(e.target.value) : () => {}}
+            $hasError={error?.state ?? false}
+            placeholder={placeholder}
+            type={
+              type === "password"
+                ? "password"
+                : type === "email"
+                ? "email"
+                : "text"
+            }
+          />
+        </S.InpLine>
+      </S.Left>
+      {/* </S.SelectedArea> */}
       <span>{error?.state ? error?.message : ""}</span>
     </S.InputArea>
   )
 }
 
-export default InputModal
+export default Input

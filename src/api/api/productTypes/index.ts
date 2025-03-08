@@ -6,7 +6,9 @@ import { TApi_Responses_ProductTypes as TResponses } from "./responses"
 
 const baseURL = "/productTypes"
 
-export const getProductTypes: TApi["productTypes"]["getProductTypes"] = async (filters) => {
+export const getProductTypes: TApi["productTypes"]["getProductTypes"] = async (
+  filters
+) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
@@ -24,28 +26,36 @@ export const getProductTypes: TApi["productTypes"]["getProductTypes"] = async (f
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar as cores. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível listar as cores. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível listar as cores. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível listar as cores. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível listar as cores. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível listar as cores. Tente novamente mais tarde.",
+        },
       })
     }
   })
 }
 
-export const getProductType: TApi["productTypes"]["getProductType"] = async ({ id }) => {
+export const getProductType: TApi["productTypes"]["getProductType"] = async ({
+  id,
+}) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
@@ -65,27 +75,32 @@ export const getProductType: TApi["productTypes"]["getProductType"] = async ({ i
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+        },
       })
     }
   })
 }
-
 
 export type TApi_ProductTypes = {
   getProductTypes: (

@@ -41,7 +41,7 @@ const ModelsPage = () => {
           state: "error",
           visible: true,
         })
-      } else throw new Error(req.error)
+      } else throw new Error(req.error.message)
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -59,7 +59,7 @@ const ModelsPage = () => {
       if (req.ok) {
         const list = req.data.list
         setModels(list)
-      } else throw new Error(req.error)
+      } else throw new Error(req.error.message)
     } catch (error) {
       controllers.feedback.setData({
         message: error.message,

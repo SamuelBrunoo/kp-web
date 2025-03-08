@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { devtools, persist } from "zustand/middleware"
 import { TStore } from "../utils/@types/store"
 
+import userShelf from "./shelfs/user"
 import feedbackShelf from "./shelfs/feedback"
 
 import controls from "./controllers"
@@ -11,7 +12,7 @@ const getStore = create<TStore>()(
     persist(
       (set) => ({
         // store...
-        // user: userShelf(),
+        user: userShelf(),
         feedback: feedbackShelf(),
 
         controllers: controls(set),
@@ -19,7 +20,9 @@ const getStore = create<TStore>()(
       {
         name: "kp",
         partialize: (store) => {
-          return {}
+          return {
+            user: store.user,
+          }
         },
       }
     )

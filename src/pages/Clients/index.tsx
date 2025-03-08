@@ -31,7 +31,7 @@ const ClientsPage = () => {
       if (req.ok) {
         const list = req.data.list
         setClients(list)
-      } else throw new Error(req.error)
+      } else throw new Error(req.error.message)
     } catch (error) {
       // feedbackError
     }

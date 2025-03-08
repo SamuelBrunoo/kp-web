@@ -24,22 +24,28 @@ export const modelBare: TApi["formBare"]["model"] = async (filters) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível obter as informações para o formulário. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível obter as informações para o formulário. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível obter as informações para o formulário. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível obter as informações para o formulário. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível obter as informações para o formulário. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível obter as informações para o formulário. Tente novamente mais tarde.",
+        },
       })
     }
   })

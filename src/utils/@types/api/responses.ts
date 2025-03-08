@@ -10,13 +10,13 @@ import { TRepresentative } from "../data/representative"
 
 // Success
 type TSuccessResponse<T> = {
-  success: true
+  ok: true
   data: T
 }
 
 // Error
 export type TErrorResponse = {
-  success: false
+  ok: false
   error: {
     message: string
   }

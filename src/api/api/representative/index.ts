@@ -25,22 +25,28 @@ export const getRepresentatives: TApi["representatives"]["getRepresentatives"] =
             } else {
               resolve({
                 ok: false,
-                error:
-                  "Não foi possível listar as cores. Tente novamente mais tarde.",
+                error: {
+                  message:
+                    "Não foi possível listar as cores. Tente novamente mais tarde.",
+                },
               })
             }
           })
           .catch((err: AxiosError) => {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar as cores. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível listar as cores. Tente novamente mais tarde.",
+              },
             })
           })
       } catch (error) {
         reject({
-          error:
-            "Não foi possível listar as cores. Tente novamente mais tarde.",
+          error: {
+            message:
+              "Não foi possível listar as cores. Tente novamente mais tarde.",
+          },
         })
       }
     })
@@ -67,22 +73,28 @@ export const getRepresentative: TApi["representatives"]["getRepresentative"] =
             } else {
               resolve({
                 ok: false,
-                error:
-                  "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+                error: {
+                  message:
+                    "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+                },
               })
             }
           })
           .catch((err: AxiosError) => {
             resolve({
               ok: false,
-              error:
-                "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+              },
             })
           })
       } catch (error) {
         reject({
-          error:
-            "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+          error: {
+            message:
+              "Não foi possível obter as informações da cor. Tente novamente mais tarde.",
+          },
         })
       }
     })

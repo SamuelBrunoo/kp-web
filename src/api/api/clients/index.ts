@@ -24,22 +24,28 @@ export const createClient: TApi["clients"]["createClient"] = async ({
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -63,22 +69,28 @@ export const updateClient: TApi["clients"]["updateClient"] = async ({
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -102,22 +114,28 @@ export const getClients: TApi["clients"]["getClients"] = async (filters) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível listar os clientes. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível listar os clientes. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível listar os clientes. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível listar os clientes. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível listar os clientes. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível listar os clientes. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -143,22 +161,28 @@ export const getClient: TApi["clients"]["getClient"] = async ({ id }) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
+        },
       })
     }
   })
@@ -180,22 +204,28 @@ export const deleteClient: TApi["clients"]["deleteClient"] = async ({ id }) => {
           } else {
             resolve({
               ok: false,
-              error:
-                "Não foi possível deletar o cliente. Tente novamente mais tarde.",
+              error: {
+                message:
+                  "Não foi possível deletar o cliente. Tente novamente mais tarde.",
+              },
             })
           }
         })
         .catch((err: AxiosError) => {
           resolve({
             ok: false,
-            error:
-              "Não foi possível deletar o cliente. Tente novamente mais tarde.",
+            error: {
+              message:
+                "Não foi possível deletar o cliente. Tente novamente mais tarde.",
+            },
           })
         })
     } catch (error) {
       reject({
-        error:
-          "Não foi possível deletar o cliente. Tente novamente mais tarde.",
+        error: {
+          message:
+            "Não foi possível deletar o cliente. Tente novamente mais tarde.",
+        },
       })
     }
   })

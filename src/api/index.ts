@@ -14,17 +14,18 @@ import { apiProductionLines } from "./api/productLine.ts"
 import { apiRepresentatives } from "./api/representative"
 import { apiProductTypes } from "./api/productTypes"
 import { apiFormBare } from "./api/formBare"
+import { apiAuth } from "./api/auth"
 
 export const initialResponse: TErrorResponse = {
-  success: false,
+  ok: false,
   error: { message: "" },
 }
 
 export const defaultErrors: {
-  [type: string]: TDefaultBodyRes<undefined>
+  [type: string]: TErrorResponse
 } = {
   connection: {
-    success: false,
+    ok: false,
     error: {
       message: "Verifique a conexão e tente novamente",
     },
@@ -33,7 +34,7 @@ export const defaultErrors: {
 
 export const generateResponse = <T>(info: any): TDefaultBodyRes<T> => {
   return {
-    success: true,
+    ok: true,
     data: info,
   }
 }
@@ -85,6 +86,8 @@ axios.interceptors.request.use(function (config) {
 export const service = axios
 
 export const Api: TApi = {
+  auth: apiAuth,
+
   formBare: apiFormBare,
 
   models: apiModels,

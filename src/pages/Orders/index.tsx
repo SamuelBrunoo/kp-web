@@ -31,7 +31,7 @@ const OrdersPage = () => {
       if (req.ok) {
         const list = req.data.list
         setOrders(list)
-      } else throw new Error(req.error)
+      } else throw new Error(req.error.message)
     } catch (error) {
       // feedbackError
     }

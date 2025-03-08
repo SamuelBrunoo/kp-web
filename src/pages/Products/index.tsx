@@ -32,7 +32,9 @@ const ProductsPage = () => {
         const { list } = req.data
 
         setProducts(list)
-      } else throw new Error(req.error)
+      } else {
+      }
+      // } else throw new Error(req.error.message)
     } catch (error) {
       // feedbackError
     }
