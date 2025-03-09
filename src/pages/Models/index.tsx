@@ -99,6 +99,8 @@ const ModelsPage = () => {
       <Table
         config={tableConfig.models}
         data={models}
+        search={search}
+        searchFields={["name", "code", "price"]}
         actions={{ deleteCallback }}
       />
     </S.Content>

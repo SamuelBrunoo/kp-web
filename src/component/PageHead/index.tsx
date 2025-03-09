@@ -1,8 +1,10 @@
+/* eslint-disable react/jsx-pascal-case */
 import * as S from "./styles"
 import Input from "../Inpts"
 import { TRoOption } from "../../utils/@types/sys/roOptions"
 import Button from "../Button"
 import { useNavigate } from "react-router-dom"
+import Icons from "../../assets/icons"
 
 type Props = {
   title: string
@@ -66,6 +68,7 @@ const PageHead = ({
           text="Novo"
           action={handleCreate}
           role="new"
+          startIcon={<Icons.add />}
         />
       </S.HeaderTop>
       {!forForm && (

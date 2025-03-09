@@ -135,6 +135,10 @@ const palleteRed = {
 }
 
 export const muiTheme = createTheme({
+  typography: {
+    fontFamily: "'Poppins', 'Roboto', sans-serif",
+    fontSize: 14
+  },
   palette: {
     neutral: palleteNeutral,
     green: palleteGreen,

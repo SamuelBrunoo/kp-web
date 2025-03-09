@@ -2,6 +2,15 @@ import * as S from "./styles"
 import { TConfig } from "../../utils/sys/table"
 import { useState } from "react"
 
+import {
+  Table as MuiTable,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material"
+
 type Props = {
   config: TConfig
   data: any[]
@@ -24,54 +33,54 @@ const Table = ({
   expandComponent,
 }: Props) => {
   return (
-    <S.Wrapper>
-      <S.Table>
-        <S.TableHead>
-          <S.RowItem>
-            {config.columns.map((col, k) => (
-              <S.TCol
-                key={k}
-                $size={col.size}
-                $align={col.align}
-                $width={col.width}
-              >
-                {col.title}
-              </S.TCol>
-            ))}
-          </S.RowItem>
-        </S.TableHead>
-        <S.TableBody $noHover={noHover}>
-          {data
-            .filter((item) => {
-              let ok = false
+    <MuiTable>
+      <TableHead>
+        <TableRow>
+          {config.columns.map((col, colKey) => (
+            <TableCell
+              key={colKey}
+              sx={{
+                fontWeight: 600,
+                color: (theme) => theme.palette.green[460],
+              }}
+              align={col.align}
+            >
+              {col.title}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data
+          .filter((item) => {
+            let ok = false
 
-              if (!!search) {
-                searchFields?.forEach((sf) => {
-                  if (!ok) {
-                    const v = sf.includes(".")
-                      ? item[sf.split(".")[0]][sf.split(".")[1]]
-                      : item[sf]
+            if (!!search) {
+              searchFields?.forEach((sf) => {
+                if (!ok) {
+                  const v = sf.includes(".")
+                    ? item[sf.split(".")[0]][sf.split(".")[1]]
+                    : item[sf]
 
-                    ok = String(v).toLowerCase().includes(search.toLowerCase())
-                  }
-                })
-              } else ok = true
+                  ok = String(v).toLowerCase().includes(search.toLowerCase())
+                }
+              })
+            } else ok = true
 
-              return ok
-            })
-            .map((item, k) => (
-              <RowItem
-                key={k}
-                item={item}
-                config={config}
-                actions={actions}
-                expandComponent={expandComponent}
-                noHover={noHover}
-              />
-            ))}
-        </S.TableBody>
-      </S.Table>
-    </S.Wrapper>
+            return ok
+          })
+          .map((item, itemKey) => (
+            <RowItem
+              key={itemKey}
+              item={item}
+              config={config}
+              actions={actions}
+              expandComponent={expandComponent}
+              noHover={noHover}
+            />
+          ))}
+      </TableBody>
+    </MuiTable>
   )
 }
 
@@ -92,7 +101,19 @@ const RowItem = (props: TRowItemProps) => {
 
   return (
     <>
-      <S.RowItem className={isExpanded ? "highlighted" : ""} $noHover={noHover}>
+      <TableRow
+        hover={!noHover}
+        sx={{
+          transition: "background-color 0.3s",
+          "&:hover": {
+            backgroundColor: (theme) =>
+              `${theme.palette.neutral[800]} !important`,
+            ".actions-area": {
+              opacity: 1,
+            },
+          },
+        }}
+      >
         {config.columns.map((col, k) => {
           let content: any = null
 
@@ -108,22 +129,32 @@ const RowItem = (props: TRowItemProps) => {
             : item[col.field]
 
           return (
-            <S.ItemData
+            <TableCell
               key={k}
-              $hasPointer={expandComponent && k !== config.columns.length - 1}
-              $align={col.align}
-              $width={col.width}
+              sx={{
+                cursor:
+                  expandComponent && k !== config.columns.length - 1
+                    ? "pointer"
+                    : undefined,
+              }}
+              align={col.align}
+              // $width={col.width}
               onClick={
                 expandComponent && k !== config.columns.length - 1
                   ? toggleExpand
                   : undefined
               }
+              className={col.field === "actions" ? "actions-area" : ""}
             >
-              {content}
-            </S.ItemData>
+              {config.specialFields[col.field] ? (
+                <Typography fontSize={14}>{content}</Typography>
+              ) : (
+                content
+              )}
+            </TableCell>
           )
         })}
-      </S.RowItem>
+      </TableRow>
       {config.isExpandable && expandComponent && (
         <S.RowExpandable className={isExpanded ? "highlighted noBg" : "noBg"}>
           <S.REWrapper colSpan={6}>

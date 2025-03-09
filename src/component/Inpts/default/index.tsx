@@ -58,13 +58,7 @@ const Input = ({
             onChange={!disabled ? (e) => handleValue(e.target.value) : () => {}}
             $hasError={error?.state ?? false}
             placeholder={placeholder}
-            type={
-              type === "password"
-                ? "password"
-                : type === "email"
-                ? "email"
-                : "text"
-            }
+            type={type === "password" ? "password" : "text"}
           />
         </S.InpLine>
       </S.Left>
