@@ -3,6 +3,8 @@ import icons from "../../../assets/icons"
 
 import { useNavigate } from "react-router-dom"
 import getStore from "../../../store"
+import { Api } from "../../../api"
+import { TDefaultBodyRes } from "../../../utils/@types/api/responses"
 
 type Props = {
   table:
@@ -16,6 +18,7 @@ type Props = {
   deleteCallback?: (params?: any, p2?: any) => void
   noEdit?: boolean
   noDelete?: boolean
+  canDelete?: boolean
 }
 
 const TableActions = ({
@@ -24,6 +27,7 @@ const TableActions = ({
   deleteCallback,
   noEdit,
   noDelete,
+  canDelete,
 }: Props) => {
   const navigate = useNavigate()
 
@@ -49,43 +53,40 @@ const TableActions = ({
     navigate(url)
   }
 
-  const getDeleteEndpoint = () => {
+  const getDeleteEndpoint: ({ id }: { id: string }) => Promise<any> = async ({
+    id,
+  }: {
+    id: string
+  }) => {
     switch (table) {
-      // case "products":
-      //   return Api.delete.product
-      // case "models":
-      //   return Api.delete.model
+      case "products":
+        return await Api.products.deleteProduct({ id })
+      case "models":
+        return await Api.models.deleteModel({ id })
       // case "clients":
-      //   return Api.delete.client
+      //   return await Api.delete.client({id})
       // case "orders":
-      //   return Api.delete.order
-      case "orderFormProduct":
-        return true
+      //   return await Api.delete.order({id})
+      // case "orderFormProduct":
+      //   return true
       default:
-        return ({ id }: { id: string }): any => {}
+        return () => ({ ok: true })
     }
   }
 
   const handleDelete = async () => {
-    const fn = getDeleteEndpoint()
+    // confirm modal...
 
-    if (fn) {
+    const action = (await getDeleteEndpoint({ id })) as TDefaultBodyRes<any>
+
+    if (action.ok) {
       try {
-        if (typeof fn === "boolean" && deleteCallback) deleteCallback(id)
-        else if (typeof fn !== "boolean") {
-          // confirm modal
-          const req = await fn({ id })
-          if (req.ok && deleteCallback) deleteCallback(id)
-          else {
-            if (!req.ok) throw new Error(req.error.message)
-            else
-              throw new Error("Ops! Houve um erro, tente novamente mais tarde")
-          }
-        }
+        if (deleteCallback) deleteCallback(id)
       } catch (error) {
-        // alert message
         controllers.feedback.setData({
-          message: (error as any).message,
+          message:
+            error.message ??
+            "Não foi possível excluir o modelo. Tente novamente mais tarde.",
           state: "error",
           visible: true,
         })
@@ -102,7 +103,11 @@ const TableActions = ({
           </S.Action>
         )}
         {!noDelete && (
-          <S.Action onClick={handleDelete} $role={"trash"}>
+          <S.Action
+            onClick={canDelete ? handleDelete : () => {}}
+            $role={"trash"}
+            $disabled={!canDelete}
+          >
             <icons.trash />
           </S.Action>
         )}

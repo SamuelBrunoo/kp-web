@@ -14,13 +14,18 @@ export const Content = styled.div`
   gap: 16px;
 `
 
-export const Action = styled.button<{ $role: "edit" | "trash" }>`
+export const Action = styled.button<{
+  $role: "edit" | "trash"
+  $disabled?: boolean
+}>`
   display: grid;
   place-items: center;
   padding: 4px;
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? "default" : "pointer")};
   background: none;
   border: none;
+
+  filter: saturate(${({ $disabled }) => ($disabled ? 0 : 1)});
 
   color: ${({ $role, theme }) =>
     $role === "edit" ? theme.colors.orange[560] : theme.colors.red[460]};

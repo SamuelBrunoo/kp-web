@@ -181,19 +181,13 @@ export const deleteModel: TApi["models"]["deleteModel"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .delete(`${baseURL}`, {
-          params: {
-            id: id,
-          },
-        })
+        .delete(`${baseURL}/${id}`)
         .then((res) => {
-          const info = res.data
+          if (res.data.success) {
+            const info = res.data
+            console.log("Response", res, info)
 
-          if (info) {
-            resolve({
-              ok: true,
-              data: info,
-            })
+            resolve({ ok: true, data: info })
           } else {
             resolve(getApiError(res))
           }

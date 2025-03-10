@@ -59,10 +59,13 @@ const ProductForm = () => {
   const handleSave = async () => {
     setSubmitting(true)
 
+    // Check errors
+
     try {
+      const m = models.find((m) => m.code === product.model)
+
       if (id) {
         // edit ...
-        const m = models.find((m) => m.code === product.model)
         const productInfo: TProduct = {
           ...product,
           id: id,
@@ -94,7 +97,14 @@ const ProductForm = () => {
         }
       } else {
         const create = await Api.products.createProduct({
-          newProduct: product as TNewProduct,
+          newProduct: {
+            ...(product as TNewProduct),
+            model: m?.id as string,
+            storage: {
+              ...product.storage,
+              quantity: product.storage.has ? product.storage.quantity : 0,
+            },
+          },
         })
 
         if (create.ok) {

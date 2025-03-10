@@ -4,9 +4,9 @@ import StatusIndicator from "../../component/StatusIndicator"
 import TableActions from "../../component/Table/TableActions"
 import { TClient } from "../@types/data/client"
 import { TColor } from "../@types/data/color"
-import { TModel } from "../@types/data/model"
+import { TModel, TPageListModel } from "../@types/data/model"
 import { TOrder } from "../@types/data/order"
-import { TProduct } from "../@types/data/product"
+import { TPageListProduct, TProduct } from "../@types/data/product"
 import { TProductionLine } from "../@types/data/productionLine"
 import { formatCep } from "../helpers/formatters/cep"
 import { formatCnpj } from "../helpers/formatters/cnpj"
@@ -87,11 +87,12 @@ export const tableConfig: {
           }}
         />
       ),
-      actions: (item: TProduct, deleteCallback) => (
+      actions: (item: TPageListProduct, deleteCallback) => (
         <TableActions
           table={"products"}
           id={item.id}
           deleteCallback={deleteCallback}
+          canDelete={item.deletable}
         />
       ),
     },
@@ -110,11 +111,12 @@ export const tableConfig: {
       storage: (item: TModel) =>
         item.storage.has ? item.storage.quantity : "Não possui",
       price: (item: TModel) => formatMoney(item.price),
-      actions: (item: TModel, deleteCallback) => (
+      actions: (item: TPageListModel, { callbacks }) => (
         <TableActions
           table={"models"}
           id={item.id}
-          deleteCallback={deleteCallback}
+          deleteCallback={callbacks.deleteCallback}
+          canDelete={item.deletable}
         />
       ),
     },

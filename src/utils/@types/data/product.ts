@@ -22,6 +22,7 @@ export type TPageListProduct = {
   type: string
   typeKey: string
   storage: string | number
+  deletable: boolean
 }
 
 export type TNewProduct = {

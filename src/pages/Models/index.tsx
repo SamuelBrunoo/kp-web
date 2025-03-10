@@ -10,11 +10,14 @@ import Table from "../../component/Table"
 
 import { Api } from "../../api"
 import getStore from "../../store"
+import Modal from "../../component/Modal"
 
 const ModelsPage = () => {
   const navigate = useNavigate()
 
   const { controllers } = getStore()
+
+  const [loading, setLoading] = useState(false)
 
   const [models, setModels] = useState<TPageListModel[]>([])
   const [search, setSearch] = useState("")
@@ -29,31 +32,19 @@ const ModelsPage = () => {
   const handleFilter = (filter: string, value: string) =>
     setFilters((ftrs) => ({ ...ftrs, [filter]: value }))
 
-  const deleteCallback = async (id: string) => {
-    try {
-      const req = await Api.models.deleteModel({ id: id })
+  const deleteCallback = async () => {
+    await loadData()
 
-      if (req.ok) {
-        setModels((mdls) => mdls.filter((m) => m.id !== id))
-
-        controllers.feedback.setData({
-          message: "Modelo excluído com sucesso",
-          state: "error",
-          visible: true,
-        })
-      } else throw new Error(req.error.message)
-    } catch (error) {
-      controllers.feedback.setData({
-        message:
-          error.message ??
-          "Não foi possível excluir o modelo. Tente novamente mais tarde.",
-        state: "error",
-        visible: true,
-      })
-    }
+    controllers.feedback.setData({
+      message: "Modelo excluído com sucesso",
+      state: "success",
+      visible: true,
+    })
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.models.getModelsPageList({})
       if (req.ok) {
@@ -67,6 +58,8 @@ const ModelsPage = () => {
         visible: true,
       })
     }
+
+    setLoading(false)
   }, [controllers.feedback])
 
   useEffect(() => {
@@ -75,6 +68,8 @@ const ModelsPage = () => {
 
   return (
     <S.Content>
+      <Modal.Loading showing={loading} closeFn={() => {}} />
+
       <PageHead
         title={"Modelos"}
         search={search}
