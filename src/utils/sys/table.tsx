@@ -1,3 +1,4 @@
+import { Switch } from "@mui/material"
 import Input from "../../component/Inpts"
 import StatusIndicator from "../../component/StatusIndicator"
 import TableActions from "../../component/Table/TableActions"
@@ -52,14 +53,40 @@ export const tableConfig: {
       { title: "Modelo", field: "model" },
       { title: "Código", field: "code" },
       { title: "Cor", field: "color" },
-      { title: "Preço", field: "price" },
       { title: "Estoque", field: "storage", align: "center" },
+      { title: "Preço base", field: "price" },
+      { title: "Status", field: "status" },
       { title: "", field: "actions" },
     ],
     specialFields: {
-      storage: (item: TProduct) =>
-        item.storage.has ? item.storage.quantity : "Não possui",
+      storage: (item: TProduct) => item.storage,
       price: (item: TProduct) => formatMoney(item.price),
+      status: (item: TProduct) => (
+        <Switch
+          checked={item.active}
+          sx={{
+            "&:has(.Mui-checked) .MuiSwitch-track": {
+              backgroundColor: (theme) =>
+                `${theme.palette.green[460]} !important`,
+            },
+            "& .Mui-checked .MuiSwitch-thumb": {
+              backgroundColor: (theme) => theme.palette.green[500],
+              "&:hover": {
+                boxShadow: "none",
+              },
+            },
+            "&:hover": {
+              ".Mui-checked": {
+                backgroundColor: "transparent",
+              },
+              input: {
+                cursor: "default",
+              },
+            },
+            pointerEvents: "none",
+          }}
+        />
+      ),
       actions: (item: TProduct, deleteCallback) => (
         <TableActions
           table={"products"}

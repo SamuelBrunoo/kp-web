@@ -3,6 +3,7 @@ import { service } from "../.."
 import { AxiosError } from "axios"
 import { TApi_Params_Products as TParams } from "./params"
 import { TApi_Responses_Products as TResponses } from "./responses"
+import { getApiError } from "../../../utils/helpers/api/getApiErrors"
 
 const baseURL = "/products"
 
@@ -14,7 +15,7 @@ export const createProduct: TApi["products"]["createProduct"] = async ({
       await service
         .post(`${baseURL}`, newProduct)
         .then((res) => {
-          const info = res.data
+          const info = res.data.data
 
           if (info) {
             resolve({
@@ -59,7 +60,7 @@ export const updateProduct: TApi["products"]["updateProduct"] = async ({
       await service
         .put(`${baseURL}/${product.id}`, product)
         .then((res) => {
-          const info = res.data
+          const info = res.data.data
 
           if (info) {
             resolve({
@@ -104,9 +105,9 @@ export const getProducts: TApi["products"]["getProducts"] = async (filters) => {
           params: filters,
         })
         .then((res) => {
-          const info = res.data
+          const info = res.data.data
 
-          if (info) {
+          if (res.data.success) {
             resolve({
               ok: true,
               data: info,
@@ -151,31 +152,19 @@ export const getProduct: TApi["products"]["getProduct"] = async ({ id }) => {
           },
         })
         .then((res) => {
-          const info = res.data
+          const info = res.data.data
 
-          if (info) {
+          if (res.data.success) {
             resolve({
               ok: true,
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível obter as informações do produto. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -193,37 +182,19 @@ export const getProductsPageList: TApi["products"]["getProductsPageList"] =
     return new Promise(async (resolve, reject) => {
       try {
         await service
-          .get(`${baseURL}`, {
+          .get(`${baseURL}/listPage`, {
             params: filters,
           })
           .then((res) => {
-            const info = res.data
-
-            if (info) {
-              resolve({
-                ok: true,
-                data: {
-                  list: info,
-                },
-              })
+            if (res.data.success) {
+              const info = res.data.data
+              resolve({ ok: true, data: info })
             } else {
-              resolve({
-                ok: false,
-                error: {
-                  message:
-                    "Não foi possível listar os produtos. Tente novamente mais tarde.",
-                },
-              })
+              resolve(getApiError(res))
             }
           })
           .catch((err: AxiosError) => {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível listar os produtos. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(err))
           })
       } catch (error) {
         reject({
@@ -248,31 +219,18 @@ export const deleteProduct: TApi["products"]["deleteProduct"] = async ({
           },
         })
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data.data
             resolve({
               ok: true,
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível excluir o produto. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível excluir o produto. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -285,37 +243,24 @@ export const deleteProduct: TApi["products"]["deleteProduct"] = async ({
   })
 }
 
-export const formBare: TApi["products"]["formBare"] = async () => {
+export const formBare: TApi["products"]["formBare"] = async ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}`)
+        .get(`/formBare/product${id ? `?productId=${id}` : ""}`)
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data.data
             resolve({
               ok: true,
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível receber as informações. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível receber as informações. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({

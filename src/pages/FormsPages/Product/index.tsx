@@ -18,6 +18,8 @@ import { TProductType } from "../../../utils/@types/data/productType"
 import { TNewProduct, TProduct } from "../../../utils/@types/data/product"
 import getStore from "../../../store"
 import Button from "../../../component/Button"
+import { FormControlLabel, Switch } from "@mui/material"
+import Modal from "../../../component/Modal"
 
 const ProductForm = () => {
   const { id } = useParams()
@@ -25,6 +27,10 @@ const ProductForm = () => {
   const { controllers } = getStore()
 
   const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const [product, setProduct] = useState<TNewProduct | TProduct>(
     initialForm.product as any
@@ -51,46 +57,72 @@ const ProductForm = () => {
   }
 
   const handleSave = async () => {
-    if (id) {
-      // edit ...
-      const update = await Api.products.updateProduct({
-        product: product as TProduct,
-      })
+    setSubmitting(true)
 
-      if (update.ok) {
-        controllers.feedback.setData({
-          message: "Produto atualizado com sucesso",
-          state: "success",
-          visible: true,
-        })
-        navigate(-1)
-      } else {
-        controllers.feedback.setData({
-          message: update.error.message,
-          state: "alert",
-          visible: true,
-        })
-      }
-    } else {
-      const create = await Api.products.createProduct({
-        newProduct: product as TNewProduct,
-      })
+    try {
+      if (id) {
+        // edit ...
+        const m = models.find((m) => m.code === product.model)
+        const productInfo: TProduct = {
+          ...product,
+          id: id,
+          price: m?.price as number,
+          model: m?.id as string,
+          storage: {
+            ...product.storage,
+            quantity: product.storage.has ? product.storage.quantity : 0,
+          },
+        }
 
-      if (create.ok) {
-        controllers.feedback.setData({
-          message: "Produto cadastrado com sucesso",
-          state: "success",
-          visible: true,
+        const update = await Api.products.updateProduct({
+          product: productInfo,
         })
-        navigate(-1)
+
+        if (update.ok) {
+          controllers.feedback.setData({
+            message: "Produto atualizado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: update.error.message,
+            state: "alert",
+            visible: true,
+          })
+        }
       } else {
-        controllers.feedback.setData({
-          message: create.error.message,
-          state: "alert",
-          visible: true,
+        const create = await Api.products.createProduct({
+          newProduct: product as TNewProduct,
         })
+
+        if (create.ok) {
+          controllers.feedback.setData({
+            message: "Produto cadastrado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: create.error.message,
+            state: "alert",
+            visible: true,
+          })
+        }
       }
+    } catch (error) {
+      controllers.feedback.setData({
+        message: `Houve um erro ao ${
+          id ? "atualizar" : "cadastrar"
+        } o produto.`,
+        state: "alert",
+        visible: true,
+      })
     }
+
+    setSubmitting(false)
   }
 
   const handleField = useCallback((field: string, value: any) => {
@@ -172,6 +204,8 @@ const ProductForm = () => {
   }, [options.models])
 
   const handleDelete = async () => {
+    setDeleting(true)
+
     if (id) {
       const req = await Api.products.deleteProduct({ id })
 
@@ -190,13 +224,17 @@ const ProductForm = () => {
         })
       }
     }
+
+    setDeleting(false)
   }
 
   // # Initial loading
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
-      const pageInfo = await Api.products.formBare({})
+      const pageInfo = await Api.products.formBare({ id })
 
       if (pageInfo.ok) {
         const opts = {
@@ -211,16 +249,7 @@ const ProductForm = () => {
         setModels(pageInfo.data.models)
         setColors(pageInfo.data.colors)
 
-        if (id) {
-          const pInfo = await Api.products.getProduct({ id })
-          setTimeout(() => {
-            if (pInfo.ok) {
-              const p = pInfo.data
-
-              setProduct(p)
-            }
-          }, 150)
-        }
+        if (pageInfo.data.product) setProduct(pageInfo.data.product)
       } else {
         controllers.feedback.setData({
           message: pageInfo.error.message,
@@ -229,8 +258,14 @@ const ProductForm = () => {
         })
       }
     } catch (error) {
-      alert("Tente novamente mais tarde")
+      controllers.feedback.setData({
+        message: error.message,
+        state: "error",
+        visible: true,
+      })
     }
+
+    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -239,6 +274,8 @@ const ProductForm = () => {
 
   return (
     <S.Content>
+      <Modal.Loading showing={loading} closeFn={() => {}} />
+
       <PageHead
         title={"Produtos"}
         subtitle={`${id ? "Edição" : "Cadastro"} de produto`}
@@ -282,7 +319,7 @@ const ProductForm = () => {
 
       <S.FormGroup>
         <S.GroupTitle>Estoque</S.GroupTitle>
-        <S.FormLine>
+        <S.FormLine style={{ alignItems: "flex-end" }}>
           <Input.Select
             label="Tem estoque"
             onChange={(v) => handleField("hasStorage", v)}
@@ -299,20 +336,74 @@ const ProductForm = () => {
             />
           )}
         </S.FormLine>
+        <S.FormLine>
+          <FormControlLabel
+            sx={{
+              "&:has(.Mui-checked) .MuiSwitch-track": {
+                backgroundColor: (theme) =>
+                  product.active ? theme.palette.green[460] : undefined,
+              },
+              "& .Mui-checked .MuiSwitch-thumb": {
+                backgroundColor: (theme) => theme.palette.green[500],
+              },
+              "& .MuiTypography-root": {
+                fontFamily: "Poppins",
+                fontWeight: 300,
+                color: (theme) => theme.palette.neutral[300],
+                fontSize: 14,
+              },
+            }}
+            label="Status"
+            control={
+              <Switch
+                checked={product.active}
+                onChange={() => handleField("active", !product.active)}
+              />
+            }
+          />
+        </S.FormLine>
       </S.FormGroup>
 
-      {id && (
-        <S.FormGroup>
-          <S.FormLine>
+      <S.FormGroup
+        style={{
+          width: "100%",
+          justifyContent: id ? "space-between" : "flex-end",
+        }}
+      >
+        <S.FormLine
+          style={{
+            width: "100%",
+            justifyContent: id ? "space-between" : "flex-end",
+          }}
+        >
+          {id && (
             <Button
               text="Deletar"
               color="red"
               type="primary"
               action={handleDelete}
+              loading={deleting}
             />
-          </S.FormLine>
-        </S.FormGroup>
-      )}
+          )}
+
+          <S.ButtonsArea>
+            <Button
+              color="orange"
+              action={handleCancel}
+              text="Cancelar"
+              type="secondary"
+              disabled={submitting}
+            />
+            <Button
+              color="green"
+              action={handleSave}
+              text={!id ? "Cadastrar" : "Atualizar"}
+              type="primary"
+              loading={submitting}
+            />
+          </S.ButtonsArea>
+        </S.FormLine>
+      </S.FormGroup>
     </S.Content>
   )
 }

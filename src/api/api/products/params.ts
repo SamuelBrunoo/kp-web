@@ -9,6 +9,6 @@ export type TApi_Params_Products = {
     getProducts: {}
     getProduct: { id: string }
     deleteProduct: { id: string }
-    formBare: {}
+    formBare: { id?: string }
   }
 }

@@ -22,6 +22,7 @@ export type TApi_Responses_Products = {
     deleteProduct: Promise<TDefaultRes<{}>>
     formBare: Promise<
       TDefaultRes<{
+        product?: TProduct
         prodTypes: TProductType[]
         models: TModel[]
         colors: TColor[]

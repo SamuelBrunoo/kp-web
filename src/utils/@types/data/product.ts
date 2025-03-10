@@ -20,10 +20,8 @@ export type TPageListProduct = {
   color: string
   price: number
   type: string
-  storage: {
-    has: boolean
-    quantity: number
-  }
+  typeKey: string
+  storage: string | number
 }
 
 export type TNewProduct = {

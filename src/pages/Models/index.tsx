@@ -85,7 +85,7 @@ const ModelsPage = () => {
             label: "Tipo",
             options: [
               { key: "all", value: "Todos" },
-              { key: "pendants", value: "Pingente" },
+              { key: "pendant", value: "Pingente" },
               { key: "tableNecklace", value: "Colar de mesa" },
             ],
             value: filters.type,
@@ -98,7 +98,9 @@ const ModelsPage = () => {
       {/* Table */}
       <Table
         config={tableConfig.models}
-        data={models}
+        data={models.filter((i) =>
+          filters.type !== "all" ? i.typeKey === filters.type : true
+        )}
         search={search}
         searchFields={["name", "code", "price"]}
         actions={{ deleteCallback }}
