@@ -28,9 +28,11 @@ const ProductsPage = () => {
     try {
       const req = await Api.products.getProductsPageList({})
 
+      console.log(req)
+      
       if (req.ok) {
         const { list } = req.data
-
+        
         setProducts(list)
       } else {
       }

@@ -8,19 +8,23 @@ type Props = {
   action: (p?: any) => void
   startIcon?: JSX.Element
   endIcon?: JSX.Element
+  loading?: boolean
+  disabled?: boolean
 }
 
 const Button = (p: Props) => {
   return (
     <MuiButton
+      disabled={p.disabled}
+      loading={p.loading}
       startIcon={p.startIcon}
       endIcon={p.endIcon}
       variant={
         p.type === "primary"
           ? "contained"
           : p.type === "secondary"
-          ? "outlined"
-          : "text"
+          ? "text"
+          : "outlined"
       }
       sx={{
         backgroundColor: (theme) =>
@@ -44,6 +48,10 @@ const Button = (p: Props) => {
             ? theme.palette.orange[460]
             : theme.palette.red[460],
         fontWeight: 400,
+        boxShadow: "none",
+        "&:hover": {
+          boxShadow: "none",
+        },
       }}
       onClick={p.action}
     >

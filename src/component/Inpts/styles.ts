@@ -42,6 +42,7 @@ export const Left = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
+  min-width: 240px;
   gap: 4px;
   flex: 1;
   cursor: ${({ $cursorNormal }) => ($cursorNormal ? "unset" : "pointer")};
@@ -63,9 +64,9 @@ export const InpLine = styled.div<{ $hasError?: boolean }>`
   &:has(input:focus) label,
   &:has(span.dateText) label,
   &:not(:has(input[value=""])) label {
-    top: 0px;
+    top: -4px;
     left: 0px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   span {

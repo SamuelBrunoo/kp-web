@@ -12,7 +12,9 @@ const ColorCheckbox = ({ checked, onChange }: Props) => {
   }
 
   return (
-    <S.Element onClick={handleClick}>{checked && <icons.check />}</S.Element>
+    <S.Element onClick={handleClick} $showing={checked}>
+      <icons.check />
+    </S.Element>
   )
 }
 

@@ -24,6 +24,7 @@ export const Box = styled.div<{
       ? theme.colors.orange[560]
       : "#D8484A"};
   box-shadow: 0 3px 16px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
 
   span {
     font-size: 12px;

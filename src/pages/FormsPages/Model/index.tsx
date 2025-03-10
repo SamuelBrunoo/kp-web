@@ -20,6 +20,8 @@ import Table from "../../../component/Table"
 import getStore from "../../../store"
 import Button from "../../../component/Button"
 import { TColor } from "../../../utils/@types/data/color"
+import { Grid2, Typography } from "@mui/material"
+import Modal from "../../../component/Modal"
 
 const ModelForm = () => {
   const { id } = useParams()
@@ -27,6 +29,9 @@ const ModelForm = () => {
   const { controllers } = getStore()
 
   const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const [model, setModel] = useState<Partial<TModel>>(initialForm.model as any)
   const [allowedColors, setAllowedColors] = useState<
@@ -58,48 +63,70 @@ const ModelForm = () => {
   }
 
   const handleSave = async () => {
-    if (id) {
-      // edit ...
-      const cls = allowedColors
-        .map((ac) => (ac.checked ? ac.code : null))
-        .filter((ac) => ac)
+    setSubmitting(true)
 
-      const update = await Api.models.updateModel({
-        model: { ...model, colors: cls } as TModel,
-      })
+    try {
+      if (id) {
+        // edit ...
+        const cls = allowedColors
+          .map((ac) => (ac.checked ? ac.code : null))
+          .filter((ac) => ac)
 
-      if (update.ok) {
-        controllers.feedback.setData({
-          message: "Modelo atualizado com sucesso",
-          state: "success",
-          visible: true,
+        const update = await Api.models.updateModel({
+          model: { ...model, colors: cls } as TModel,
         })
-        navigate(-1)
+
+        if (update.ok) {
+          controllers.feedback.setData({
+            message: "Modelo atualizado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: update.error.message,
+            state: "alert",
+            visible: true,
+          })
+        }
       } else {
-        controllers.feedback.setData({
-          message: "Ops! Houve um problema. Tente novamente mais tarde.",
-          state: "alert",
-          visible: true,
-        })
-      }
-    } else {
-      const cls = allowedColors
-        .map((ac) => (ac.checked ? ac.code : null))
-        .filter((ac) => ac)
+        const cls = allowedColors
+          .map((ac) => (ac.checked ? ac.code : null))
+          .filter((ac) => ac)
 
-      const create = await Api.models.createModel({
-        newModel: { ...model, colors: cls } as TNewModel,
+        console.log(model)
+
+        const create = await Api.models.createModel({
+          newModel: { ...model, colors: cls } as TNewModel,
+        })
+
+        if (create.ok) {
+          controllers.feedback.setData({
+            message: "Modelo adicionado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: create.error.message,
+            state: "error",
+            visible: true,
+          })
+        }
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        message: `Houve um erro ao ${
+          id ? "editar" : "salvar"
+        } o modelo. Tente novamente mais tarde.`,
+        state: "error",
+        visible: true,
       })
-
-      if (create.ok) {
-        controllers.feedback.setData({
-          message: "Modelo adicionado com sucesso",
-          state: "success",
-          visible: true,
-        })
-        navigate(-1)
-      }
     }
+
+    setSubmitting(false)
   }
 
   const handleField = useCallback((field: string, value: any) => {
@@ -109,6 +136,8 @@ const ModelForm = () => {
   // # Initial loading
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const params = id ? { modelId: id } : null
 
@@ -117,11 +146,20 @@ const ModelForm = () => {
       if (req.ok) {
         const modelInfo = req.data.model
 
-        if (modelInfo) setModel(modelInfo.model)
-
         const newOptions: { [key: string]: TRoOption[] } = {
           prodTypes: parseRoOption(req.data.prodTypes, "name", "code"),
           colors: parseRoOption(req.data.colors, "name", "code"),
+        }
+
+        if (modelInfo) setModel(modelInfo.model)
+        else {
+          setModel((mdl) => ({
+            ...mdl,
+            type:
+              newOptions.prodTypes.length === 0
+                ? ""
+                : newOptions.prodTypes[0].key,
+          }))
         }
 
         setOptions((opts) => ({
@@ -140,10 +178,26 @@ const ModelForm = () => {
 
         setVariations(req.data.model ? req.data.model.variations : [])
       } else {
-        // ...
+        controllers.feedback.setData({
+          message: req.error.message,
+          state: "error",
+          visible: true,
+        })
       }
-    } catch (error) {}
-  }, [id])
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Houve um erro ao carregar as informações. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+      navigate(-1)
+    }
+
+    setTimeout(() => {
+      setLoading(false)
+    }, 400)
+  }, [controllers.feedback, id, navigate])
 
   useEffect(() => {
     loadData()
@@ -151,27 +205,48 @@ const ModelForm = () => {
 
   // Renders
   const renderColorsControl = () => {
-    let tables: any[] = []
+    let columns: any[] = []
 
-    for (let i = 0; i < Math.ceil(allowedColors.length / 6); i++) {
-      tables.push(
-        <Table
-          key={i}
-          config={tableConfig.colors}
-          data={allowedColors
+    const cols = 4
+    const perColumn = 4
+
+    for (let i = 0; i < Math.ceil(allowedColors.length / cols); i++) {
+      columns.push(
+        <Grid2 container direction={"column"} gap={1}>
+          {allowedColors
             .sort((a, b) => a.name.localeCompare(b.name))
-            .slice(i * 6, (i + 1) * 6)}
-          actions={{ toggleColor }}
-          noHover={true}
-        />
+            .slice(i * perColumn, (i + 1) * perColumn)
+            .map((item, itemKey) => (
+              <Grid2 key={itemKey} container direction={"row"}>
+                <Typography
+                  width={180}
+                  fontWeight={300}
+                  sx={{
+                    transition: "color 0.3s ease",
+                    color: (theme) =>
+                      item.checked
+                        ? theme.palette.neutral[100]
+                        : theme.palette.neutral[300],
+                  }}
+                >
+                  {item.name}
+                </Typography>
+                <Input.ColorCheckbox
+                  checked={item.checked}
+                  onChange={() => toggleColor(item.code)}
+                />
+              </Grid2>
+            ))}
+        </Grid2>
       )
     }
 
-    return tables
+    return columns
   }
 
   return (
     <S.Content>
+      <Modal.Loading showing={loading} closeFn={() => {}} />
       <PageHead
         title={"Modelos"}
         forForm={true}
@@ -246,13 +321,15 @@ const ModelForm = () => {
           color="orange"
           action={handleCancel}
           text="Cancelar"
-          type="primary"
+          type="secondary"
+          disabled={submitting}
         />
         <Button
           color="green"
           action={handleSave}
           text={!id ? "Cadastrar" : "Atualizar"}
           type="primary"
+          loading={submitting}
         />
       </S.ButtonsArea>
     </S.Content>

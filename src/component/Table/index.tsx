@@ -25,7 +25,7 @@ type Props = {
 
 const Table = ({
   config,
-  data,
+  data = [],
   noHover,
   actions,
   search,

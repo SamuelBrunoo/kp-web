@@ -22,13 +22,13 @@ export const SelectArea = styled.div<{ $qt?: number; $reverse?: boolean }>`
 `
 
 export const DataArea = styled.div`
-  padding: 8px;
+  padding: 9px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 24px;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.neutral[800]};
   color: ${({ theme }) => theme.colors.neutral[100]};
   cursor: pointer;
@@ -54,7 +54,7 @@ export const Left = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 12px;
+  font-size: 14px;
 `
 
 export const Label = styled.span<{ $hasError?: boolean }>`
@@ -64,11 +64,11 @@ export const Label = styled.span<{ $hasError?: boolean }>`
   margin-left: 8px;
   transition: top 0.3s, font-size 0.3s, color 0.3s;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 14px;
 `
 
 export const SelectedInfo = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 300;
   white-space: nowrap;
   display: block;
@@ -78,7 +78,7 @@ export const SelectedInfo = styled.span`
 export const OptionsArea = styled.div<{ $reverse: boolean }>`
   display: none;
   position: absolute;
-  ${({ $reverse }) => ($reverse ? `bottom` : `top`)}: calc(100% + 6px);
+  ${({ $reverse }) => ($reverse ? `bottom` : `top`)}: calc(100% + 7px);
   right: 0;
   left: 0px;
   width: 100%;
@@ -102,10 +102,10 @@ export const Option = styled.div`
   font-size: 12px;
   font-weight: 300;
   white-space: nowrap;
-  color: ${({ theme }) => theme.colors.neutral[500]};
+  color: ${({ theme }) => theme.colors.neutral[300]};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.green[260]};
+    background-color: ${({ theme }) => theme.colors.green[430]};
     color: ${({ theme }) => theme.colors.neutral[100]};
   }
 `

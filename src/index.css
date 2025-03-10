@@ -14,3 +14,9 @@
 td:has(.actions-area) {
   width: 1%;
 }
+
+/* Loading modal */
+.MuiModal-root.loadingModal .MuiBackdrop-root {
+  background-color: rgba(200, 200, 200, 0.4);
+  backdrop-filter: blur(6px);
+}

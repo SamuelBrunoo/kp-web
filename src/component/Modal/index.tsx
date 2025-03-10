@@ -1,4 +1,5 @@
 import AddOrderProduct from "./AddOrderProduct"
+import LoadingModal from "./Loading"
 
 export type TDefaultProps = {
   showing: boolean
@@ -7,6 +8,7 @@ export type TDefaultProps = {
 
 const Modal = {
   AddOrderProduct,
+  Loading: LoadingModal,
 }
 
 export default Modal

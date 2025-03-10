@@ -3,6 +3,7 @@ import { service } from "../../"
 import { AxiosError } from "axios"
 import { TApi_Params_Models as TParams } from "./params"
 import { TApi_Responses_Models as TResponses } from "./responses"
+import { getApiError } from "../../../utils/helpers/api/getApiErrors"
 
 const baseURL = "/models"
 
@@ -14,9 +15,8 @@ export const createModel: TApi["models"]["createModel"] = async ({
       await service
         .post(`${baseURL}`, newModel)
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data
             resolve({
               ok: true,
               data: {
@@ -24,23 +24,11 @@ export const createModel: TApi["models"]["createModel"] = async ({
               },
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível cadastrar o modelo. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível cadastrar o modelo. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -59,9 +47,8 @@ export const updateModel: TApi["models"]["updateModel"] = async ({ model }) => {
       await service
         .put(`${baseURL}/${model.id}`, model)
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data.data
             resolve({
               ok: true,
               data: {
@@ -69,23 +56,11 @@ export const updateModel: TApi["models"]["updateModel"] = async ({ model }) => {
               },
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível atualizar o modelo. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível atualizar o modelo. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -106,9 +81,8 @@ export const getModels: TApi["models"]["getModels"] = async () => {
           params: {},
         })
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data
             resolve({
               ok: true,
               data: {
@@ -116,23 +90,11 @@ export const getModels: TApi["models"]["getModels"] = async () => {
               },
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível listar os modelos. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível listar os modelos. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -163,23 +125,11 @@ export const getModel: TApi["models"]["getModel"] = async ({ id }) => {
               },
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível acessar as informações do modelo. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível acessar as informações do modelo. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -210,22 +160,11 @@ export const getModelsPageList: TApi["models"]["getModelsPageList"] = async (
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message: res.data.error,
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível listar os modelos. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -256,23 +195,11 @@ export const deleteModel: TApi["models"]["deleteModel"] = async ({ id }) => {
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível excluir o modelo. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível excluir o modelo. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
