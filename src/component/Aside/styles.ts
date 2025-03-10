@@ -2,7 +2,8 @@ import styled from "styled-components"
 
 export const Component = styled.div`
   padding: 10px;
-  max-width: 240px;
+  width: 100%;
+  max-width: 280px;
   border-right: 1px solid ${({ theme }) => theme.colors.green[200]};
 `
 
@@ -21,7 +22,6 @@ export const MainContent = styled.div`
 
 export const UserArea = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 12px;
   height: 128px;

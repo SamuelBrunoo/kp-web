@@ -3,8 +3,11 @@ import { menu } from "../../utils/sys/menu"
 import { useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
 import SideMenuItem from "../SidemenuItem"
+import getStore from "../../store"
 
 const Aside = () => {
+  const { user } = getStore()
+
   const location = useLocation()
   const [page, setPage] = useState("")
 
@@ -21,8 +24,8 @@ const Aside = () => {
         <S.MainContent>
           <S.UserArea>
             <S.UserData>
-              <S.UserName>Keila Coelho</S.UserName>
-              <S.UserEmail>keeilacooelho@hotmail.com</S.UserEmail>
+              <S.UserName>{user?.name}</S.UserName>
+              <S.UserEmail>{user?.email}</S.UserEmail>
             </S.UserData>
           </S.UserArea>
           <S.MenuArea>
