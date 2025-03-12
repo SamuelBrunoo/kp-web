@@ -43,11 +43,17 @@ export const initialForm = {
     price: "",
   },
   client: {
-    name: "",
+    type: "",
+    clientName: "",
+    personName: "",
     socialRole: "",
-    cpf: "",
-    cnpj: "",
-    stateRegister: "",
+    phone1: "",
+    phone2: "",
+    documents: {
+      register: "",
+      stateInscription: "",
+      cityInscription: "",
+    },
     address: {
       full: "",
       street: "",

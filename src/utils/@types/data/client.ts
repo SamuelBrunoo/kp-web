@@ -1,11 +1,18 @@
-export type TClient = {
+export type TClientType = "juridical" | "physical"
+
+export type TBaseClient = {
   id: string
-  type: string
-  name: string
+  type: TClientType
+  clientName: string
+  personName: string
   socialRole: string
-  cpf?: string
-  cnpj?: string
-  stateRegister: string
+  phone1: string
+  phone2: string
+  documents: {
+    register: string
+    stateInscription: string
+    cityInscription: string
+  }
   address: {
     full: string
     street: string
@@ -16,18 +23,48 @@ export type TClient = {
     cep: string
   }
   email: string
-  phone: string
+  representative: string
+}
+
+export type TClient = {
+  id: string
+  type: TClientType
+  clientName: string
+  personName: string
+  socialRole: string
+  phone1: string
+  phone2: string
+  documents: {
+    register: string
+    stateInscription: string
+    cityInscription: string
+  }
+  address: {
+    full: string
+    street: string
+    number: string
+    neighborhood: string
+    city: string
+    state: string
+    cep: string
+  }
+  email: string
   orders: string[]
   representative: string
 }
 
 export type TNewClient = {
-  name: string
-  type: string
+  type: TClientType
+  clientName: string
+  personName: string
   socialRole: string
-  cpf?: string
-  cnpj?: string
-  stateRegister: string
+  phone1: string
+  phone2: string
+  documents: {
+    register: string
+    stateInscription: string
+    cityInscription: string
+  }
   address: {
     full: string
     street: string
@@ -38,6 +75,5 @@ export type TNewClient = {
     cep: string
   }
   email: string
-  phone: string
   representative: string
 }

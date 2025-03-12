@@ -150,7 +150,9 @@ export const tableConfig: {
       socialRole: (item: TClient) => item.socialRole ?? "-",
       address: (item: TClient) => item.address.full,
       cpfCnpj: (item: TClient) =>
-        item.cpf ? formatCpf(item.cpf) : formatCnpj(item.cnpj ?? ""),
+        item.type === "physical"
+          ? formatCpf(item.documents.register)
+          : formatCnpj(item.documents.register),
       cep: (item: TClient) => formatCep(item.address.cep),
       actions: (item: TClient, deleteCallback) => (
         <TableActions
@@ -172,7 +174,7 @@ export const tableConfig: {
       { title: "Controle", field: "actions", align: "center" },
     ],
     specialFields: {
-      clientName: (item: TOrder) => item.client.name,
+      clientName: (item: TOrder) => item.client.clientName,
       orderDate: (item: TOrder) => parseDate(item.orderDate, "str"),
       value: (item: TOrder) => formatMoney(item.value),
       status: (item: TOrder) => getStatus("resume", item.status as any),

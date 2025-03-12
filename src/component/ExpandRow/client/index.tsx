@@ -61,25 +61,29 @@ const ClientExpand = (client: TClient) => {
             <AdditionalInfo
               icon={"bookmark"}
               label={"CPF"}
-              value={client.cpf ? formatCpf(client.cpf) : "-"}
+              value={formatCpf(client.documents.register)}
               size={3}
             />
-            <AdditionalInfo
-              icon={"bookmark"}
-              label={"Insc. Estadual"}
-              value={formatStateRegister(client.stateRegister)}
-              size={3}
-            />
-            <AdditionalInfo
-              icon={"bookmark"}
-              label={"CNPJ"}
-              value={client.cnpj ? formatCnpj(client.cnpj) : "-"}
-              size={3}
-            />
+            {client.type === "juridical" && (
+              <>
+                <AdditionalInfo
+                  icon={"bookmark"}
+                  label={"Insc. Estadual"}
+                  value={formatStateRegister(client.documents.register)}
+                  size={3}
+                />
+                <AdditionalInfo
+                  icon={"bookmark"}
+                  label={"CNPJ"}
+                  value={formatCnpj(client.documents.register)}
+                  size={3}
+                />
+              </>
+            )}
             <AdditionalInfo
               icon={"bookmark"}
               label={"Telefone"}
-              value={formatPhone(client.phone)}
+              value={formatPhone(client.phone1)}
               size={3}
             />
           </S.AIRow>

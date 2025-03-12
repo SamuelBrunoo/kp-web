@@ -23,23 +23,11 @@ export const createProduct: TApi["products"]["createProduct"] = async ({
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível cadastrar o produto. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -68,23 +56,11 @@ export const updateProduct: TApi["products"]["updateProduct"] = async ({
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível atualizar o produto. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível atualizar o produto. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -113,23 +89,11 @@ export const getProducts: TApi["products"]["getProducts"] = async (filters) => {
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível listar os produtos. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível listar os produtos. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({

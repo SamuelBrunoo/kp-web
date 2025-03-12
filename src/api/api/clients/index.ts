@@ -3,6 +3,7 @@ import { service } from "../.."
 import { AxiosError } from "axios"
 import { TApi_Params_Clients as TParams } from "./params"
 import { TApi_Responses_Clients as TResponses } from "./responses"
+import { getApiError } from "../../../utils/helpers/api/getApiErrors"
 
 const baseURL = "/clients"
 
@@ -22,23 +23,11 @@ export const createClient: TApi["clients"]["createClient"] = async ({
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível cadastrar o cliente. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -67,23 +56,11 @@ export const updateClient: TApi["clients"]["updateClient"] = async ({
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível atualizar o cliente. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -112,23 +89,11 @@ export const getClients: TApi["clients"]["getClients"] = async (filters) => {
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível listar os clientes. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível listar os clientes. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -159,23 +124,11 @@ export const getClient: TApi["clients"]["getClient"] = async ({ id }) => {
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível obter as informações do cliente. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({
@@ -202,23 +155,11 @@ export const deleteClient: TApi["clients"]["deleteClient"] = async ({ id }) => {
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível deletar o cliente. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {
-          resolve({
-            ok: false,
-            error: {
-              message:
-                "Não foi possível deletar o cliente. Tente novamente mais tarde.",
-            },
-          })
+          resolve(getApiError(err))
         })
     } catch (error) {
       reject({

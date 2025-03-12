@@ -52,16 +52,16 @@ const OrderExpand = (order: TOrder) => {
               icon={"bookmark"}
               label={"CPF / CNPJ"}
               value={
-                order.client.type === "phisical"
-                  ? formatCpf(order.client.cpf as string)
-                  : formatCnpj(order.client.cnpj as string)
+                order.client.type === "physical"
+                  ? formatCpf(order.client.documents.register)
+                  : formatCnpj(order.client.documents.register)
               }
               size={3}
             />
             <AdditionalInfo
               icon={"bookmark"}
               label={"Insc. Estadual"}
-              value={formatStateRegister(order.client.stateRegister)}
+              value={formatStateRegister(order.client.documents.register)}
               size={3}
             />
             <AdditionalInfo

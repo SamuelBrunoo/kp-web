@@ -10,11 +10,14 @@ import Table from "../../component/Table"
 
 import { Api } from "../../api"
 import getStore from "../../store"
+import Modal from "../../component/Modal"
 
 const ProductsPage = () => {
   const { controllers } = getStore()
 
   const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(false)
 
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     type: "all",
@@ -34,6 +37,8 @@ const ProductsPage = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.products.getProductsPageList({})
 
@@ -56,6 +61,8 @@ const ProductsPage = () => {
       })
       navigate(-1)
     }
+
+    setLoading(false)
   }, [controllers.feedback, navigate])
 
   useEffect(() => {
@@ -64,6 +71,8 @@ const ProductsPage = () => {
 
   return (
     <S.Content>
+      <Modal.Loading showing={loading} closeFn={() => {}} />
+
       <PageHead
         title={"Produtos"}
         search={search}

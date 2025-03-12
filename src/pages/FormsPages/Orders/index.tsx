@@ -313,11 +313,13 @@ const OrdersForm = () => {
             avoidAutoSelect={true}
           />
           <Input.Readonly
-            label={selectedClient?.type === "phisical" ? "CPF" : "CNPJ"}
+            label={selectedClient?.type === "physical" ? "CPF" : "CNPJ"}
             value={
-              selectedClient?.type === "phisical"
-                ? formatCpf(selectedClient?.cpf ?? "")
-                : formatCnpj(selectedClient?.cnpj ?? "")
+              selectedClient
+                ? selectedClient.type === "physical"
+                  ? formatCpf(selectedClient?.documents.register as string)
+                  : formatCnpj(selectedClient?.documents.register as string)
+                : ""
             }
           />
         </S.FormLine>
@@ -424,7 +426,7 @@ const OrdersForm = () => {
           <S.AIRow>
             <AdditionalInfo
               label={"Cliente"}
-              value={selectedClient?.name ?? ""}
+              value={selectedClient?.clientName ?? ""}
               size={6}
             />
             <AdditionalInfo
