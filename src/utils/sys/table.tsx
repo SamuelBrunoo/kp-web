@@ -139,15 +139,14 @@ export const tableConfig: {
   },
   clients: {
     columns: [
-      { title: "Cliente", field: "name" },
       { title: "Razão social", field: "socialRole" },
+      { title: "Nome do cliente", field: "name" },
       { title: "CPF / CNPJ", field: "cpfCnpj" },
       { title: "Endereço", field: "address" },
       { title: "CEP", field: "cep" },
       { title: "", field: "actions" },
     ],
     specialFields: {
-      socialRole: (item: TPageListClient) => item.name ?? "-",
       address: (item: TPageListClient) => item.address.full,
       cpfCnpj: (item: TPageListClient) =>
         item.type === "physical"

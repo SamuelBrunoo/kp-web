@@ -15,6 +15,7 @@ import {
   TNewClient,
   TBaseClient,
   TClientType,
+  TClient,
 } from "../../../utils/@types/data/client"
 import { formatCnpj } from "../../../utils/helpers/formatters/cnpj"
 import { formatCpf } from "../../../utils/helpers/formatters/cpf"
@@ -79,7 +80,7 @@ const ClientsForm = () => {
     if (id) {
       // edit ...
       const update = await Api.clients.updateClient({
-        client: client as TBaseClient,
+        client: client as TClient,
       })
       if (update.ok) {
         controllers.feedback.setData({
@@ -296,7 +297,7 @@ const ClientsForm = () => {
             <Input.Default
               label="CPF"
               onChange={(v) => handleField("documents.register", v)}
-              value={client.documents.register}
+              value={formatCpf(client.documents.register)}
             />
           </S.FormLine>
         ) : (
@@ -304,12 +305,12 @@ const ClientsForm = () => {
             <Input.Default
               label="CNPJ"
               onChange={(v) => handleField("documents.register", v)}
-              value={client.documents.register}
+              value={formatCnpj(client.documents.register)}
             />
             <Input.Default
               label="Inscrição Estadual"
               onChange={(v) => handleField("documents.stateInscription", v)}
-              value={client.documents.stateInscription}
+              value={formatStateRegister(client.documents.stateInscription)}
             />
           </S.FormLine>
         )}
@@ -325,7 +326,7 @@ const ClientsForm = () => {
           />
           <Input.Default
             label="Telefone"
-            value={client.phone1}
+            value={formatPhone(client.phone1)}
             onChange={(v) => handleField("phone1", v)}
           />
         </S.FormLine>
@@ -357,7 +358,7 @@ const ClientsForm = () => {
           />
           <Input.Default
             label="CEP"
-            value={client.address.cep}
+            value={formatCep(client.address.cep)}
             onChange={(v) => handleField("address.cep", v)}
           />
         </S.FormLine>

@@ -76,6 +76,7 @@ export type TPageListClient = {
   id: string
   type: TClientType
   name: string
+  socialRole: string
   address: TAddress
   cep: string
   document: string

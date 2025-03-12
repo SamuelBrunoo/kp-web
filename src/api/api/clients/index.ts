@@ -46,7 +46,7 @@ export const updateClient: TApi["clients"]["updateClient"] = async ({
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .put(`${baseURL}`, client)
+        .put(`${baseURL}/${client.id}`, client)
         .then((res) => {
           const info = res.data
 
