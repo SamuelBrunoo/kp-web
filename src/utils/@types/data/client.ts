@@ -77,3 +77,13 @@ export type TNewClient = {
   email: string
   representative: string
 }
+
+export type TPageListClient = {
+  id: string
+  name: string
+  address: string
+  document: string
+  stateIncription: string
+  orders: number
+  deletable: boolean
+}

@@ -8,13 +8,19 @@ import PageHead from "../../component/PageHead"
 import Table from "../../component/Table"
 
 import { Api } from "../../api"
-import { TClient } from "../../utils/@types/data/client"
+import { TPageListClient } from "../../utils/@types/data/client"
 import ExpansibleRow from "../../component/ExpandRow"
+import Modal from "../../component/Modal"
+import getStore from "../../store"
 
 const ClientsPage = () => {
+  const { controllers } = getStore()
+
   const navigate = useNavigate()
 
-  const [clients, setClients] = useState<TClient[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const [clients, setClients] = useState<TPageListClient[]>([])
   const [search, setSearch] = useState("")
 
   const handleNew = () => {
@@ -26,16 +32,31 @@ const ClientsPage = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
-      const req = await Api.clients.getClients({})
+      const req = await Api.clients.getClientsListPage({})
       if (req.ok) {
         const list = req.data.list
         setClients(list)
-      } else throw new Error(req.error.message)
+      } else {
+        controllers.feedback.setData({
+          message: req.error.message,
+          state: "error",
+          visible: true,
+        })
+      }
     } catch (error) {
-      // feedbackError
+      controllers.feedback.setData({
+        message:
+          "Houve um erro ao carregar as informações. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
     }
-  }, [])
+
+    setLoading(false)
+  }, [controllers.feedback])
 
   useEffect(() => {
     loadData()
@@ -43,6 +64,8 @@ const ClientsPage = () => {
 
   return (
     <S.Content>
+      <Modal.Loading showing={loading} closeFn={() => {}} />
+
       <PageHead
         title={"Clientes"}
         search={search}

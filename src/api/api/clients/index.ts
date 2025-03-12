@@ -73,6 +73,41 @@ export const updateClient: TApi["clients"]["updateClient"] = async ({
   })
 }
 
+export const getClientsListPage: TApi["clients"]["getClientsListPage"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${baseURL}/listPage`, {
+          params: filters,
+        })
+        .then((res) => {
+          const info = res.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve(getApiError(res))
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve(getApiError(err))
+        })
+    } catch (error) {
+      reject({
+        error: {
+          message:
+            "Não foi possível listar os clientes. Tente novamente mais tarde.",
+        },
+      })
+    }
+  })
+}
+
 export const getClients: TApi["clients"]["getClients"] = async (filters) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -179,6 +214,9 @@ export type TApi_Clients = {
   updateClient: (
     p: TParams["clients"]["updateClient"]
   ) => TResponses["clients"]["updateClient"]
+  getClientsListPage: (
+    p: TParams["clients"]["getClientsListPage"]
+  ) => TResponses["clients"]["getClientsListPage"]
   getClients: (
     p: TParams["clients"]["getClients"]
   ) => TResponses["clients"]["getClients"]
@@ -194,6 +232,7 @@ export const apiClients: TApi["clients"] = {
   createClient: createClient,
   updateClient: updateClient,
   getClients: getClients,
+  getClientsListPage: getClientsListPage,
   getClient: getClient,
   deleteClient: deleteClient,
 }

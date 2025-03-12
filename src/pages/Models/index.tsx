@@ -50,10 +50,17 @@ const ModelsPage = () => {
       if (req.ok) {
         const list = req.data.list
         setModels(list)
-      } else throw new Error(req.error.message)
+      } else {
+        controllers.feedback.setData({
+          message: req.error.message,
+          state: "error",
+          visible: true,
+        })
+      }
     } catch (error) {
       controllers.feedback.setData({
-        message: error.message,
+        message:
+          "Houve um erro ao carregar os dados. Tente novamente mais tarde.",
         state: "error",
         visible: true,
       })

@@ -1,5 +1,5 @@
 import { TDefaultRes } from "../../types/responses"
-import { TClient } from "../../../utils/@types/data/client"
+import { TClient, TPageListClient } from "../../../utils/@types/data/client"
 
 export type TApi_Responses_Clients = {
   clients: {
@@ -11,6 +11,11 @@ export type TApi_Responses_Clients = {
     updateClient: Promise<
       TDefaultRes<{
         client: TClient
+      }>
+    >
+    getClientsListPage: Promise<
+      TDefaultRes<{
+        list: TPageListClient[]
       }>
     >
     getClients: Promise<
