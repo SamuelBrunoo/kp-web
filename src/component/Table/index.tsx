@@ -33,7 +33,16 @@ const Table = ({
   expandComponent,
 }: Props) => {
   return (
-    <MuiTable>
+    <MuiTable
+      sx={{
+        "& th": {
+          borderBottom: "none",
+        },
+        "& td": {
+          borderBottom: "none",
+        },
+      }}
+    >
       <TableHead>
         <TableRow>
           {config.columns.map((col, colKey) => (
@@ -105,6 +114,14 @@ const RowItem = (props: TRowItemProps) => {
         hover={!noHover}
         sx={{
           transition: "background-color 0.3s",
+          backgroundColor: (theme) =>
+            isExpanded ? theme.palette.neutral[800] : "transparent",
+          "& td:nth-child(1)": {
+            borderTopLeftRadius: 8,
+          },
+          "& td:nth-last-child(1)": {
+            borderTopRightRadius: 8,
+          },
           "&:hover": {
             backgroundColor: (theme) =>
               `${theme.palette.neutral[800]} !important`,
@@ -156,7 +173,7 @@ const RowItem = (props: TRowItemProps) => {
         })}
       </TableRow>
       {config.isExpandable && expandComponent && (
-        <S.RowExpandable className={isExpanded ? "highlighted noBg" : "noBg"}>
+        <S.RowExpandable className={isExpanded ? "highlighted" : "noBg"}>
           <S.REWrapper colSpan={6}>
             <S.REBox $visible={isExpanded}>
               <S.REContainer>{expandComponent(item)}</S.REContainer>

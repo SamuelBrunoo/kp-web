@@ -83,9 +83,8 @@ export const getClientsListPage: TApi["clients"]["getClientsListPage"] = async (
           params: filters,
         })
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data.data
             resolve({
               ok: true,
               data: info,
@@ -151,9 +150,8 @@ export const getClient: TApi["clients"]["getClient"] = async ({ id }) => {
           },
         })
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data.data
             resolve({
               ok: true,
               data: info,

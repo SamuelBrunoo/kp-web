@@ -89,12 +89,21 @@ export const RowExpandable = styled.tr`
   display: table-row;
   outline: 0px;
   cursor: unset;
+
+  &.highlighted {
+    td {
+      background-color: ${({ theme }) => theme.colors.neutral[800]};
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+  }
 `
 
 export const REWrapper = styled.td`
   color: inherit;
   vertical-align: middle;
   outline: 0px;
+  transition: background-color 0.3s;
 `
 
 export const REBox = styled.div<{ $visible: boolean }>`

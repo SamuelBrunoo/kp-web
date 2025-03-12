@@ -15,3 +15,13 @@ export type TState = {
   abbreviation: string
   country: string
 }
+
+export type TAddress = {
+  full: string
+  street: string
+  number: string
+  neighborhood: string
+  city: string
+  state: string
+  cep: string
+}

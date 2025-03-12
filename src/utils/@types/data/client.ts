@@ -1,3 +1,5 @@
+import { TAddress } from "./address"
+
 export type TClientType = "juridical" | "physical"
 
 export type TBaseClient = {
@@ -13,15 +15,7 @@ export type TBaseClient = {
     stateInscription: string
     cityInscription: string
   }
-  address: {
-    full: string
-    street: string
-    number: string
-    neighborhood: string
-    city: string
-    state: string
-    cep: string
-  }
+  address: TAddress
   email: string
   representative: string
 }
@@ -80,10 +74,13 @@ export type TNewClient = {
 
 export type TPageListClient = {
   id: string
+  type: TClientType
   name: string
-  address: string
+  address: TAddress
+  cep: string
   document: string
   stateIncription: string
   orders: number
   deletable: boolean
+  details: TClient
 }

@@ -39,6 +39,7 @@ const ClientsPage = () => {
       if (req.ok) {
         const list = req.data.list
         setClients(list)
+        console.log(list)
       } else {
         controllers.feedback.setData({
           message: req.error.message,

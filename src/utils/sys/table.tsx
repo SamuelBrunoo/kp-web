@@ -2,7 +2,7 @@ import { Switch } from "@mui/material"
 import Input from "../../component/Inpts"
 import StatusIndicator from "../../component/StatusIndicator"
 import TableActions from "../../component/Table/TableActions"
-import { TClient } from "../@types/data/client"
+import { TPageListClient } from "../@types/data/client"
 import { TColor } from "../@types/data/color"
 import { TModel, TPageListModel } from "../@types/data/model"
 import { TOrder } from "../@types/data/order"
@@ -147,17 +147,18 @@ export const tableConfig: {
       { title: "", field: "actions" },
     ],
     specialFields: {
-      socialRole: (item: TClient) => item.socialRole ?? "-",
-      address: (item: TClient) => item.address.full,
-      cpfCnpj: (item: TClient) =>
+      socialRole: (item: TPageListClient) => item.name ?? "-",
+      address: (item: TPageListClient) => item.address.full,
+      cpfCnpj: (item: TPageListClient) =>
         item.type === "physical"
-          ? formatCpf(item.documents.register)
-          : formatCnpj(item.documents.register),
-      cep: (item: TClient) => formatCep(item.address.cep),
-      actions: (item: TClient, deleteCallback) => (
+          ? formatCpf(item.document)
+          : formatCnpj(item.document),
+      cep: (item: TPageListClient) => formatCep(item.cep),
+      actions: (item: TPageListClient, deleteCallback) => (
         <TableActions
           table={"clients"}
           id={item.id}
+          canDelete={item.deletable}
           deleteCallback={deleteCallback}
         />
       ),
