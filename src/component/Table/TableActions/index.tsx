@@ -99,7 +99,7 @@ const TableActions = ({
       <S.Content>
         {!noEdit && (
           <S.Action onClick={handleEdit} $role={"edit"}>
-            <icons.edit />
+            <icons.Edit />
           </S.Action>
         )}
         {!noDelete && (
@@ -108,7 +108,7 @@ const TableActions = ({
             $role={"trash"}
             $disabled={!canDelete}
           >
-            <icons.trash />
+            <icons.Trash />
           </S.Action>
         )}
       </S.Content>

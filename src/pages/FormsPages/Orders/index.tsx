@@ -11,14 +11,12 @@ import PageHead from "../../../component/PageHead"
 import Input from "../../../component/Inpts"
 
 import { initialForm } from "../../../utils/initialData/form"
-import { TClient } from "../../../utils/@types/data/client"
+import { TBaseClient, TClient } from "../../../utils/@types/data/client"
 import { formatCep } from "../../../utils/helpers/formatters/cep"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { TNewOrder, TOrder } from "../../../utils/@types/data/order"
 import Table from "../../../component/Table"
 import { tableConfig } from "../../../utils/sys/table"
-import { formatCpf } from "../../../utils/helpers/formatters/cpf"
-import { formatCnpj } from "../../../utils/helpers/formatters/cnpj"
 import { payments } from "../../../utils/sys/payments"
 import Modal from "../../../component/Modal"
 import { TProduct } from "../../../utils/@types/data/product"
@@ -64,9 +62,9 @@ const OrdersForm = () => {
   const [models, setModels] = useState<TModel[]>([])
   const [colors, setColors] = useState<TColor[]>([])
 
-  const [clients, setClients] = useState<TClient[]>([])
+  const [clients, setClients] = useState<TBaseClient[]>([])
   const [productsList, setProdList] = useState<TProduct[]>([])
-  const [selectedClient, setSelectedClient] = useState<TClient | null>(null)
+  const [selectedClient, setSelectedClient] = useState<TBaseClient | null>(null)
   const [showingModal, setShowingModal] = useState(false)
 
   const handleCancel = () => {
@@ -214,7 +212,7 @@ const OrdersForm = () => {
 
   const loadData = useCallback(async () => {
     try {
-      const req = await Api.orders.formBare({})
+      const req = await Api.formBare.order({ orderId: id })
 
       if (req.ok) {
         const pageInfo = req.data
@@ -231,7 +229,7 @@ const OrdersForm = () => {
 
         setOptions((opts) => ({
           ...opts,
-          clients: parseRoOption(pageInfo.clients, "name", "id"),
+          clients: parseRoOption(pageInfo.clients, "clientName", "id"),
           representatives: parseRoOption(
             pageInfo.representatives,
             "name",
@@ -262,7 +260,13 @@ const OrdersForm = () => {
             }, 150)
           }
         }
-      } else throw new Error()
+      } else {
+        controllers.feedback.setData({
+          message: req.error.message,
+          state: "error",
+          visible: true,
+        })
+      }
     } catch (error) {
       alert("Tente novamente mais tarde")
       navigate(-1)
@@ -305,47 +309,31 @@ const OrdersForm = () => {
       <S.FormGroup>
         <S.GroupTitle>Comprador</S.GroupTitle>
         <S.FormLine>
-          <Input.Select
+          <Input.SearchSelect
             label="Cliente"
             onChange={(v) => handleField("client", v)}
             value={order.client}
             roOptions={options.clients}
             avoidAutoSelect={true}
           />
-          <Input.Readonly
-            label={selectedClient?.type === "physical" ? "CPF" : "CNPJ"}
-            value={
-              selectedClient
-                ? selectedClient.type === "physical"
-                  ? formatCpf(selectedClient?.documents.register as string)
-                  : formatCnpj(selectedClient?.documents.register as string)
-                : ""
-            }
-          />
-        </S.FormLine>
-        <S.FormLine>
-          <Input.Readonly
-            label={"Endereço"}
-            value={selectedClient?.address.full}
-          />
-          <Input.Readonly
-            label={"CEP"}
-            value={formatCep(selectedClient?.address.cep ?? "")}
-          />
-          <Input.Readonly label={"UF"} value={selectedClient?.address.state} />
         </S.FormLine>
       </S.FormGroup>
 
       <S.FormGroup>
-        <S.GroupTitle>Venda</S.GroupTitle>
+        <S.GroupTitle>Detalhes da venda</S.GroupTitle>
         <S.FormLine>
-          <Input.Select
-            label="Representante"
-            onChange={(v) => handleField("representative", v)}
-            value={order.representative}
-            roOptions={options.representatives}
-            avoidAutoSelect={true}
+          <Input.Date
+            label="Data da venda"
+            onChange={(v) => handleField("orderDate", v)}
+            value={order.orderDate}
           />
+          <Input.Date
+            label="Data do envio"
+            onChange={(v) => handleField("deadline", v)}
+            value={order.deadline}
+          />
+        </S.FormLine>
+        <S.FormLine>
           <Input.Select
             label="Emissora"
             onChange={(v) => handleField("emmitter", v)}
@@ -378,23 +366,32 @@ const OrdersForm = () => {
           )}
         </S.FormLine>
         <S.FormLine>
-          <Input.Date
-            label="Data do pedido"
-            onChange={(v) => handleField("orderDate", v)}
-            value={order.orderDate}
-          />
-          <Input.Date
-            label="Prazo"
-            onChange={(v) => handleField("deadline", v)}
-            value={order.deadline}
+          <Input.Select
+            label="Envio"
+            onChange={(v) => handleField("shippingType", v)}
+            value={order.shippingType}
+            roOptions={options.shippingTypes}
+            avoidAutoSelect={true}
           />
         </S.FormLine>
         <S.FormLine>
           <Input.Select
-            label="Método de entrega"
-            onChange={(v) => handleField("shippingType", v)}
-            value={order.shippingType}
-            roOptions={options.shippingTypes}
+            label="Método enviado como"
+            onChange={(v) => handleField("shippingMode", v)}
+            value={order.shippingMode}
+            roOptions={[
+              { key: "sedex", value: "Sedex" },
+              { key: "pac", value: "Pac" },
+            ]}
+            avoidAutoSelect={true}
+          />
+        </S.FormLine>
+        <S.FormLine>
+          <Input.Select
+            label="Representante"
+            onChange={(v) => handleField("representative", v)}
+            value={order.representative}
+            roOptions={options.representatives}
             avoidAutoSelect={true}
           />
         </S.FormLine>

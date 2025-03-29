@@ -6,6 +6,7 @@ import DateInput from "./Date"
 import InputMonetary from "./monetary"
 import Readonly from "./readonly"
 import SelectDefault from "./Select"
+import SearchSelect from "./SearchSelect"
 
 const Input = {
   PageSearch: PageSearch,
@@ -16,6 +17,7 @@ const Input = {
   Monetary: InputMonetary,
   Readonly: Readonly,
   Select: SelectDefault,
+  SearchSelect: SearchSelect,
 }
 
 export default Input

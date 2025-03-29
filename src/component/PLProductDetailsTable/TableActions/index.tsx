@@ -66,10 +66,10 @@ const TableActions = ({ table, id, deleteCallback }: Props) => {
     <S.Wrapper className="actions-area">
       <S.Content>
         <S.Action onClick={handleEdit} $role={"edit"}>
-          <icons.edit />
+          <icons.Edit />
         </S.Action>
         <S.Action onClick={handleDelete} $role={"trash"}>
-          <icons.trash />
+          <icons.Trash />
         </S.Action>
       </S.Content>
     </S.Wrapper>

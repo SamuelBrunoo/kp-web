@@ -20,28 +20,28 @@ import { ReactComponent as Search } from "./search.svg"
 import { ReactComponent as Trash } from "./trash.svg"
 
 const Icons = {
-  clients: Clients,
-  delegate: Delegate,
-  employees: Employees,
-  financial: Financial,
-  home: Home,
-  orders: Orders,
-  prods: Prods,
+  Clients: Clients,
+  Delegate: Delegate,
+  Employees: Employees,
+  Financial: Financial,
+  Home: Home,
+  Orders: Orders,
+  Prods: Prods,
 
-  bookmark: Bookmark,
-  calendar: Calendar,
-  dollarBox: DollarBox,
-  dollarCircle: DollarCircle,
-  location: Location,
+  Bookmark: Bookmark,
+  Calendar: Calendar,
+  DollarBox: DollarBox,
+  DollarCircle: DollarCircle,
+  Location: Location,
 
   // sm
-  add: Add,
-  cancel: Cancel,
-  check: Check,
-  dropdown: Dropdown,
-  edit: Edit,
-  search: Search,
-  trash: Trash,
+  Add: Add,
+  Cancel: Cancel,
+  Check: Check,
+  Dropdown: Dropdown,
+  Edit: Edit,
+  Search: Search,
+  Trash: Trash,
 }
 
 export default Icons

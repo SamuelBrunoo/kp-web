@@ -22,6 +22,7 @@ export type TNewOrder = {
     status: string
   }
   shippingType: TShipping
+  shippingMode: TShippingMode
   emmitter: string
 }
 
@@ -48,6 +49,7 @@ export type TOrder = {
     status: string
   }
   shippingType: TShipping
+  shippingMode: TShippingMode
   emmitter: string
 }
 
@@ -59,5 +61,6 @@ type TOrderProduct = TProduct & {
 export type TPayment = "pix" | "cash" | "slip"
 
 export type TShipping = "transporter" | "representative" | "mail"
+export type TShippingMode = "sedex" | "pac"
 
 export type TOPStatus = "queued" | "lor" | "doing" | "done"

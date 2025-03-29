@@ -36,7 +36,7 @@ const DateInput = ({ label, value, onChange }: Props) => {
         <C.Left>
           <C.SelectedInfo>{parseDate(value, "ddmmyyyy")}</C.SelectedInfo>
         </C.Left>
-        <icons.calendar />
+        <icons.Calendar />
       </S.DataArea>
       <S.PickerArea>
         <DatePicker

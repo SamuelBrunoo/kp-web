@@ -22,6 +22,7 @@ const order: TNewOrder = {
     status: "",
   },
   shippingType: "transporter",
+  shippingMode: "sedex",
   emmitter: "",
 }
 

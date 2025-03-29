@@ -100,7 +100,7 @@ const PageSearchSelect = ({
             {selected && selected.key !== "all" ? selected.value : label}
           </S.SelectedInfo>
         </S.Left>
-        <icons.dropdown />
+        <icons.Dropdown />
       </S.DataArea>
       <S.OptionsArea
         ref={dropRef}

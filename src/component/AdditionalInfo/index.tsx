@@ -2,11 +2,11 @@ import * as S from "./styles"
 import icons from "../../assets/icons"
 
 const iconsRelations = {
-  bookmark: <icons.bookmark />,
-  calendar: <icons.calendar />,
-  dollarBox: <icons.dollarBox />,
-  dollarCircle: <icons.dollarCircle />,
-  location: <icons.location />,
+  bookmark: <icons.Bookmark />,
+  calendar: <icons.Calendar />,
+  dollarBox: <icons.DollarBox />,
+  dollarCircle: <icons.DollarCircle />,
+  location: <icons.Location />,
 }
 
 type Props = {

@@ -94,8 +94,6 @@ export const ValueArea = styled.div`
 `
 
 export const Input = styled.input<{ $hasError: boolean }>`
-  background-color: ${({ $hasError, theme }) =>
-    $hasError ? theme.colors.red[630] : theme.colors.neutral[800]};
   color: ${({ $hasError, theme }) =>
     $hasError ? theme.colors.red[460] : theme.colors.neutral[100]};
   font-size: inherit;

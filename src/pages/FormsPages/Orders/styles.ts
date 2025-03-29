@@ -17,7 +17,7 @@ export const FormGroup = styled.div<{ $fullSize?: boolean }>`
 export const GroupTitle = styled.span`
   font-size: 16px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.neutral[100]};
+  color: ${({ theme }) => theme.colors.orange[360]};
 `
 
 export const FormLine = styled.div<{ $fullSize?: boolean }>`

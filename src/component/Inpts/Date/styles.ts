@@ -11,6 +11,8 @@ export const DataArea = styled.div`
   flex: 1;
   transition: color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.neutral[800]};
 
   svg {
     width: 14px;

@@ -68,7 +68,7 @@ const PageHead = ({
           text="Novo"
           action={handleCreate}
           role="new"
-          startIcon={<Icons.add />}
+          startIcon={<Icons.Add />}
         />
       </S.HeaderTop>
       {!forForm && (
