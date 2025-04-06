@@ -1,11 +1,11 @@
 import { Switch } from "@mui/material"
-import Input from "../../component/Inpts"
-import StatusIndicator from "../../component/StatusIndicator"
-import TableActions from "../../component/Table/TableActions"
+import Input from "../../components/Inpts"
+import StatusIndicator from "../../components/StatusIndicator"
+import TableActions from "../../components/Table/TableActions"
 import { TPageListClient } from "../@types/data/client"
 import { TColor } from "../@types/data/color"
 import { TModel, TPageListModel } from "../@types/data/model"
-import { TOrder } from "../@types/data/order"
+import { TOrder, TPageListOrder } from "../@types/data/order"
 import { TPageListProduct, TProduct } from "../@types/data/product"
 import { TProductionLine } from "../@types/data/productionLine"
 import { formatCep } from "../helpers/formatters/cep"
@@ -13,7 +13,9 @@ import { formatCnpj } from "../helpers/formatters/cnpj"
 import { formatCpf } from "../helpers/formatters/cpf"
 import { parseDate } from "../helpers/formatters/date"
 import { formatMoney } from "../helpers/formatters/money"
-import { getStatus } from "../helpers/parsers/getStatus"
+import { TProductType } from "../@types/data/productType"
+
+import { theme } from "../../theme"
 
 type TTableConfigs =
   | "colors"
@@ -24,6 +26,7 @@ type TTableConfigs =
   | "orders"
   | "orderDetailsProducts"
   | "orderFormProducts"
+  | "orderFormSlips"
   | "productionLines"
   | "productProductionGroup"
   | "productProduction"
@@ -87,11 +90,11 @@ export const tableConfig: {
           }}
         />
       ),
-      actions: (item: TPageListProduct, deleteCallback) => (
+      actions: (item: TPageListProduct, { callbacks }) => (
         <TableActions
           table={"products"}
           id={item.id}
-          deleteCallback={deleteCallback}
+          deleteCallback={callbacks.deleteCallback}
           canDelete={item.deletable}
         />
       ),
@@ -153,12 +156,12 @@ export const tableConfig: {
           ? formatCpf(item.document)
           : formatCnpj(item.document),
       cep: (item: TPageListClient) => formatCep(item.cep),
-      actions: (item: TPageListClient, deleteCallback) => (
+      actions: (item: TPageListClient, { callbacks }) => (
         <TableActions
           table={"clients"}
           id={item.id}
           canDelete={item.deletable}
-          deleteCallback={deleteCallback}
+          deleteCallback={callbacks.deleteCallback}
         />
       ),
     },
@@ -170,21 +173,19 @@ export const tableConfig: {
       { title: "Cliente", field: "clientName" },
       { title: "Data do pedido", field: "orderDate" },
       { title: "Valor", field: "value" },
-      { title: "Status", field: "status", align: "center" },
-      { title: "Controle", field: "actions", align: "center" },
+      { title: "Quantidade", field: "quantity", align: "center" },
     ],
     specialFields: {
-      clientName: (item: TOrder) => item.client.clientName,
-      orderDate: (item: TOrder) => parseDate(item.orderDate, "str"),
-      value: (item: TOrder) => formatMoney(item.value),
-      status: (item: TOrder) => getStatus("resume", item.status as any),
-      actions: (item: TOrder, deleteCallback) => (
-        <TableActions
-          table={"orders"}
-          id={item.id}
-          deleteCallback={deleteCallback}
-        />
-      ),
+      value: (item: TPageListOrder) => formatMoney(item.value),
+      quantity: (item: TPageListOrder) => item.quantity,
+      // status: (item: TPageListOrder) => getStatus("resume", item.status as any),
+      // actions: (item: TPageListOrder, { callbacks }) => (
+      //   <TableActions
+      //     table={"orders"}
+      //     id={item.id}
+      //     deleteCallback={callbacks.deleteCallback}
+      //   />
+      // ),
     },
     isExpandable: true,
   },
@@ -203,15 +204,15 @@ export const tableConfig: {
       color: (item: TOrder["products"][number]) => item.color,
       unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
       status: (item: TOrder["products"][number]) => (
-        <StatusIndicator status={item.status} />
+        <StatusIndicator status={item.status} onChange={() => {}} />
       ),
       total: (item: TOrder["products"][number]) =>
         formatMoney(item.price * item.quantity),
-      actions: (item: TOrder["products"][number], deleteCallback) => (
+      actions: (item: TOrder["products"][number], { callbacks }) => (
         <TableActions
           table={"orders"}
           id={item.id}
-          deleteCallback={deleteCallback}
+          deleteCallback={callbacks.deleteCallback}
         />
       ),
     },
@@ -219,30 +220,60 @@ export const tableConfig: {
   },
   orderFormProducts: {
     columns: [
+      { title: "Tipo", field: "type" },
       { title: "Modelo", field: "model" },
       { title: "Cor", field: "color" },
       { title: "Código", field: "code" },
       { title: "Qnt", field: "quantity", align: "center" },
-      { title: "Valor Un.", field: "unitary" },
-      { title: "Valor Total", field: "total" },
+      { title: "Preço Un.", field: "unitary" },
+      { title: "Preço Total", field: "total" },
       { title: "", field: "actions" },
     ],
     specialFields: {
+      type: (item: TOrder["products"][number], { extra }) =>
+        (extra.productTypes as TProductType[]).find(
+          (pt) => pt.code === item.type
+        )?.name,
       model: (item: TOrder["products"][number]) => item.model,
       color: (item: TOrder["products"][number]) => item.color,
       unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
       total: (item: TOrder["products"][number]) =>
         formatMoney(item.price * item.quantity),
-      actions: (item: TOrder["products"][number], deleteCallback) => (
+      actions: (item: TOrder["products"][number], { callbacks }) => (
         <TableActions
           table={"orderFormProduct"}
           id={item.id}
-          deleteCallback={deleteCallback}
+          deleteCallback={callbacks.deleteCallback}
+          canDelete={true}
           noEdit={true}
         />
       ),
     },
     isExpandable: true,
+  },
+  orderFormSlips: {
+    columns: [
+      { title: "Parcela", field: "installment" },
+      { title: "Valor", field: "value" },
+      { title: "Vencimento", field: "due" },
+      { title: "Código de barras", field: "code" },
+      { title: "Total pago", field: "paidTotal", align: "center" },
+      { title: "Preço Total", field: "totalPrice" },
+      { title: "", field: "actions" },
+    ],
+    specialFields: {
+      actions: (item: TOrder["payment"], { callbacks, extra }) =>
+        Object.keys(callbacks).length > 0 ? (
+          <TableActions
+            table={"orderFormProduct"}
+            id={extra.listIndex}
+            deleteCallback={callbacks.deleteCallback}
+            canDelete={true}
+            noEdit={true}
+          />
+        ) : null,
+    },
+    itemColor: theme.colors.neutral[600],
   },
   productionLines: {
     columns: [
@@ -313,7 +344,17 @@ type TColumn = {
 export type TConfig = {
   columns: TColumn[]
   specialFields: {
-    [key: string]: (item: any, callbacks?: any) => any
+    [key: string]: (
+      item: any,
+      info: {
+        data?: any
+        callbacks: {
+          [key: string]: (...params: any[]) => void | Promise<void>
+        }
+        extra?: any
+      }
+    ) => any
   }
   isExpandable?: boolean
+  itemColor?: string
 }

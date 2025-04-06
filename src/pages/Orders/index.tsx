@@ -4,15 +4,18 @@ import * as S from "./styles"
 import { useNavigate } from "react-router-dom"
 import { tableConfig } from "../../utils/sys/table"
 
-import PageHead from "../../component/PageHead"
-import Table from "../../component/Table"
+import PageHead from "../../components/PageHead"
+import Table from "../../components/Table"
 
 import { Api } from "../../api"
 import { TOrder } from "../../utils/@types/data/order"
-import ExpansibleRow from "../../component/ExpandRow"
+import ExpansibleRow from "../../components/ExpandRow"
+import LoadingModal from "../../components/Modal/variations/Loading"
 
 const OrdersPage = () => {
   const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(false)
 
   const [orders, setOrders] = useState<TOrder[]>([])
   const [search, setSearch] = useState("")
@@ -26,6 +29,8 @@ const OrdersPage = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.orders.getPageListOrders({})
       if (req.ok) {
@@ -35,6 +40,8 @@ const OrdersPage = () => {
     } catch (error) {
       // feedbackError
     }
+
+    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -43,6 +50,8 @@ const OrdersPage = () => {
 
   return (
     <S.Content>
+      <LoadingModal visible={loading} />
+
       <PageHead
         title={"Pedidos"}
         search={search}

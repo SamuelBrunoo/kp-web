@@ -24,6 +24,14 @@ export const FormLine = styled.div<{ $fullSize?: boolean }>`
   display: flex;
   gap: 16px;
   width: ${({ $fullSize }) => ($fullSize ? "100%" : "fit-content")};
+
+  div .slipTableTip {
+    color: ${({ theme }) => theme.colors.orange[460]};
+    font-weight: 300;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+  }
 `
 
 // Order Resume

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import * as S from "./styles"
-import Aside from "../../component/Aside"
+import Aside from "../../components/Aside"
 
 const Template = () => {
   return (

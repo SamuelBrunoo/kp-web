@@ -12,6 +12,7 @@ export type TRepresentative = {
     state: string
     cep: string
   }
+  comission: number
   email: string
   phone: string
   clients: string[]
@@ -31,6 +32,7 @@ export type TNewRepresentative = {
     state: string
     cep: string
   }
+  comission: number
   email: string
   phone: string
 }

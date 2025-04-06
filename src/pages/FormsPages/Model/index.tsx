@@ -14,14 +14,14 @@ import { initialForm } from "../../../utils/initialData/form"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { tableConfig } from "../../../utils/sys/table"
 
-import PageHead from "../../../component/PageHead"
-import Input from "../../../component/Inpts"
-import Table from "../../../component/Table"
+import PageHead from "../../../components/PageHead"
+import Input from "../../../components/Inpts"
+import Table from "../../../components/Table"
 import getStore from "../../../store"
-import Button from "../../../component/Button"
+import Button from "../../../components/Button"
 import { TColor } from "../../../utils/@types/data/color"
 import { Grid2, Typography } from "@mui/material"
-import Modal from "../../../component/Modal"
+import LoadingModal from "../../../components/Modal/variations/Loading"
 
 const ModelForm = () => {
   const { id } = useParams()
@@ -246,7 +246,7 @@ const ModelForm = () => {
 
   return (
     <S.Content>
-      <Modal.Loading showing={loading} closeFn={() => {}} />
+      <LoadingModal visible={loading} />
 
       <PageHead
         title={"Modelos"}
@@ -265,19 +265,22 @@ const ModelForm = () => {
           <Input.Select
             label="Tipo"
             onChange={(v) => handleField("type", v)}
-            value={model.type}
-            roOptions={options.prodTypes}
-            showValueFromKey={true}
+            field={"type"}
+            value={model.type ?? null}
+            options={options.prodTypes}
+            setByKey={true}
           />
           <Input.Default
             label="Nome do modelo"
             onChange={(v) => handleField("name", v)}
-            value={model.name}
+            field={"name"}
+            value={model.name ?? ""}
           />
           <Input.Default
             label="Código"
             onChange={(v) => handleField("code", v)}
-            value={model.code}
+            field={"code"}
+            value={model.code ?? ""}
           />
         </S.FormLine>
       </S.FormGroup>

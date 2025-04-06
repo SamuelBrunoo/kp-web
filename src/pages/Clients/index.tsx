@@ -4,14 +4,14 @@ import * as S from "./styles"
 import { useNavigate } from "react-router-dom"
 import { tableConfig } from "../../utils/sys/table"
 
-import PageHead from "../../component/PageHead"
-import Table from "../../component/Table"
+import PageHead from "../../components/PageHead"
+import Table from "../../components/Table"
 
 import { Api } from "../../api"
 import { TPageListClient } from "../../utils/@types/data/client"
-import ExpansibleRow from "../../component/ExpandRow"
-import Modal from "../../component/Modal"
+import ExpansibleRow from "../../components/ExpandRow"
 import getStore from "../../store"
+import LoadingModal from "../../components/Modal/variations/Loading"
 
 const ClientsPage = () => {
   const { controllers } = getStore()
@@ -65,7 +65,7 @@ const ClientsPage = () => {
 
   return (
     <S.Content>
-      <Modal.Loading showing={loading} closeFn={() => {}} />
+      <LoadingModal visible={loading} />
 
       <PageHead
         title={"Clientes"}

@@ -3,14 +3,17 @@ import * as S from "./styles"
 
 import { tableConfig } from "../../utils/sys/table"
 
-import PageHead from "../../component/PageHead"
-import Table from "../../component/Table"
+import PageHead from "../../components/PageHead"
+import Table from "../../components/Table"
 
 import { Api } from "../../api"
-import ExpansibleRow from "../../component/ExpandRow"
+import ExpansibleRow from "../../components/ExpandRow"
 import { TProductionLine } from "../../utils/@types/data/productionLine"
+import LoadingModal from "../../components/Modal/variations/Loading"
 
 const ProductionLinesPage = () => {
+  const [loading, setLoading] = useState(false)
+
   const [productionLines, setProductionLines] = useState<TProductionLine[]>([])
   const [search, setSearch] = useState("")
 
@@ -19,6 +22,8 @@ const ProductionLinesPage = () => {
   }
 
   const loadData = useCallback(async () => {
+    setLoading(true)
+
     try {
       const req = await Api.productionLines.getProductionLines({})
       if (req.ok) {
@@ -28,6 +33,8 @@ const ProductionLinesPage = () => {
     } catch (error) {
       // feedbackError
     }
+
+    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -36,6 +43,8 @@ const ProductionLinesPage = () => {
 
   return (
     <S.Content>
+      <LoadingModal visible={loading} />
+
       <PageHead
         title={"Linha de produção"}
         search={search}

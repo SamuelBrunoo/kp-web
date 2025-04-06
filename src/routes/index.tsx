@@ -60,7 +60,7 @@ const Router = () => {
               <Route path={":id"} element={<OrdersForm />} />
             </Route>
           </Route>
-          <Route path="manufacturing" element={<ProductionLinesPage />} />
+          <Route path="production" element={<ProductionLinesPage />} />
         </Route>
 
         {/* sys routes */}

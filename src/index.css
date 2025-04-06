@@ -20,3 +20,111 @@ td:has(.actions-area) {
   background-color: rgba(200, 200, 200, 0.4);
   backdrop-filter: blur(6px);
 }
+
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+input[type="password"]::-moz-textfield-decoration-container {
+  display: none;
+}
+
+/* Skeletons */
+.bone {
+  background-color: #e0e4eb;
+
+  animation: pulse;
+  animation-duration: 1.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+/* Swiper Pagination */
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: #4e7c3c !important;
+}
+
+@media (min-width: 540px) {
+  .mobileBudgetsArea {
+    display: none;
+  }
+}
+@media (max-width: 540px) {
+  .desktopBudgetsArea {
+    display: none;
+  }
+}
+
+/* Animations */
+
+@keyframes pulse {
+  0% {
+    background-color: #e0e4eb;
+  }
+
+  50% {
+    background-color: #cdd1d8;
+  }
+
+  100% {
+    background-color: #e0e4eb;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeTop {
+  0% {
+    transform: translateY(60px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeBottom {
+  0% {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeLeft {
+  0% {
+    transform: translateX(60px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeRight {
+  0% {
+    transform: translateX(-60px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}

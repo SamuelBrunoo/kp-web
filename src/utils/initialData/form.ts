@@ -15,13 +15,15 @@ const order: TNewOrder = {
   deadline: getMinDeadline(14),
   representative: "",
   payment: {
-    installments: "0",
-    type: "pix",
+    hasInstallments: true,
+    installments: 1,
+    due: 15,
+    type: "slip",
     paymentCode: "",
     paymentNumber: "",
     status: "",
   },
-  shippingType: "transporter",
+  shippingType: "mail",
   shippingMode: "sedex",
   emmitter: "",
 }

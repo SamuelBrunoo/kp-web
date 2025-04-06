@@ -1,5 +1,5 @@
 import { Box, Button, Container, Grid2, Typography } from "@mui/material"
-import Input from "../../component/Inpts"
+import Input from "../../components/Inpts"
 import { useState } from "react"
 import getStore from "../../store"
 import { Api } from "../../api"
@@ -154,22 +154,24 @@ const LoginPage = () => {
                   label="Email"
                   value={form.email}
                   error={{
-                    state: errors.email,
+                    has: errors.email,
                     message: "Digite um email válido.",
                   }}
                   onChange={(v) => handleField("email", v)}
-                  type="email"
+                  inputType="email"
+                  field={"email"}
                 />
 
                 <Input.Default
                   label="Senha"
                   value={form.password}
                   error={{
-                    state: errors.password,
+                    has: errors.password,
                     message: "Senha incorreta.",
                   }}
                   onChange={(v) => handleField("password", v)}
-                  type={"password"}
+                  inputType={"password"}
+                  field={"password"}
                   onEnter={handleSubmit}
                 />
               </Grid2>

@@ -14,13 +14,7 @@ export type TNewOrder = {
   }
   deadline: number | string | Date
   representative: string
-  payment: {
-    installments?: string
-    type: TPayment
-    paymentCode: string
-    paymentNumber: string
-    status: string
-  }
+  payment: TPaymentConfig
   shippingType: TShipping
   shippingMode: TShippingMode
   emmitter: string
@@ -41,16 +35,53 @@ export type TOrder = {
   }
   deadline: string
   representative?: string
-  payment: {
-    installments?: string
-    type: TPayment
-    paymentCode: string
-    paymentNumber: string
-    status: string
-  }
+  payment: TPaymentConfig
   shippingType: TShipping
   shippingMode: TShippingMode
   emmitter: string
+}
+
+export type TPageListOrder = {
+  id: string
+  code: string
+  clientName: string
+  orderDate: string
+  value: number
+  quantity: number
+  status: TOPStatus
+  details: {
+    productionLineId: string | null
+    products: TOrderDetailsProduct[]
+    additional: {
+      clientName: string
+      clientRegister: string
+      clientStateInscription: string | null
+      orderDate: string
+      deadline: string
+      valueTotal: number
+      valueCommission: number
+      valueLiquid: number
+      paymentMethod: string
+      hasInstallments: string
+      installments: number
+      paidInstallments: number
+      emmitter: string
+      representative: string | null
+      address: string
+    }
+  }
+}
+
+type TOrderDetailsProduct = {
+  id: string
+  code: string
+  model: string
+  name: string
+  color: string
+  price: number
+  type: string
+  quantity: number
+  status: TOPStatus
 }
 
 type TOrderProduct = TProduct & {
@@ -59,6 +90,16 @@ type TOrderProduct = TProduct & {
 }
 
 export type TPayment = "pix" | "cash" | "slip"
+
+export type TPaymentConfig = {
+  hasInstallments: boolean
+  installments: number
+  type: TPayment
+  paymentCode: string
+  paymentNumber: string
+  status: string
+  due: string | number
+}
 
 export type TShipping = "transporter" | "representative" | "mail"
 export type TShippingMode = "sedex" | "pac"

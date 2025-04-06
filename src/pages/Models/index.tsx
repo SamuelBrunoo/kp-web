@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom"
 import { TPageListModel } from "../../utils/@types/data/model"
 import { tableConfig } from "../../utils/sys/table"
 
-import PageHead from "../../component/PageHead"
-import Table from "../../component/Table"
+import PageHead from "../../components/PageHead"
+import Table from "../../components/Table"
 
 import { Api } from "../../api"
 import getStore from "../../store"
-import Modal from "../../component/Modal"
+import LoadingModal from "../../components/Modal/variations/Loading"
 
 const ModelsPage = () => {
   const navigate = useNavigate()
@@ -75,7 +75,7 @@ const ModelsPage = () => {
 
   return (
     <S.Content>
-      <Modal.Loading showing={loading} closeFn={() => {}} />
+      <LoadingModal visible={loading} />
 
       <PageHead
         title={"Modelos"}

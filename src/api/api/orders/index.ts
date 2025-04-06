@@ -3,6 +3,7 @@ import { service } from "../.."
 import { AxiosError } from "axios"
 import { TApi_Params_Orders as TParams } from "./params"
 import { TApi_Responses_Orders as TResponses } from "./responses"
+import { getApiError } from "../../../utils/helpers/api/getApiErrors"
 
 const baseURL = "/orders"
 
@@ -100,25 +101,18 @@ export const getPageListOrders: TApi["orders"]["getPageListOrders"] = async (
   return new Promise(async (resolve, reject) => {
     try {
       await service
-        .get(`${baseURL}`, {
+        .get(`${baseURL}/listPage`, {
           params: filters,
         })
         .then((res) => {
-          const info = res.data
-
-          if (info) {
+          if (res.data.success) {
+            const info = res.data.data
             resolve({
               ok: true,
               data: info,
             })
           } else {
-            resolve({
-              ok: false,
-              error: {
-                message:
-                  "Não foi possível listar os pedidos. Tente novamente mais tarde.",
-              },
-            })
+            resolve(getApiError(res))
           }
         })
         .catch((err: AxiosError) => {

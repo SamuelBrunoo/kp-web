@@ -7,8 +7,8 @@ import * as S from "./styles"
 
 import { TRoOption } from "../../../utils/@types/sys/roOptions"
 
-import PageHead from "../../../component/PageHead"
-import Input from "../../../component/Inpts"
+import PageHead from "../../../components/PageHead"
+import Input from "../../../components/Inpts"
 
 import { initialForm } from "../../../utils/initialData/form"
 import {
@@ -23,8 +23,8 @@ import { formatStateRegister } from "../../../utils/helpers/formatters/stateRegi
 import { formatCep } from "../../../utils/helpers/formatters/cep"
 import { formatPhone } from "../../../utils/helpers/formatters/phone"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
-import Modal from "../../../component/Modal"
-import Button from "../../../component/Button"
+import LoadingModal from "../../../components/Modal/variations/Loading"
+import Button from "../../../components/Button"
 import getStore from "../../../store"
 
 const ClientsForm = () => {
@@ -262,7 +262,7 @@ const ClientsForm = () => {
 
   return (
     <S.Content>
-      <Modal.Loading showing={loading} closeFn={() => {}} />
+      <LoadingModal visible={loading} />
 
       <PageHead
         title={"Clientes"}
@@ -277,18 +277,21 @@ const ClientsForm = () => {
             label="Tipo de cliente"
             onChange={(v) => handleField("type", v)}
             value={client.type}
-            roOptions={options.clientType}
+            options={options.clientType}
+            field={"type"}
           />
           <Input.Default
             label="Nome do cliente"
             value={client.clientName}
             onChange={(v) => handleField("clientName", v)}
+            field={"clientName"}
           />
           {client.type === "juridical" && (
             <Input.Default
               label="Nome da empresa"
               value={client.socialRole}
               onChange={(v) => handleField("socialRole", v)}
+              field={"socialRole"}
             />
           )}
         </S.FormLine>
@@ -298,6 +301,7 @@ const ClientsForm = () => {
               label="CPF"
               onChange={(v) => handleField("documents.register", v)}
               value={formatCpf(client.documents.register)}
+              field={"documents.register"}
             />
           </S.FormLine>
         ) : (
@@ -306,11 +310,13 @@ const ClientsForm = () => {
               label="CNPJ"
               onChange={(v) => handleField("documents.register", v)}
               value={formatCnpj(client.documents.register)}
+              field={"documents.register"}
             />
             <Input.Default
               label="Inscrição Estadual"
               onChange={(v) => handleField("documents.stateInscription", v)}
               value={formatStateRegister(client.documents.stateInscription)}
+              field={"documents.stateInscription"}
             />
           </S.FormLine>
         )}
@@ -323,11 +329,13 @@ const ClientsForm = () => {
             label="Email"
             value={client.email}
             onChange={(v) => handleField("email", v)}
+            field={"email"}
           />
           <Input.Default
             label="Telefone"
             value={formatPhone(client.phone1)}
             onChange={(v) => handleField("phone1", v)}
+            field={"phone1"}
           />
         </S.FormLine>
       </S.FormGroup>
@@ -342,6 +350,8 @@ const ClientsForm = () => {
                 ? client.address.full
                 : "Seu endereço completo aparecerá aqui"
             }
+            field={"address"}
+            onChange={() => {}}
           />
         </S.FormLine>
         <S.FormLine style={{ alignItems: "flex-end" }}>
@@ -349,17 +359,20 @@ const ClientsForm = () => {
             label="Estado"
             onChange={(v) => handleField("address.state", v)}
             value={client.address.state}
-            roOptions={options.states}
+            options={options.states}
+            field={"address.state"}
           />
           <Input.Default
             label="Cidade"
             value={client.address.city}
             onChange={(v) => handleField("address.city", v)}
+            field={"address.city"}
           />
           <Input.Default
             label="CEP"
             value={formatCep(client.address.cep)}
             onChange={(v) => handleField("address.cep", v)}
+            field={"address.cep"}
           />
         </S.FormLine>
         <S.FormLine>
@@ -367,16 +380,19 @@ const ClientsForm = () => {
             label="Bairro"
             value={client.address.neighborhood}
             onChange={(v) => handleField("address.neighborhood", v)}
+            field={"address.neighborhood"}
           />
           <Input.Default
             label="Rua"
             onChange={(v) => handleField("address.street", v)}
+            field={"address.street"}
             value={client.address.street}
           />
           <Input.Default
             label="Número"
             value={client.address.number}
             onChange={(v) => handleField("address.number", v)}
+            field={"address.number"}
           />
         </S.FormLine>
       </S.FormGroup>
@@ -388,7 +404,8 @@ const ClientsForm = () => {
             label="Representante"
             onChange={(v) => handleField("representative", v)}
             value={client.representative}
-            roOptions={options.representatives}
+            options={options.representatives}
+            field={"representative"}
           />
         </S.FormLine>
       </S.FormGroup>

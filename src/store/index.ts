@@ -4,6 +4,7 @@ import { TStore } from "../utils/@types/store"
 
 import userShelf from "./shelfs/user"
 import feedbackShelf from "./shelfs/feedback"
+import modalShelf from "./shelfs/modal"
 
 import controls from "./controllers"
 
@@ -14,7 +15,7 @@ const getStore = create<TStore>()(
         // store...
         user: userShelf(),
         feedback: feedbackShelf(),
-
+        modal: modalShelf(),
         controllers: controls(set),
       }),
       {

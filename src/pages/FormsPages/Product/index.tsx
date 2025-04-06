@@ -9,17 +9,17 @@ import { TRoOption } from "../../../utils/@types/sys/roOptions"
 import { TModel } from "../../../utils/@types/data/model"
 import { TColor } from "../../../utils/@types/data/color"
 
-import PageHead from "../../../component/PageHead"
-import Input from "../../../component/Inpts"
+import PageHead from "../../../components/PageHead"
+import Input from "../../../components/Inpts"
 
 import { initialForm } from "../../../utils/initialData/form"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import { TProductType } from "../../../utils/@types/data/productType"
 import { TNewProduct, TProduct } from "../../../utils/@types/data/product"
 import getStore from "../../../store"
-import Button from "../../../component/Button"
+import Button from "../../../components/Button"
 import { FormControlLabel, Switch } from "@mui/material"
-import Modal from "../../../component/Modal"
+import LoadingModal from "../../../components/Modal/variations/Loading"
 
 const ProductForm = () => {
   const { id } = useParams()
@@ -284,7 +284,7 @@ const ProductForm = () => {
 
   return (
     <S.Content>
-      <Modal.Loading showing={loading} closeFn={() => {}} />
+      <LoadingModal visible={loading} />
 
       <PageHead
         title={"Produtos"}
@@ -306,24 +306,32 @@ const ProductForm = () => {
           <Input.Select
             label="Tipo"
             onChange={(v) => handleField("type", v)}
+            field={"type"}
             value={product.type}
-            roOptions={options.prodTypes}
+            options={options.prodTypes}
           />
           <Input.Select
             label="Modelo"
             onChange={(v) => handleField("model", v)}
+            field={"model"}
             value={product.model}
-            roOptions={options.models}
+            options={options.models}
           />
           <Input.Select
             label="Cor"
             onChange={(v) => handleField("color", v)}
+            field={"color"}
             value={product.color}
-            roOptions={options.colors}
+            options={options.colors}
           />
         </S.FormLine>
         <S.FormLine>
-          <Input.Readonly label="Código" value={product.code} />
+          <Input.Readonly
+            label="Código"
+            value={product.code}
+            field="code"
+            onChange={handleField}
+          />
         </S.FormLine>
       </S.FormGroup>
 
@@ -333,14 +341,16 @@ const ProductForm = () => {
           <Input.Select
             label="Tem estoque"
             onChange={(v) => handleField("hasStorage", v)}
+            field={"hasStorage"}
             value={String(product.storage.has)}
-            roOptions={options.storage}
+            options={options.storage}
           />
           {product.storage.has && (
             <Input.Default
               label="Quantidade"
               onChange={(v) => handleField("storage", v)}
-              value={product.storage.quantity}
+              field={"storage"}
+              value={String(product.storage.quantity ?? 0)}
               disabled={!Boolean(product.storage.has)}
               isNumber={true}
             />
