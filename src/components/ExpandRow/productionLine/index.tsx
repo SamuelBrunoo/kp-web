@@ -1,12 +1,13 @@
 import * as S from "./styles"
 
-import { TProductionLine } from "../../../utils/@types/data/productionLine"
+import { TPageListProductionLine } from "../../../utils/@types/data/productionLine"
 import { tableConfig } from "../../../utils/sys/table"
 
 import PLDetailsTable from "../../PLDetailsTable"
 import ExpansibleRow from ".."
+import Table from "../../Table"
 
-const ProductionLineExpand = (pl: TProductionLine) => {
+const ProductionLineExpand = (item: TPageListProductionLine["order"]) => {
   return (
     <S.Area>
       <S.InfoGroup>
@@ -14,8 +15,18 @@ const ProductionLineExpand = (pl: TProductionLine) => {
 
         <PLDetailsTable
           config={tableConfig.productProductionGroup}
-          data={pl.products}
+          data={item.details.products ?? []}
           expandComponent={ExpansibleRow.PLProductDetails}
+        />
+      </S.InfoGroup>
+
+      <S.InfoGroup>
+        <S.IGTitle>Atribuições</S.IGTitle>
+
+        <Table
+          config={tableConfig.productionLineAttributions}
+          data={item.details.attributions}
+          noHover={true}
         />
       </S.InfoGroup>
     </S.Area>

@@ -8,24 +8,28 @@ import Table from "../../components/Table"
 
 import { Api } from "../../api"
 import ExpansibleRow from "../../components/ExpandRow"
-import { TProductionLine } from "../../utils/@types/data/productionLine"
+import { TPageListProductionLine } from "../../utils/@types/data/productionLine"
 import LoadingModal from "../../components/Modal/variations/Loading"
 
 const ProductionLinesPage = () => {
   const [loading, setLoading] = useState(false)
 
-  const [productionLines, setProductionLines] = useState<TProductionLine[]>([])
+  const [productionLines, setProductionLines] = useState<
+    TPageListProductionLine["order"][] | TPageListProductionLine["products"][]
+  >([])
   const [search, setSearch] = useState("")
 
   const deleteCallback = (id: string) => {
-    setProductionLines((pls) => pls.filter((m) => m.id !== id))
+    // setProductionLines((pls) => pls.filter((m) => m.id !== id))
   }
 
   const loadData = useCallback(async () => {
     setLoading(true)
 
     try {
-      const req = await Api.productionLines.getProductionLines({})
+      const req = await Api.productionLines.getProductionLinesPageList({
+        showType: "orders",
+      })
       if (req.ok) {
         const list = req.data.list
         setProductionLines(list)

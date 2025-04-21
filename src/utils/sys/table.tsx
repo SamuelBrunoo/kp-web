@@ -7,11 +7,13 @@ import { TColor } from "../@types/data/color"
 import { TModel, TPageListModel } from "../@types/data/model"
 import { TOrder, TPageListOrder } from "../@types/data/order"
 import { TPageListProduct, TProduct } from "../@types/data/product"
-import { TProductionLine } from "../@types/data/productionLine"
+import {
+  TPageListProductionLine,
+  TProductionLine,
+} from "../@types/data/productionLine"
 import { formatCep } from "../helpers/formatters/cep"
 import { formatCnpj } from "../helpers/formatters/cnpj"
 import { formatCpf } from "../helpers/formatters/cpf"
-import { parseDate } from "../helpers/formatters/date"
 import { formatMoney } from "../helpers/formatters/money"
 import { TProductType } from "../@types/data/productType"
 
@@ -29,7 +31,8 @@ type TTableConfigs =
   | "orderFormSlips"
   | "productionLines"
   | "productProductionGroup"
-  | "productProduction"
+  | "productionLineProductList"
+  | "productionLineAttributions"
 
 export const tableConfig: {
   [key in TTableConfigs]: TConfig
@@ -58,13 +61,13 @@ export const tableConfig: {
       { title: "Cor", field: "color" },
       { title: "Estoque", field: "storage", align: "center" },
       { title: "Preço base", field: "price" },
-      { title: "Status", field: "status" },
+      { title: "Status", field: "statusIndicator" },
       { title: "", field: "actions" },
     ],
     specialFields: {
       storage: (item: TProduct) => item.storage,
       price: (item: TProduct) => formatMoney(item.price),
-      status: (item: TProduct) => (
+      statusIndicator: (item: TProduct) => (
         <Switch
           checked={item.active}
           sx={{
@@ -197,13 +200,18 @@ export const tableConfig: {
       { title: "Qnt", field: "quantity", align: "center" },
       { title: "Valor Un.", field: "unitary" },
       { title: "Valor Total", field: "total" },
-      { title: "Status", field: "status", align: "center", width: "152px" },
+      {
+        title: "Status",
+        field: "statusIndicator",
+        align: "center",
+        width: "152px",
+      },
     ],
     specialFields: {
       model: (item: TOrder["products"][number]) => item.model,
       color: (item: TOrder["products"][number]) => item.color,
       unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
-      status: (item: TOrder["products"][number]) => (
+      statusIndicator: (item: TOrder["products"][number]) => (
         <StatusIndicator status={item.status} onChange={() => {}} />
       ),
       total: (item: TOrder["products"][number]) =>
@@ -225,8 +233,6 @@ export const tableConfig: {
       { title: "Cor", field: "color" },
       { title: "Código", field: "code" },
       { title: "Qnt", field: "quantity", align: "center" },
-      { title: "Preço Un.", field: "unitary" },
-      { title: "Preço Total", field: "total" },
       { title: "", field: "actions" },
     ],
     specialFields: {
@@ -280,20 +286,19 @@ export const tableConfig: {
       { title: "Pedido", field: "orderCode" },
       { title: "Cliente", field: "clientName" },
       { title: "Data do pedido", field: "orderDate" },
-      { title: "Prazo de entrega", field: "deadline" },
-      { title: "Produzindo", field: "quantity", align: "center" },
-      { title: "Status", field: "status", align: "center", width: "152px" },
+      { title: "Produzindo", field: "onProduction", align: "center" },
+      {
+        title: "Status",
+        field: "statusIndicator",
+        align: "center",
+        width: "152px",
+      },
     ],
     specialFields: {
-      orderCode: (item: TProductionLine) => item.order.code,
-      clientName: (item: TProductionLine) =>
-        item.order.client.name ?? item.order.client.socialRole,
-      orderDate: (item: TProductionLine) =>
-        parseDate(item.order.orderDate, "str"),
-      deadline: (item: TProductionLine) =>
-        parseDate(item.order.deadline, "str"),
-      status: (item: TProductionLine) => (
-        <StatusIndicator status={item.status} />
+      statusIndicator: (item: TPageListProductionLine["order"]) => (
+        <div style={{ margin: "auto", width: "fit-content" }}>
+          <StatusIndicator status={item.status} />
+        </div>
       ),
     },
     isExpandable: true,
@@ -302,33 +307,60 @@ export const tableConfig: {
     columns: [
       { title: "Tipo", field: "type" },
       { title: "Modelo", field: "model" },
-      { title: "Cor/Variação", field: "color" },
+      { title: "Código", field: "code" },
       { title: "Qnt", field: "quantity", align: "center" },
-      { title: "Status", field: "status", align: "center", width: "152px" },
     ],
     specialFields: {
-      quantity: (item: TProductionLine["products"][number]) => item.list.length,
       status: (item: TProductionLine["products"][number]) => (
         <StatusIndicator status={item.status} />
       ),
     },
     isExpandable: true,
+    isDropable: true,
   },
-  productProduction: {
+  productionLineProductList: {
     columns: [
-      { title: "Nº", field: "productIndex" },
-      { title: "Responsável", field: "inCharge" },
-      { title: "Status", field: "status", align: "center", width: "152px" },
+      { title: "Nº", field: "lineNumber", width: "30%" },
+      { title: "Cor", field: "color" },
+      { title: "Código", field: "code", align: "center" },
     ],
     specialFields: {
-      productIndex: (
-        item: TProductionLine["products"][number]["list"][number]
-      ) => String(item.index).padStart(3, "0"),
-      inCharge: (item: TProductionLine["products"][number]["list"][number]) =>
-        item.inCharge.name ?? "Não atribuído",
-      status: (item: TProductionLine["products"][number]["list"][number]) => (
-        <StatusIndicator status={item.status} />
-      ),
+      lineNumber: (item: any) => String(item.lineNumber).padStart(3, "0"),
+    },
+  },
+  productionLineAttributions: {
+    columns: [
+      { title: "Nº", field: "number" },
+      { title: "Responsável", field: "inCharge" },
+      { title: "Modelo", field: "model" },
+      { title: "Cor", field: "color" },
+      { title: "Código", field: "code" },
+      {
+        title: "Status",
+        field: "statusIndicator",
+        align: "center",
+        width: "152px",
+      },
+      { title: "Atribuído em", field: "attributedAt" },
+    ],
+    specialFields: {
+      number: (
+        item: TPageListProductionLine["order"]["details"]["attributions"][number]
+      ) => String(item.number).padStart(3, "0"),
+      inCharge: (
+        item: TPageListProductionLine["order"]["details"]["attributions"][number]
+      ) => (item.responsable ? item.responsable.name : "Não atribuído"),
+      statusIndicator: (
+        item: TPageListProductionLine["order"]["details"]["attributions"][number]
+      ) =>
+        item.status ? (
+          <StatusIndicator status={item.status} />
+        ) : (
+          "Não atribuído"
+        ),
+      attributedAt: (
+        item: TPageListProductionLine["order"]["details"]["attributions"][number]
+      ) => item.attributedAt ?? "Não atribuído",
     },
   },
 }
@@ -356,5 +388,6 @@ export type TConfig = {
     ) => any
   }
   isExpandable?: boolean
+  isDropable?: boolean
   itemColor?: string
 }

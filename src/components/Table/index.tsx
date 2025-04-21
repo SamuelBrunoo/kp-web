@@ -130,6 +130,7 @@ const RowItem = (props: TRowItemProps) => {
       <TableRow
         hover={!noHover}
         sx={{
+          cursor: noHover ? "default" : "pointer",
           transition: "background-color 0.3s",
           backgroundColor: (theme) =>
             isExpanded ? theme.palette.neutral[800] : "transparent",
@@ -141,15 +142,13 @@ const RowItem = (props: TRowItemProps) => {
             borderTopRightRadius: 8,
             borderBottomRightRadius: 8,
           },
-          "&:hover": !noHover
-            ? {
-                backgroundColor: (theme) =>
-                  `${theme.palette.neutral[800]} !important`,
-                ".actions-area": {
-                  opacity: 1,
-                },
-              }
-            : undefined,
+          "&:hover": {
+            backgroundColor: (theme) =>
+              `${theme.palette.neutral[800]} !important`,
+            ".actions-area": {
+              opacity: 1,
+            },
+          },
         }}
       >
         {config.columns.map((col, k) => {
@@ -174,23 +173,27 @@ const RowItem = (props: TRowItemProps) => {
             <TableCell
               key={k}
               sx={{
-                cursor:
-                  expandComponent && k !== config.columns.length - 1
-                    ? "pointer"
-                    : undefined,
+                cursor: noHover ? "default" : "pointer",
                 color: itemColor ?? theme.colors.neutral[300],
               }}
               align={col.align}
-              // $width={col.width}
               onClick={
-                expandComponent && k !== config.columns.length - 1
+                col.field !== "actions" ||
+                (expandComponent && k !== config.columns.length - 1)
                   ? toggleExpand
                   : undefined
               }
               className={col.field === "actions" ? "actions-area" : ""}
             >
-              {config.specialFields[col.field] ? (
-                <Typography fontSize={14}>{content}</Typography>
+              {config.specialFields[col.field] &&
+              col.field !== "statusIndicator" ? (
+                <Typography
+                  fontSize={14}
+                  align={col.align}
+                  style={{ textAlign: col.align ?? undefined }}
+                >
+                  {content}
+                </Typography>
               ) : (
                 content
               )}

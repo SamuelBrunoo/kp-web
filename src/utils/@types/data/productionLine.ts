@@ -23,8 +23,6 @@ export type TNewProductLine = {
   products: TFBLineProductGroup[]
 }
 
-// # Client
-
 export type TProductionLine = {
   id: string
   order: TProductionOrder
@@ -69,4 +67,87 @@ export type TLineProduct = {
     name: string
   }
   status: TOPStatus
+}
+
+// PageList
+
+export type TPageListProductionLine = {
+  order: TPageListPLOrders
+  products: TPageListPLProducts
+}
+
+export type TPageListPLOrders = {
+  id: string
+  clientName: string
+  orderDate: string
+  onProduction: number
+  status: TOPStatus
+  details: {
+    products: TOrderPLDetailsProduct[]
+    attributions: TAttribution[]
+  }
+}
+
+export type TPageListPLProducts = {
+  id: string
+  type: string
+  modelName: string
+  onProduction: number
+  orders: number
+  status: TOPStatus
+
+  details: {
+    ordersList: TPageListPLProductsDetailsOrders[]
+    attributions: TPageListPLProductsDetailsAttribution[]
+  }
+}
+
+export type TPageListPLProductsDetailsOrders = {
+  index: number
+  orderNumber: number
+  clientName: string
+  orderDate: string
+  deadline: string
+}
+
+// Order tab
+
+export type TOrderPLDetailsProduct = {
+  type: string
+  model: string
+  code: string
+  quantity: number
+  list: TOrderPLDetailsProductListItem[]
+}
+
+export type TOrderPLDetailsProductListItem = {
+  lineNumber: number
+  color: string
+  code: string
+}
+
+// -----
+
+export type TAttribution = {
+  number: number
+  responsable: null | {
+    id: string
+    name: string
+  }
+  model: string
+  color: string
+  code: string
+  status: TOPStatus
+  attributedAt: string | null
+}
+
+export type TPageListPLProductsDetailsAttribution = {
+  index: number
+  color: string
+  responsable: null | {
+    id: string
+    name: string
+  }
+  status: TOPStatus
+  attributedAt: string | null
 }

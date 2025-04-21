@@ -16,12 +16,12 @@ type Props = {
 
 const StatusIndicator = ({ status }: Props) => {
   return (
-    <S.Box $status={status}>
-      <S.Text>{textRelation[status]}</S.Text>
-    </S.Box>
+    <S.Wrapper>
+      <S.Box $status={status}>
+        <S.Text>{textRelation[status]}</S.Text>
+      </S.Box>
+    </S.Wrapper>
   )
 }
 
 export default StatusIndicator
-
-// getStatus("resume", item.status as any)

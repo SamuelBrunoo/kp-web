@@ -5,12 +5,15 @@ export const Area = styled.div`
   flex-direction: column;
   gap: 48px;
   margin: 0 -8px 0px 0px;
+  width: 100%;
+  padding: 0 48px;
 `
 
 export const InfoGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  flex: 1;
 `
 
 export const IGTitle = styled.span`

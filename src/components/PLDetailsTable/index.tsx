@@ -1,11 +1,13 @@
 import * as S from "./styles"
 import { TConfig } from "../../utils/sys/table"
 import { useState } from "react"
-import { TProductionLine } from "../../utils/@types/data/productionLine"
+import { TPageListProductionLine } from "../../utils/@types/data/productionLine"
+import Icons from "../../assets/icons"
+import { theme } from "../../theme"
 
 type Props = {
   config: TConfig
-  data: TProductionLine["products"]
+  data: TPageListProductionLine["order"]["details"]["products"]
   actions?: any[]
   noHover?: boolean
   expandComponent?: (item: any) => JSX.Element
@@ -80,11 +82,17 @@ const RowItem = (props: TRowItemProps) => {
           return (
             <S.ItemData
               key={k}
-              $hasPointer={expandComponent && k !== config.columns.length - 1}
+              $hasPointer={
+                !config.isDropable &&
+                expandComponent &&
+                k !== config.columns.length - 1
+              }
               $align={col.align}
               $width={col.width}
               onClick={
-                expandComponent && k !== config.columns.length - 1
+                !config.isDropable &&
+                expandComponent &&
+                k !== config.columns.length - 1
                   ? toggleExpand
                   : undefined
               }
@@ -93,6 +101,24 @@ const RowItem = (props: TRowItemProps) => {
             </S.ItemData>
           )
         })}
+
+        {config.isDropable && (
+          <S.ItemData
+            key={config.columns.length}
+            $hasPointer={true}
+            $align={"right"}
+            $width={"64px"}
+            onClick={config.isDropable ? toggleExpand : undefined}
+          >
+            <Icons.Dropdown
+              style={{
+                color: theme.colors.green[460],
+                transform: `rotate(${isExpanded ? 180 : 0}deg)`,
+                transition: "transform 0.3s",
+              }}
+            />
+          </S.ItemData>
+        )}
       </S.RowItem>
       {config.isExpandable && expandComponent && (
         <S.RowExpandable className={"normal noHover"}>

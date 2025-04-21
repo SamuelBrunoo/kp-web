@@ -1,6 +1,13 @@
 import styled from "styled-components"
 import { TOPStatus } from "../../utils/@types/data/order"
 
+export const Wrapper = styled.div`
+  flex: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+`
+
 export const Box = styled.div<{ $status: TOPStatus }>`
   display: grid;
   place-items: center;

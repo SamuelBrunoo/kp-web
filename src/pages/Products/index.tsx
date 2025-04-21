@@ -102,6 +102,7 @@ const ProductsPage = () => {
         search={search}
         searchFields={["model", "code", "color", "price"]}
         actions={{ deleteCallback }}
+        noHover={true}
       />
     </S.Content>
   )

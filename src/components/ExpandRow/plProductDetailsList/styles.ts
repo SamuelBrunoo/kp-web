@@ -4,20 +4,18 @@ export const Area = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
-  padding: 10px;
+  margin: 48px 24px;
 `
 
 export const InfoGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 10px;
 `
 
 export const IGTitle = styled.span`
   font-size: 16px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.orange[460]};
 `
 
 export const AdditionalInfosArea = styled.div`
