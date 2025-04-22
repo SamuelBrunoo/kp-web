@@ -95,8 +95,6 @@ const ModelForm = () => {
           .map((ac) => (ac.checked ? ac.code : null))
           .filter((ac) => ac)
 
-        console.log(model)
-
         const create = await Api.models.createModel({
           newModel: { ...model, colors: cls } as TNewModel,
         })

@@ -173,6 +173,7 @@ const RowItem = (props: TRowItemProps) => {
             <TableCell
               key={k}
               sx={{
+                width: col.width ? +col.width.replace("px", "") : undefined,
                 cursor: noHover ? "default" : "pointer",
                 color: itemColor ?? theme.colors.neutral[300],
               }}

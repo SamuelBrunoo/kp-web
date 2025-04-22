@@ -185,7 +185,6 @@ export const deleteModel: TApi["models"]["deleteModel"] = async ({ id }) => {
         .then((res) => {
           if (res.data.success) {
             const info = res.data
-            console.log("Response", res, info)
 
             resolve({ ok: true, data: info })
           } else {

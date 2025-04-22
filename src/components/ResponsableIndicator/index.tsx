@@ -2,20 +2,15 @@ import { useEffect, useRef, useState } from "react"
 import * as S from "./styles"
 
 import { TOPStatus } from "../../utils/@types/data/order"
-
-const textRelation: { [key in TOPStatus]: string } = {
-  queued: "Em fila",
-  done: "Concluído",
-  doing: "Em andamento",
-  lor: "Falta material",
-}
+import { TRoOption } from "../../utils/@types/sys/roOptions"
 
 type Props = {
-  status: TOPStatus
-  onChange?: (newValue: TOPStatus) => void
+  options: TRoOption[]
+  value: string | null
+  onChange?: (newValue: string) => void
 }
 
-const StatusIndicator = ({ status, onChange }: Props) => {
+const ResponsableIndicator = ({ options, value, onChange }: Props) => {
   // # Refs
   const wrapperRef = useRef<null | HTMLDivElement>(null)
   const dataRef = useRef<null | HTMLDivElement>(null)
@@ -49,22 +44,23 @@ const StatusIndicator = ({ status, onChange }: Props) => {
 
   return (
     <S.Wrapper ref={wrapperRef}>
-      <S.Box ref={dataRef} $status={status} onClick={() => setOpen(!open)}>
-        <S.Text>{textRelation[status]}</S.Text>
+      <S.Box ref={dataRef} onClick={() => setOpen(!open)}>
+        <S.Text>
+          {options.find((o) => o.key === value)?.value ?? "Não atribuído"}
+        </S.Text>
       </S.Box>
       <S.Dropdown ref={dropRef} $opened={open}>
-        {Object.entries(textRelation)
-          .filter(([option]) => option !== status)
-          .map(([option, value], index) => (
+        {options
+          .filter(({ key }) => key !== value)
+          .map(({ key, value: optionValue }, index) => (
             <S.Option
               key={index}
-              $status={option as TOPStatus}
               onClick={() => {
                 setOpen(false)
-                if (onChange) onChange(option as TOPStatus)
+                if (onChange) onChange(key as TOPStatus)
               }}
             >
-              <span>{value}</span>
+              <span>{optionValue}</span>
             </S.Option>
           ))}
       </S.Dropdown>
@@ -72,4 +68,4 @@ const StatusIndicator = ({ status, onChange }: Props) => {
   )
 }
 
-export default StatusIndicator
+export default ResponsableIndicator

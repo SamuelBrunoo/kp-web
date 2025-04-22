@@ -105,3 +105,10 @@ export type TShipping = "transporter" | "representative" | "mail"
 export type TShippingMode = "sedex" | "pac"
 
 export type TOPStatus = "queued" | "lor" | "doing" | "done"
+
+export const TOPStatusWeight = {
+  done: 1,
+  queued: 2,
+  doing: 3,
+  lor: 4,
+}

@@ -71,10 +71,6 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
   // Auto Matching
 
   useEffect(() => {
-    console.log(product)
-  }, [product])
-
-  useEffect(() => {
     const m = data.models.find((mod: TModel) => mod.id === info.model) as TModel
     const c = data.colors.find(
       (col: TColor) => col.code === info.color
@@ -158,8 +154,6 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
   }, [info.type])
 
   useEffect(() => {
-    console.log(data)
-
     if (data && data.prodTypes.length > 0) {
       const tOpts = parseRoOption(data.prodTypes, "name", "code").sort((a, b) =>
         a.value.toLowerCase().localeCompare(b.value)

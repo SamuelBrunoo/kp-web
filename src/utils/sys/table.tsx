@@ -5,7 +5,7 @@ import TableActions from "../../components/Table/TableActions"
 import { TPageListClient } from "../@types/data/client"
 import { TColor } from "../@types/data/color"
 import { TModel, TPageListModel } from "../@types/data/model"
-import { TOrder, TPageListOrder } from "../@types/data/order"
+import { TOPStatus, TOrder, TPageListOrder } from "../@types/data/order"
 import { TPageListProduct, TProduct } from "../@types/data/product"
 import {
   TPageListProductionLine,
@@ -16,6 +16,10 @@ import { formatCnpj } from "../helpers/formatters/cnpj"
 import { formatCpf } from "../helpers/formatters/cpf"
 import { formatMoney } from "../helpers/formatters/money"
 import { TProductType } from "../@types/data/productType"
+
+import ResponsableIndicator from "../../components/ResponsableIndicator"
+
+import * as dateFns from "date-fns"
 
 import { theme } from "../../theme"
 
@@ -331,7 +335,12 @@ export const tableConfig: {
   productionLineAttributions: {
     columns: [
       { title: "Nº", field: "number" },
-      { title: "Responsável", field: "inCharge" },
+      {
+        title: "Responsável",
+        field: "inCharge",
+        align: "center",
+        width: "152px",
+      },
       { title: "Modelo", field: "model" },
       { title: "Cor", field: "color" },
       { title: "Código", field: "code" },
@@ -341,26 +350,44 @@ export const tableConfig: {
         align: "center",
         width: "152px",
       },
-      { title: "Atribuído em", field: "attributedAt" },
+      { title: "Atribuído em", field: "attributedAt", align: "center" },
     ],
     specialFields: {
       number: (
         item: TPageListProductionLine["order"]["details"]["attributions"][number]
       ) => String(item.number).padStart(3, "0"),
       inCharge: (
-        item: TPageListProductionLine["order"]["details"]["attributions"][number]
-      ) => (item.responsable ? item.responsable.name : "Não atribuído"),
+        item: TPageListProductionLine["order"]["details"]["attributions"][number],
+        { callbacks, extra }
+      ) => (
+        <ResponsableIndicator
+          value={!item.responsable ? null : item.responsable.id}
+          options={extra.responsableList}
+          onChange={(newResponsable: string) =>
+            callbacks.onChangeResponsable(item.number, newResponsable)
+          }
+        />
+      ),
       statusIndicator: (
-        item: TPageListProductionLine["order"]["details"]["attributions"][number]
+        item: TPageListProductionLine["order"]["details"]["attributions"][number],
+        { callbacks }
       ) =>
         item.status ? (
-          <StatusIndicator status={item.status} />
+          <StatusIndicator
+            status={item.status}
+            onChange={(newStatus: TOPStatus) =>
+              callbacks.onChangeStatus(item.number, newStatus)
+            }
+          />
         ) : (
           "Não atribuído"
         ),
       attributedAt: (
         item: TPageListProductionLine["order"]["details"]["attributions"][number]
-      ) => item.attributedAt ?? "Não atribuído",
+      ) =>
+        item.attributedAt
+          ? dateFns.format(item.attributedAt, "dd/MM/yyyy")
+          : "Não atribuído",
     },
   },
 }
