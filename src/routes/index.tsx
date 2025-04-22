@@ -4,6 +4,7 @@ import LoginPage from "../pages/Login"
 import Template from "../pages/_template"
 
 // dashboard pages
+import DashboardPage from "../pages/DashboardPage"
 
 // # Models
 import ModelsPage from "../pages/Models"
@@ -32,6 +33,7 @@ const Router = () => {
 
         {/* <Route path="/" element={<AuthRoute />}> */}
         <Route path="dashboard" element={<Template />}>
+          <Route path="" element={<DashboardPage />} />
           <Route path="models">
             <Route path={""} element={<ModelsPage />} />
             <Route path="single">

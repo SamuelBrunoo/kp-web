@@ -13,6 +13,7 @@ type Props = {
   onChangeSearch?: (v: string) => void
   onFilterChange?: (filter: string, v: string) => void
   filters?: TFilter[]
+  withoutNewButton?: boolean
   buttons?: TButton[]
   forForm?: boolean
 }
@@ -37,6 +38,7 @@ const PageHead = ({
   onFilterChange,
   onChangeSearch,
   filters,
+  withoutNewButton,
   buttons,
   forForm,
 }: Props) => {
@@ -62,14 +64,16 @@ const PageHead = ({
           {subtitle && <S.SubTitle>{subtitle}</S.SubTitle>}
         </S.HeaderTopLeft>
 
-        <Button
-          color="green"
-          type="secondary"
-          text="Novo"
-          action={handleCreate}
-          role="new"
-          startIcon={<Icons.Add />}
-        />
+        {!withoutNewButton && (
+          <Button
+            color="green"
+            type="secondary"
+            text="Novo"
+            action={handleCreate}
+            role="new"
+            startIcon={<Icons.Add />}
+          />
+        )}
       </S.HeaderTop>
       {!forForm && (
         <S.Main>
