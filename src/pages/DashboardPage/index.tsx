@@ -7,9 +7,14 @@ import PageHead from "../../components/PageHead"
 import getStore from "../../store"
 import LoadingModal from "../../components/Modal/variations/Loading"
 import DashboardSellsCard from "../../components/DashboardSellsCard"
+import RankingCard from "../../components/RankingCard"
+import { PListVariation } from "../../components/RankingCard/variations/List"
 
 const DashboardPage = () => {
   const { controllers } = getStore()
+
+  /* Data */
+  const [bestSellers, setBestSellers] = useState<PListVariation["data"]>([])
 
   const [loading, setLoading] = useState(false)
 
@@ -18,6 +23,11 @@ const DashboardPage = () => {
 
     try {
       // const req = await Api...
+      setBestSellers([
+        { id: 1, category: "Pingente", name: "Íma smart", value: 64 },
+        { id: 2, category: "Pingente", name: "Íma smart", value: 63 },
+        { id: 3, category: "Pingente", name: "Íma smart", value: 58 },
+      ])
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -61,6 +71,11 @@ const DashboardPage = () => {
             tertiaryInfo: { title: "Custos", value: 200000 },
           }}
         />
+        <RankingCard
+          title="Produtos mais vendidos"
+          type="list"
+          data={bestSellers}
+        />
       </S.InfoRow>
 
       <PageHead
@@ -69,6 +84,12 @@ const DashboardPage = () => {
         forForm={true}
         withoutNewButton={true}
       />
+
+      <S.InfoRow>
+        <RankingCard title="Enviados hoje" type="list" data={bestSellers} />
+        <RankingCard title="Em produção" type="list" data={bestSellers} />
+        <RankingCard title="Últimos pedidos" type="list" data={bestSellers} />
+      </S.InfoRow>
     </S.Content>
   )
 }
