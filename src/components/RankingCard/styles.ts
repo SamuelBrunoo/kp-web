@@ -78,12 +78,30 @@ export const ListItem = styled.li`
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-
+  padding: 8px;
+  border-radius: 8px;
   margin-bottom: 8px;
+  transition: background-color 0.3s;
+  cursor: default;
 
   &:nth-last-of-type(1) {
     margin: 0;
   }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.neutral[900]};
+  }
+`
+
+export const InfoArea = styled.div<{
+  $fill?: boolean
+  $align: "left" | "right"
+}>`
+  display: flex;
+  flex-direction: column;
+  flex: ${({ $fill }) => ($fill ? 1 : "unset")};
+  align-items: ${({ $align }) =>
+    $align === "left" ? "flex-start" : "flex-end"};
 `
 
 export const Info = styled.span<{
@@ -102,4 +120,18 @@ export const Info = styled.span<{
       : theme.colors.neutral[600]};
   font-weight: ${({ $role }) =>
     $role === "id" || $role === "text" || $role === "value" ? 600 : 300};
+`
+
+export const OrderInfo = styled.span<{
+  $role: "primary" | "secondary" | "tertiary"
+}>`
+  flex: 1;
+  color: ${({ $role, theme }) =>
+    $role === "primary"
+      ? theme.colors.orange[460]
+      : $role === "secondary"
+      ? theme.colors.green[460]
+      : theme.colors.neutral[500]};
+  font-weight: ${({ $role }) =>
+    $role === "primary" || $role === "secondary" ? 500 : 400};
 `

@@ -1,4 +1,5 @@
 import ListVariation, { PListVariation } from "./variations/List"
+import OrdersVariation, { POrdersVariation } from "./variations/Orders"
 
 // type TComponentType =
 //   | "list"
@@ -7,11 +8,17 @@ import ListVariation, { PListVariation } from "./variations/List"
 //   | "recipes"
 //   | "horizontalPercentages"
 
-type Props = {
-  type: "list"
-  title: string
-  data: PListVariation["data"]
-}
+type Props =
+  | {
+      type: "list"
+      title: string
+      data: PListVariation["data"]
+    }
+  | {
+      type: "orders"
+      title: string
+      data: POrdersVariation["data"]
+    }
 
 const RankingCard = ({ type, title, data }: Props) => {
   const getComponent = () => {
@@ -20,6 +27,9 @@ const RankingCard = ({ type, title, data }: Props) => {
     switch (type) {
       case "list":
         component = <ListVariation title={title} data={data} />
+        break
+      case "orders":
+        component = <OrdersVariation title={title} data={data} />
         break
       default:
         break
