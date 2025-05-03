@@ -10,7 +10,6 @@ import { TModel } from "../../../utils/@types/data/model"
 import { TColor } from "../../../utils/@types/data/color"
 
 import PageHead from "../../../components/PageHead"
-import Input from "../../../components/Inpts"
 
 import { initialForm } from "../../../utils/initialData/form"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
@@ -20,6 +19,7 @@ import getStore from "../../../store"
 import Button from "../../../components/Button"
 import { FormControlLabel, Switch } from "@mui/material"
 import LoadingModal from "../../../components/Modal/variations/Loading"
+import Form from "../../../components/Form"
 
 const ProductForm = () => {
   const { id } = useParams()
@@ -142,7 +142,9 @@ const ProductForm = () => {
         storage: { ...p.storage, has: value === "true" },
       }))
     } else if (field === "storage") {
-      setProduct((p) => ({ ...p, storage: { ...p.storage, quantity: value } }))
+      const v = !Number.isNaN(value) ? +value : 0
+
+      setProduct((p) => ({ ...p, storage: { ...p.storage, quantity: v } }))
     } else setProduct((p) => ({ ...p, [field]: value }))
   }, [])
 
@@ -289,100 +291,133 @@ const ProductForm = () => {
       <PageHead
         title={"Produtos"}
         subtitle={`${id ? "Edição" : "Cadastro"} de produto`}
-        buttons={[
-          { role: "cancel", text: "Cancelar", onClick: handleCancel },
-          {
-            role: id ? "update" : "new",
-            text: id ? "Salvar" : "Cadastrar",
-            onClick: handleSave,
-          },
-        ]}
+        forForm={true}
       />
 
       {/* form */}
-      <S.FormGroup>
-        <S.GroupTitle>Informações gerais</S.GroupTitle>
-        <S.FormLine>
-          <Input.Select
-            label="Tipo"
-            onChange={(v) => handleField("type", v)}
-            field={"type"}
-            value={product.type}
-            options={options.prodTypes}
-          />
-          <Input.Select
-            label="Modelo"
-            onChange={(v) => handleField("model", v)}
-            field={"model"}
-            value={product.model}
-            options={options.models}
-          />
-          <Input.Select
-            label="Cor"
-            onChange={(v) => handleField("color", v)}
-            field={"color"}
-            value={product.color}
-            options={options.colors}
-          />
-        </S.FormLine>
-        <S.FormLine>
-          <Input.Readonly
-            label="Código"
-            value={product.code}
-            field="code"
-            onChange={handleField}
-          />
-        </S.FormLine>
-      </S.FormGroup>
-
-      <S.FormGroup>
-        <S.GroupTitle>Estoque</S.GroupTitle>
-        <S.FormLine style={{ alignItems: "flex-end" }}>
-          <Input.Select
-            label="Tem estoque"
-            onChange={(v) => handleField("hasStorage", v)}
-            field={"hasStorage"}
-            value={String(product.storage.has)}
-            options={options.storage}
-          />
-          {product.storage.has && (
-            <Input.Default
-              label="Quantidade"
-              onChange={(v) => handleField("storage", v)}
-              field={"storage"}
-              value={String(product.storage.quantity ?? 0)}
-              disabled={!Boolean(product.storage.has)}
-              isNumber={true}
-            />
-          )}
-        </S.FormLine>
-        <S.FormLine>
-          <FormControlLabel
-            sx={{
-              "&:has(.Mui-checked) .MuiSwitch-track": {
-                backgroundColor: (theme) =>
-                  product.active ? theme.palette.green[460] : undefined,
+      <Form
+        handleCancel={handleCancel}
+        handleSave={handleSave}
+        handleField={handleField}
+        columns={[
+          {
+            blocks: [
+              {
+                title: "Informações gerais",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      [
+                        {
+                          type: "select",
+                          field: "type",
+                          label: "Tipo do modelo",
+                          options: options.prodTypes,
+                          value: product.type,
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "select",
+                          field: "model",
+                          label: "Modelo",
+                          options: options.models,
+                          value: product.model,
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "select",
+                          field: "color",
+                          label: "Cor",
+                          options: options.colors,
+                          value: product.color,
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                      {
+                        type: "readonly",
+                        field: "code",
+                        label: "Código",
+                        value: product.code,
+                        gridSizes: { big: 2 },
+                      },
+                    ],
+                  },
+                ],
               },
-              "& .Mui-checked .MuiSwitch-thumb": {
-                backgroundColor: (theme) => theme.palette.green[500],
+              {
+                title: "Estoque",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      [
+                        {
+                          type: "select",
+                          field: "hasStorage",
+                          label: "Tem estoque",
+                          options: options.storage,
+                          value: String(product.storage.has),
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "storage",
+                          label: "Quantidade",
+                          value:
+                            String(
+                              !Number.isNaN(product.storage.quantity)
+                                ? product.storage.quantity
+                                : 0
+                            ).replace(/\D/g, "") ?? "0",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                    ],
+                  },
+                  {
+                    type: "custom",
+                    columns: 12,
+                    element: (
+                      <FormControlLabel
+                        sx={{
+                          "&:has(.Mui-checked) .MuiSwitch-track": {
+                            backgroundColor: (theme) =>
+                              product.active
+                                ? theme.palette.green[460]
+                                : undefined,
+                          },
+                          "& .Mui-checked .MuiSwitch-thumb": {
+                            backgroundColor: (theme) =>
+                              theme.palette.green[500],
+                          },
+                          "& .MuiTypography-root": {
+                            fontFamily: "Poppins",
+                            fontWeight: 300,
+                            color: (theme) => theme.palette.neutral[300],
+                            fontSize: 14,
+                          },
+                        }}
+                        label="Status"
+                        control={
+                          <Switch
+                            checked={product.active}
+                            onChange={() =>
+                              handleField("active", !product.active)
+                            }
+                          />
+                        }
+                      />
+                    ),
+                  },
+                ],
               },
-              "& .MuiTypography-root": {
-                fontFamily: "Poppins",
-                fontWeight: 300,
-                color: (theme) => theme.palette.neutral[300],
-                fontSize: 14,
-              },
-            }}
-            label="Status"
-            control={
-              <Switch
-                checked={product.active}
-                onChange={() => handleField("active", !product.active)}
-              />
-            }
-          />
-        </S.FormLine>
-      </S.FormGroup>
+            ],
+          },
+        ]}
+      />
 
       <S.FormGroup
         style={{
