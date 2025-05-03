@@ -32,3 +32,8 @@ export const ButtonsArea = styled.div`
   gap: 16px;
   justify-content: flex-end;
 `
+
+export const ColorsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`

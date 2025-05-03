@@ -17,12 +17,13 @@ export const DataArea = styled.div`
   height: 100%;
   min-height: 39px;
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.neutral[800]};
+  background-color: ${({ theme }) => theme.colors.neutral[900]};
   color: ${({ theme }) => theme.colors.neutral[100]};
   cursor: pointer;
   flex: 1;
   transition: color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: -8px;
 
   svg {
     transition: transform 0.3s;
@@ -50,8 +51,7 @@ export const Label = styled.span<{ $hasError?: boolean }>`
     $hasError ? theme.colors.red[460] : theme.colors.green[360]};
   white-space: nowrap;
   margin-left: 8px;
-  position: absolute;
-  top: -24px;
+  margin-top: -5px;
   transition: top 0.3s, font-size 0.3s, color 0.3s;
   font-weight: 300;
   font-size: 14px;

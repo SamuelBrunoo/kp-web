@@ -15,6 +15,8 @@ const getElement = (
   switch (field.type) {
     case "default":
       return <Input.Default {...field} onChange={handleField} key={key} />
+    case "monetary":
+      return <Input.Monetary {...field} onChange={handleField} key={key} />
     case "date":
       return <Input.Date {...field} onChange={handleField} key={key} />
     case "readonly":

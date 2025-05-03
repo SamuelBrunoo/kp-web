@@ -22,6 +22,7 @@ import Button from "../../../components/Button"
 import { TColor } from "../../../utils/@types/data/color"
 import { Grid2, Typography } from "@mui/material"
 import LoadingModal from "../../../components/Modal/variations/Loading"
+import Form from "../../../components/Form"
 
 const ModelForm = () => {
   const { id } = useParams()
@@ -33,7 +34,7 @@ const ModelForm = () => {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const [model, setModel] = useState<Partial<TModel>>(initialForm.model as any)
+  const [model, setModel] = useState<TModel>(initialForm.model as any)
   const [allowedColors, setAllowedColors] = useState<
     (TColor & { checked: boolean })[]
   >([])
@@ -160,6 +161,8 @@ const ModelForm = () => {
           }))
         }
 
+        console.log("newOptions", newOptions)
+
         setOptions((opts) => ({
           ...opts,
           ...newOptions,
@@ -253,70 +256,98 @@ const ModelForm = () => {
       />
 
       {/* form */}
-      <S.FormGroup>
-        <S.GroupTitle>Informações gerais</S.GroupTitle>
-        <S.FormLine
-          style={{
-            alignItems: "flex-end",
-          }}
-        >
-          <Input.Select
-            label="Tipo"
-            onChange={(v) => handleField("type", v)}
-            field={"type"}
-            value={model.type ?? null}
-            options={options.prodTypes}
-            setByKey={true}
-          />
-          <Input.Default
-            label="Nome do modelo"
-            onChange={(v) => handleField("name", v)}
-            field={"name"}
-            value={model.name ?? ""}
-          />
-          <Input.Default
-            label="Código"
-            onChange={(v) => handleField("code", v)}
-            field={"code"}
-            value={model.code ?? ""}
-          />
-        </S.FormLine>
-      </S.FormGroup>
-
-      <S.FormGroup>
-        <S.GroupTitle>Informações de venda</S.GroupTitle>
-        <S.FormLine>
-          <Input.Monetary
-            label="Preço Unitário"
-            onChange={(v) => handleField("price", v)}
-            value={model.price}
-          />
-        </S.FormLine>
-      </S.FormGroup>
-
-      <S.FormGroup>
-        <S.GroupTitle>Cores</S.GroupTitle>
-        <S.FormLine
-          style={{
-            minWidth: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          {renderColorsControl()}
-        </S.FormLine>
-      </S.FormGroup>
-
-      <S.FormGroup>
-        <S.GroupTitle>Variações do modelo</S.GroupTitle>
-        <S.FormLine style={{ minWidth: "100%" }}>
-          <Table
-            config={tableConfig.modelVariations}
-            data={variations}
-            noHover={true}
-          />
-        </S.FormLine>
-      </S.FormGroup>
+      <Form
+        handleCancel={handleCancel}
+        handleSave={handleSave}
+        handleField={handleField}
+        columns={[
+          {
+            blocks: [
+              {
+                title: "Informações gerais",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      [
+                        {
+                          type: "select",
+                          field: "type",
+                          label: "Tipo do modelo",
+                          options: options.prodTypes,
+                          value: model.type,
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "name",
+                          label: "Nome do modelo",
+                          value: model.name,
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "code",
+                          label: "Código",
+                          value: model.code,
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                    ],
+                  },
+                ],
+              },
+              {
+                title: "Informações de venda",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      {
+                        type: "monetary",
+                        field: "price",
+                        label: "Preço unitário",
+                        value: model.price,
+                        gridSizes: { big: 2 },
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                title: "Cores",
+                groups: [
+                  {
+                    type: "custom",
+                    columns: 12,
+                    element: (
+                      <S.ColorsWrapper>{renderColorsControl()}</S.ColorsWrapper>
+                    ),
+                  },
+                ],
+              },
+              {
+                title: "Variações do modelo",
+                groups: [
+                  {
+                    type: "custom",
+                    columns: 12,
+                    element: (
+                      <Table
+                        config={tableConfig.modelVariations}
+                        data={variations}
+                        noHover={true}
+                      />
+                    ),
+                  },
+                ],
+              },
+            ],
+          },
+        ]}
+      />
 
       <S.ButtonsArea>
         <Button
