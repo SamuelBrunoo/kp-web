@@ -1,4 +1,5 @@
 import { TNewOrder } from "../@types/data/order"
+import { TNewRepresentative } from "../@types/data/representative"
 import { getMinDeadline } from "../helpers/date"
 
 const order: TNewOrder = {
@@ -26,6 +27,16 @@ const order: TNewOrder = {
   shippingType: "mail",
   shippingMode: "sedex",
   emmitter: "",
+}
+
+const baseAddress = {
+  full: "",
+  street: "",
+  number: "",
+  neighborhood: "",
+  city: "",
+  state: "",
+  cep: "",
 }
 
 export const initialForm = {
@@ -57,18 +68,29 @@ export const initialForm = {
       stateInscription: "",
       cityInscription: "",
     },
-    address: {
-      full: "",
-      street: "",
-      number: "",
-      neighborhood: "",
-      city: "",
-      state: "",
-      cep: "",
-    },
+    address: baseAddress,
     email: "",
     phone: "",
     representative: "",
   },
   order,
+  representative: {
+    address: baseAddress,
+    email: "",
+    name: "",
+    phone: "",
+    phone2: "",
+    paymentConfig: {
+      commissionType: "percentage",
+      dateLimit: 15,
+      dateLimit2: 25,
+      paymentMethod: "pix",
+      period: "monthly",
+      value: 0,
+    },
+    registers: {
+      cpf: "",
+      cnpj: "",
+    },
+  } as TNewRepresentative,
 }

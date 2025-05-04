@@ -3,5 +3,6 @@ export type TApi_Params_FormBare = {
     model: { modelId?: string }
     order: { orderId?: string }
     client: { clientId?: string }
+    representative: { representativeId?: string }
   }
 }

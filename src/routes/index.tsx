@@ -18,6 +18,10 @@ import ProductForm from "../pages/FormsPages/Product"
 import ClientsPage from "../pages/Clients"
 import ClientsForm from "../pages/FormsPages/Clients"
 
+// # Representatives
+import RepresentativesPage from "../pages/Representatives"
+import RepresentativesForm from "../pages/FormsPages/Representative"
+
 // # Orders
 import OrdersPage from "../pages/Orders"
 import OrdersForm from "../pages/FormsPages/Orders"
@@ -53,6 +57,13 @@ const Router = () => {
             <Route path="single">
               <Route path={""} element={<ClientsForm />} />
               <Route path={":id"} element={<ClientsForm />} />
+            </Route>
+          </Route>
+          <Route path="representatives">
+            <Route path={""} element={<RepresentativesPage />} />
+            <Route path="single">
+              <Route path={""} element={<RepresentativesForm />} />
+              <Route path={":id"} element={<RepresentativesForm />} />
             </Route>
           </Route>
           <Route path="orders">

@@ -34,6 +34,8 @@ import FormBottomButtons from "../../../components/FormBottomButtons"
 import { TGroup } from "../../../utils/@types/components/Form"
 import { theme } from "../../../theme"
 import { TRepresentative } from "../../../utils/@types/data/representative"
+import { getRepresentativeComissionString } from "../../../utils/helpers/formatters/commission"
+import { TPaymentConfig } from "../../../utils/@types/data/payment"
 
 const OrdersForm = () => {
   const { id } = useParams()
@@ -502,11 +504,12 @@ const OrdersForm = () => {
                           label: "Comissão",
                           field: "comission",
                           value: order.representative
-                            ? `${
+                            ? `${getRepresentativeComissionString(
                                 representatives.find(
                                   (r) => r.id === order.representative
-                                )?.comission
-                              }%`
+                                )
+                                  ?.paymentConfig as TPaymentConfig["representative"]
+                              )}%`
                             : "-",
                           type: "readonly",
                           gridSizes: { big: 1 },

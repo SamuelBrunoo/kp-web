@@ -1,38 +1,39 @@
-export type TRepresentative = {
+import { TAddress } from "./address"
+import { TClient } from "./client"
+import { TPaymentConfig } from "./payment"
+
+export type TPageListRepresentative = {
   id: string
   name: string
-  cpf?: string
-  cnpj?: string
-  address: {
-    full: string
-    street: string
-    number: string
-    neighborhood: string
-    city: string
-    state: string
-    cep: string
-  }
-  comission: number
-  email: string
-  phone: string
-  clients: string[]
-  orders: string[]
+  clients: number
+  monthTotal: number
+  monthSells: number
+  yearSells: number
+  yearTotal: number
+  deletable: boolean
 }
 
 export type TNewRepresentative = {
   name: string
-  cpf?: string
-  cnpj?: string
-  address: {
-    full: string
-    street: string
-    number: string
-    neighborhood: string
-    city: string
-    state: string
-    cep: string
-  }
-  comission: number
   email: string
   phone: string
+  phone2: string
+  paymentConfig: TPaymentConfig["representative"]
+  registers: {
+    cpf: string
+    cnpj: string | null
+  }
+  address: TAddress
+}
+
+export type TFBRepresentative = TNewRepresentative
+
+export type TBasicRepresentative = TFBRepresentative & {
+  id: string
+}
+
+export type TRepresentative = TNewRepresentative & {
+  id: string
+  clients: TClient[]
+  orders: string[]
 }

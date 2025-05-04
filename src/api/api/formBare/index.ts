@@ -106,14 +106,53 @@ export const orderBare: TApi["formBare"]["order"] = async (filters) => {
   })
 }
 
+export const representativeBare: TApi["formBare"]["representative"] = async (
+  filters
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .get(`${baseURL}/representative`, {
+          params: filters,
+        })
+        .then((res) => {
+          const info = res.data.data
+
+          if (info) {
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else {
+            resolve(getApiError(res))
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve(getApiError(err))
+        })
+    } catch (error) {
+      reject({
+        error: {
+          message:
+            "Não foi possível obter as informações para o formulário. Tente novamente mais tarde.",
+        },
+      })
+    }
+  })
+}
+
 export type TApi_FormBare = {
   model: (p: TParams["formBare"]["model"]) => TResponses["formBare"]["model"]
   client: (p: TParams["formBare"]["client"]) => TResponses["formBare"]["client"]
   order: (p: TParams["formBare"]["order"]) => TResponses["formBare"]["order"]
+  representative: (
+    p: TParams["formBare"]["representative"]
+  ) => TResponses["formBare"]["representative"]
 }
 
 export const apiFormBare: TApi["formBare"] = {
   model: modelBare,
   client: clientBare,
   order: orderBare,
+  representative: representativeBare,
 }

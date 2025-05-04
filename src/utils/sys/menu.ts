@@ -33,8 +33,8 @@ export const menu: TSideMenuItem[] = [
   {
     title: "Representantes",
     icon: Icons.Delegate,
-    slug: "delegates",
-    link: "/dashboard/delegates",
+    slug: "representatives",
+    link: "/dashboard/representatives",
     submenus: [],
   },
   {

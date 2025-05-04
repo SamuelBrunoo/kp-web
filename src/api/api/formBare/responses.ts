@@ -39,5 +39,11 @@ export type TApi_Responses_FormBare = {
         order?: TOrder
       }>
     >
+    representative: Promise<
+      TDefaultRes<{
+        representative?: TRepresentative
+        states: TState[]
+      }>
+    >
   }
 }

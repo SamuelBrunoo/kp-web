@@ -22,6 +22,7 @@ import ResponsableIndicator from "../../components/ResponsableIndicator"
 import * as dateFns from "date-fns"
 
 import { theme } from "../../theme"
+import { TPageListRepresentative } from "../@types/data/representative"
 
 type TTableConfigs =
   | "colors"
@@ -29,6 +30,7 @@ type TTableConfigs =
   | "models"
   | "modelVariations"
   | "clients"
+  | "representatives"
   | "orders"
   | "orderDetailsProducts"
   | "orderFormProducts"
@@ -166,6 +168,31 @@ export const tableConfig: {
       actions: (item: TPageListClient, { callbacks }) => (
         <TableActions
           table={"clients"}
+          id={item.id}
+          canDelete={item.deletable}
+          deleteCallback={callbacks.deleteCallback}
+        />
+      ),
+    },
+    isExpandable: true,
+  },
+  representatives: {
+    columns: [
+      { title: "Nome", field: "name" },
+      { title: "Clientes", field: "clients", align: "center" },
+      { title: "Total mês", field: "monthTotal" },
+      { title: "Vendas no mês", field: "monthSells", align: "center" },
+      { title: "Vendas no ano", field: "yearSells", align: "center" },
+      { title: "Total ano", field: "yearTotal" },
+      { title: "", field: "actions" },
+    ],
+    specialFields: {
+      monthTotal: (item: TPageListRepresentative) =>
+        formatMoney(item.monthTotal),
+      yearTotal: (item: TPageListRepresentative) => formatMoney(item.yearTotal),
+      actions: (item: TPageListRepresentative, { callbacks }) => (
+        <TableActions
+          table={"representatives"}
           id={item.id}
           canDelete={item.deletable}
           deleteCallback={callbacks.deleteCallback}

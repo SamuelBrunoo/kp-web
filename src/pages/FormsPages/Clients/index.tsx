@@ -236,7 +236,7 @@ const ClientsForm = () => {
 
     try {
       if (id) {
-        const req = await Api.products.deleteProduct({ id })
+        const req = await Api.clients.deleteClient({ id })
 
         if (req.ok) {
           controllers.feedback.setData({

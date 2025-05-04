@@ -12,6 +12,7 @@ type Props = {
     | "models"
     | "modelVariations"
     | "clients"
+    | "representatives"
     | "orders"
     | "orderFormProduct"
   id: string
@@ -40,6 +41,7 @@ const TableActions = ({
       case "products":
       case "models":
       case "clients":
+      case "representatives":
       case "orders":
         url = `single/${id}`
         break
@@ -63,12 +65,12 @@ const TableActions = ({
         return await Api.products.deleteProduct({ id })
       case "models":
         return await Api.models.deleteModel({ id })
-      // case "clients":
-      //   return await Api.delete.client({id})
-      // case "orders":
-      //   return await Api.delete.order({id})
-      // case "orderFormProduct":
-      //   return true
+      case "clients":
+        return await Api.clients.deleteClient({ id })
+      case "orders":
+        return await Api.orders.deleteOrder({ id })
+      case "representatives":
+        return await Api.representatives.deleteRepresentative({ id })
       default:
         return () => ({ ok: true })
     }
@@ -86,7 +88,7 @@ const TableActions = ({
         controllers.feedback.setData({
           message:
             error.message ??
-            "Não foi possível excluir o modelo. Tente novamente mais tarde.",
+            "Não foi possível excluir. Tente novamente mais tarde.",
           state: "error",
           visible: true,
         })
