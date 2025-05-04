@@ -8,7 +8,6 @@ import * as S from "./styles"
 import { TRoOption } from "../../../utils/@types/sys/roOptions"
 
 import PageHead from "../../../components/PageHead"
-import Input from "../../../components/Inpts"
 
 import { initialForm } from "../../../utils/initialData/form"
 import {
@@ -26,6 +25,8 @@ import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import LoadingModal from "../../../components/Modal/variations/Loading"
 import Button from "../../../components/Button"
 import getStore from "../../../store"
+import Form from "../../../components/Form"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
 const ClientsForm = () => {
   const { id } = useParams()
@@ -60,8 +61,6 @@ const ClientsForm = () => {
   const getNewClientData = () => {
     const d: TNewClient = {
       ...client,
-      personName: client.clientName,
-      type: client.type,
       phone1: client.phone1.replace(/\D/g, ""),
       phone2: client.phone2.replace(/\D/g, ""),
       documents: {
@@ -215,13 +214,18 @@ const ClientsForm = () => {
   useEffect(() => {
     let str = ""
 
+    const stateName = (
+      options.states.find((i) => i.key === client.address.state) ?? {
+        value: "Não definido",
+      }
+    )?.value
+
     if (!!client.address.street) str += client.address.street
     if (!!client.address.number) str += `, nº${client.address.number}`
     if (!!client.address.neighborhood) str += `, ${client.address.neighborhood}`
 
     if (!!client.address.city) str += ` - ${client.address.city}`
-    if (!!client.address.city && !!client.address.state)
-      str += `, ${client.address.state}`
+    if (!!client.address.city && !!client.address.state) str += `, ${stateName}`
 
     if (client.address.full !== str)
       setClient((c) => ({ ...c, address: { ...c.address, full: str } }))
@@ -266,149 +270,204 @@ const ClientsForm = () => {
 
       <PageHead
         title={"Clientes"}
-        subtitle={`${id ? "Edição" : "Cadastro"} de cliente`}
+        subtitle={`${id ? "Edição" : "Cadastro"}`}
+        forForm={true}
+        withoutNewButton={true}
       />
 
       {/* form */}
-      <S.FormGroup>
-        <S.GroupTitle>Informações gerais</S.GroupTitle>
-        <S.FormLine style={{ alignItems: "flex-end" }}>
-          <Input.Select
-            label="Tipo de cliente"
-            onChange={(v) => handleField("type", v)}
-            value={client.type}
-            options={options.clientType}
-            field={"type"}
-          />
-          <Input.Default
-            label="Nome do cliente"
-            value={client.clientName}
-            onChange={(v) => handleField("clientName", v)}
-            field={"clientName"}
-          />
-          {client.type === "juridical" && (
-            <Input.Default
-              label="Nome da empresa"
-              value={client.socialRole}
-              onChange={(v) => handleField("socialRole", v)}
-              field={"socialRole"}
-            />
-          )}
-        </S.FormLine>
-        {client.type === "physical" ? (
-          <S.FormLine>
-            <Input.Default
-              label="CPF"
-              onChange={(v) => handleField("documents.register", v)}
-              value={formatCpf(client.documents.register)}
-              field={"documents.register"}
-            />
-          </S.FormLine>
-        ) : (
-          <S.FormLine>
-            <Input.Default
-              label="CNPJ"
-              onChange={(v) => handleField("documents.register", v)}
-              value={formatCnpj(client.documents.register)}
-              field={"documents.register"}
-            />
-            <Input.Default
-              label="Inscrição Estadual"
-              onChange={(v) => handleField("documents.stateInscription", v)}
-              value={formatStateRegister(client.documents.stateInscription)}
-              field={"documents.stateInscription"}
-            />
-          </S.FormLine>
-        )}
-      </S.FormGroup>
-
-      <S.FormGroup>
-        <S.GroupTitle>Informações de contato</S.GroupTitle>
-        <S.FormLine>
-          <Input.Default
-            label="Email"
-            value={client.email}
-            onChange={(v) => handleField("email", v)}
-            field={"email"}
-          />
-          <Input.Default
-            label="Telefone"
-            value={formatPhone(client.phone1)}
-            onChange={(v) => handleField("phone1", v)}
-            field={"phone1"}
-          />
-        </S.FormLine>
-      </S.FormGroup>
-
-      <S.FormGroup>
-        <S.GroupTitle>Informações de envio</S.GroupTitle>
-        <S.FormLine>
-          <Input.Readonly
-            label="Endereço completo"
-            value={
-              !!client.address.full
-                ? client.address.full
-                : "Seu endereço completo aparecerá aqui"
-            }
-            field={"address"}
-            onChange={() => {}}
-          />
-        </S.FormLine>
-        <S.FormLine style={{ alignItems: "flex-end" }}>
-          <Input.Select
-            label="Estado"
-            onChange={(v) => handleField("address.state", v)}
-            value={client.address.state}
-            options={options.states}
-            field={"address.state"}
-          />
-          <Input.Default
-            label="Cidade"
-            value={client.address.city}
-            onChange={(v) => handleField("address.city", v)}
-            field={"address.city"}
-          />
-          <Input.Default
-            label="CEP"
-            value={formatCep(client.address.cep)}
-            onChange={(v) => handleField("address.cep", v)}
-            field={"address.cep"}
-          />
-        </S.FormLine>
-        <S.FormLine>
-          <Input.Default
-            label="Bairro"
-            value={client.address.neighborhood}
-            onChange={(v) => handleField("address.neighborhood", v)}
-            field={"address.neighborhood"}
-          />
-          <Input.Default
-            label="Rua"
-            onChange={(v) => handleField("address.street", v)}
-            field={"address.street"}
-            value={client.address.street}
-          />
-          <Input.Default
-            label="Número"
-            value={client.address.number}
-            onChange={(v) => handleField("address.number", v)}
-            field={"address.number"}
-          />
-        </S.FormLine>
-      </S.FormGroup>
-
-      <S.FormGroup>
-        <S.GroupTitle>Relações de Vendas</S.GroupTitle>
-        <S.FormLine>
-          <Input.Select
-            label="Representante"
-            onChange={(v) => handleField("representative", v)}
-            value={client.representative}
-            options={options.representatives}
-            field={"representative"}
-          />
-        </S.FormLine>
-      </S.FormGroup>
+      <Form
+        handleCancel={handleCancel}
+        handleSave={handleSave}
+        handleField={handleField}
+        columns={[
+          {
+            blocks: [
+              {
+                title: "Informações gerais",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      [
+                        {
+                          type: "select",
+                          field: "type",
+                          options: options.clientType,
+                          value: client.type,
+                          label: "Tipo do cliente",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "select",
+                          field: "representative",
+                          options: options.representatives,
+                          value: client.representative,
+                          label: "Representante",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                      [
+                        {
+                          type: "default",
+                          field: "clientName",
+                          value: client.clientName,
+                          label: "Nome do cliente",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "personName",
+                          value: client.personName,
+                          label: "Nome do(a) proprietário(a)",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "socialRole",
+                          value: client.socialRole,
+                          label: "Razão social",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                      (client.type === "physical"
+                        ? [
+                            {
+                              type: "default",
+                              field: "documents.register",
+                              value: formatCpf(client.documents.register),
+                              label: "CPF",
+                              gridSizes: { big: 2 },
+                            },
+                          ]
+                        : [
+                            {
+                              type: "default",
+                              field: "documents.register",
+                              value: formatCnpj(client.documents.register),
+                              label: "CNPJ",
+                              gridSizes: { big: 2 },
+                            },
+                            {
+                              type: "default",
+                              field: "documents.stateInscription",
+                              value: formatStateRegister(
+                                client.documents.stateInscription
+                              ),
+                              label: "Inscrição estadual",
+                              gridSizes: { big: 2 },
+                            },
+                          ]) as FormField[],
+                    ],
+                  },
+                ],
+              },
+              {
+                title: "Informações de contato",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      [
+                        {
+                          type: "default",
+                          field: "email",
+                          value: client.email,
+                          label: "Email",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "phone1",
+                          value: formatPhone(client.phone1),
+                          label: "Telefone 1",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "phone2",
+                          value: formatPhone(client.phone2),
+                          label: "Telefone 2",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                    ],
+                  },
+                ],
+              },
+              {
+                title: "Informações de envio",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      {
+                        type: "readonly",
+                        field: "address",
+                        value: !!client.address.full
+                          ? client.address.full
+                          : "O endereço vai aparecer aqui",
+                        label: "Endereço completo",
+                        gridSizes: { big: 2 },
+                      },
+                      [
+                        {
+                          type: "select",
+                          field: "address.state",
+                          value: client.address.state,
+                          options: options.states,
+                          label: "Estado",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.city",
+                          value: client.address.city,
+                          label: "Cidade",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.cep",
+                          value: formatCep(client.address.cep),
+                          label: "CEP",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                      [
+                        {
+                          type: "default",
+                          field: "address.neighborhood",
+                          value: client.address.neighborhood,
+                          label: "Bairro",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.street",
+                          value: client.address.street,
+                          label: "Rua",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.number",
+                          value: client.address.number,
+                          label: "Número",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ]}
+      />
 
       <S.FormGroup
         style={{
