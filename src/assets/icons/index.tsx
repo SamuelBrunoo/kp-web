@@ -15,6 +15,7 @@ import { ReactComponent as Dropdown } from "./dropdown.svg"
 import { ReactComponent as DollarBox } from "./dollarBox.svg"
 import { ReactComponent as DollarCircle } from "./dollar.svg"
 import { ReactComponent as Edit } from "./edit.svg"
+import { ReactComponent as Expand } from "./edit.svg"
 import { ReactComponent as Location } from "./location.svg"
 import { ReactComponent as Search } from "./search.svg"
 import { ReactComponent as Trash } from "./trash.svg"
@@ -40,6 +41,7 @@ const Icons = {
   Check: Check,
   Dropdown: Dropdown,
   Edit: Edit,
+  Expand: Expand,
   Search: Search,
   Trash: Trash,
 }

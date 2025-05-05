@@ -20,12 +20,13 @@ import Button from "../../../components/Button"
 import getStore from "../../../store"
 import Form from "../../../components/Form"
 import {
-  TBasicRepresentative,
   TNewRepresentative,
   TRepresentative,
 } from "../../../utils/@types/data/representative"
 import { states } from "../../../utils/sys/states"
 import { formatMoney } from "../../../utils/helpers/formatters/money"
+import Table from "../../../components/Table"
+import { tableConfig } from "../../../utils/sys/table"
 
 const RepresentativesForm = () => {
   const { id } = useParams()
@@ -39,7 +40,7 @@ const RepresentativesForm = () => {
   const [deleting, setDeleting] = useState(false)
 
   const [representative, setRepresentative] = useState<
-    TNewRepresentative | TBasicRepresentative
+    TNewRepresentative | TRepresentative
   >(initialForm.representative as any)
 
   // Page control
@@ -430,6 +431,88 @@ const RepresentativesForm = () => {
                         },
                       ],
                     ],
+                  },
+                  {
+                    type: "fields",
+                    title: "Endereço",
+                    columns: 12,
+                    fields: [
+                      {
+                        type: "readonly",
+                        field: "address",
+                        value: !!representative.address.full
+                          ? representative.address.full
+                          : "O endereço vai aparecer aqui",
+                        label: "Endereço completo",
+                        gridSizes: { big: 2 },
+                      },
+                      [
+                        {
+                          type: "select",
+                          field: "address.state",
+                          value: representative.address.state,
+                          options: options.states,
+                          label: "Estado",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.city",
+                          value: representative.address.city,
+                          label: "Cidade",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.cep",
+                          value: formatCep(representative.address.cep),
+                          label: "CEP",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                      [
+                        {
+                          type: "default",
+                          field: "address.neighborhood",
+                          value: representative.address.neighborhood,
+                          label: "Bairro",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.street",
+                          value: representative.address.street,
+                          label: "Rua",
+                          gridSizes: { big: 2 },
+                        },
+                        {
+                          type: "default",
+                          field: "address.number",
+                          value: representative.address.number,
+                          label: "Número",
+                          gridSizes: { big: 2 },
+                        },
+                      ],
+                    ],
+                  },
+                ],
+              },
+              {
+                title: "Clientes",
+                groups: [
+                  {
+                    type: "custom",
+                    columns: 12,
+                    element: (
+                      <Table
+                        config={tableConfig.representativeClients}
+                        data={
+                          // @ts-ignore
+                          representative.clients ? representative.clients : []
+                        }
+                        noHover={true}
+                      />
+                    ),
                   },
                 ],
               },

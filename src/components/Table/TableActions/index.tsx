@@ -12,6 +12,7 @@ type Props = {
     | "models"
     | "modelVariations"
     | "clients"
+    | "representativeClients"
     | "representatives"
     | "orders"
     | "orderFormProduct"
@@ -99,6 +100,11 @@ const TableActions = ({
   return (
     <S.Wrapper className="actions-area">
       <S.Content>
+        {table === "representativeClients" && (
+          <S.Action onClick={handleEdit} $role={"extra"}>
+            <icons.Expand />
+          </S.Action>
+        )}
         {!noEdit && (
           <S.Action onClick={handleEdit} $role={"edit"}>
             <icons.Edit />

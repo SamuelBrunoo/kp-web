@@ -15,7 +15,7 @@ export const Content = styled.div`
 `
 
 export const Action = styled.button<{
-  $role: "edit" | "trash"
+  $role: "edit" | "trash" | "extra"
   $disabled?: boolean
 }>`
   display: grid;
@@ -28,5 +28,9 @@ export const Action = styled.button<{
   filter: saturate(${({ $disabled }) => ($disabled ? 0 : 1)});
 
   color: ${({ $role, theme }) =>
-    $role === "edit" ? theme.colors.orange[560] : theme.colors.red[460]};
+    $role === "edit"
+      ? theme.colors.orange[560]
+      : $role === "extra"
+      ? theme.colors.green[460]
+      : theme.colors.red[460]};
 `

@@ -2,7 +2,7 @@ import { Switch } from "@mui/material"
 import Input from "../../components/Inpts"
 import StatusIndicator from "../../components/StatusIndicator"
 import TableActions from "../../components/Table/TableActions"
-import { TPageListClient } from "../@types/data/client"
+import { TClient, TPageListClient } from "../@types/data/client"
 import { TColor } from "../@types/data/color"
 import { TModel, TPageListModel } from "../@types/data/model"
 import { TOPStatus, TOrder, TPageListOrder } from "../@types/data/order"
@@ -30,6 +30,7 @@ type TTableConfigs =
   | "models"
   | "modelVariations"
   | "clients"
+  | "representativeClients"
   | "representatives"
   | "orders"
   | "orderDetailsProducts"
@@ -148,6 +149,30 @@ export const tableConfig: {
         <TableActions table={"modelVariations"} id={item.id} />
       ),
     },
+  },
+  representativeClients: {
+    columns: [
+      { title: "Nome do cliente", field: "clientName" },
+      { title: "CPF / CNPJ", field: "cpfCnpj" },
+      { title: "Endereço", field: "address" },
+      { title: "", field: "actions" },
+    ],
+    specialFields: {
+      cpfCnpj: (item: TClient) =>
+        item.type === "physical"
+          ? formatCpf(item.documents.register)
+          : formatCnpj(item.documents.register),
+      address: (item: TClient) => item.address.full,
+      actions: (item: TClient) => (
+        <TableActions
+          table={"representativeClients"}
+          id={item.id}
+          noDelete={true}
+          noEdit={true}
+        />
+      ),
+    },
+    isExpandable: true,
   },
   clients: {
     columns: [
