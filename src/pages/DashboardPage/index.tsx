@@ -10,12 +10,18 @@ import DashboardSellsCard from "../../components/DashboardSellsCard"
 import RankingCard from "../../components/RankingCard"
 import { PListVariation } from "../../components/RankingCard/variations/List"
 import { POrdersVariation } from "../../components/RankingCard/variations/Orders"
+import { Api } from "../../api"
+import { parseOrdersToDashboardList } from "../../utils/helpers/parsers/orders"
 
 const DashboardPage = () => {
   const { controllers } = getStore()
 
   /* Data */
   const [bestSellers, setBestSellers] = useState<PListVariation["data"]>([])
+  const [shippedToday, setShippedToday] = useState<POrdersVariation["data"]>([])
+  const [productionOrders, setProductionOrders] = useState<
+    POrdersVariation["data"]
+  >([])
   const [lastOrders, setLastOrders] = useState<POrdersVariation["data"]>([])
 
   const [loading, setLoading] = useState(false)
@@ -24,36 +30,17 @@ const DashboardPage = () => {
     setLoading(true)
 
     try {
-      // const req = await Api...
-      setBestSellers([
-        { id: 1, category: "Pingente", name: "Íma smart", value: 64 },
-        { id: 2, category: "Pingente", name: "Íma smart", value: 63 },
-        { id: 3, category: "Pingente", name: "Íma smart", value: 58 },
-      ])
+      const req = await Api.dashboard.admin({})
 
-      setLastOrders([
-        {
-          id: 1,
-          clientName: "Decor House",
-          orderDate: "01/05/2025",
-          value: 58,
-          itemsCount: 14,
-        },
-        {
-          id: 1,
-          clientName: "Decor House",
-          orderDate: "01/05/2025",
-          value: 58,
-          itemsCount: 14,
-        },
-        {
-          id: 1,
-          clientName: "Decor House",
-          orderDate: "01/05/2025",
-          value: 58,
-          itemsCount: 14,
-        },
-      ])
+      if (req.ok) {
+        const info = req.data
+
+        setBestSellers(info.bastSellers)
+
+        setShippedToday(parseOrdersToDashboardList(info.orders.shippedToday))
+        setProductionOrders(parseOrdersToDashboardList(info.orders.production))
+        setLastOrders(parseOrdersToDashboardList(info.orders.lastOrders))
+      }
     } catch (error) {
       controllers.feedback.setData({
         message:
@@ -115,8 +102,16 @@ const DashboardPage = () => {
         />
 
         <S.InfoRow>
-          <RankingCard title="Enviados hoje" type="orders" data={lastOrders} />
-          <RankingCard title="Em produção" type="orders" data={lastOrders} />
+          <RankingCard
+            title="Enviados hoje"
+            type="orders"
+            data={shippedToday}
+          />
+          <RankingCard
+            title="Em produção"
+            type="orders"
+            data={productionOrders}
+          />
           <RankingCard
             title="Últimos pedidos"
             type="orders"

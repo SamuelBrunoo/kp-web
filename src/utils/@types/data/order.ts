@@ -4,15 +4,16 @@ import { TProduct } from "./product"
 export type TNewOrder = {
   client: string
   orderDate: number
+  shippedAt?: number | null
+  deadline: number | string | Date
   value: number
   status: TOPStatus
   products: TOrderProduct[]
   productsIds: string[]
-  total: {
+  totals: {
     products: number
     value: number
   }
-  deadline: number | string | Date
   representative: string
   payment: TPaymentConfig
   shippingType: TShipping
@@ -24,16 +25,17 @@ export type TOrder = {
   id: string
   code: string
   client: TClient
+  shippedAt: number
   orderDate: number
+  deadline: string
   value: number
   status: TOPStatus
   products: TOrderProduct[]
   productsIds: string[]
-  total: {
+  totals: {
     products: number
     value: number
   }
-  deadline: string
   representative?: string
   payment: TPaymentConfig
   shippingType: TShipping

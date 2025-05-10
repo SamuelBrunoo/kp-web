@@ -572,7 +572,7 @@ const OrdersForm = () => {
                         {
                           label: "Valor bruto",
                           field: "grossValue",
-                          value: formatMoney(order.total.value),
+                          value: formatMoney(order.totals.value),
                           type: "readonly",
                           gridSizes: { big: 1 },
                           color: "orange",
@@ -588,7 +588,7 @@ const OrdersForm = () => {
                         {
                           label: "Valor líquido",
                           field: "netValue",
-                          value: formatMoney(order.total.value),
+                          value: formatMoney(order.totals.value),
                           type: "readonly",
                           gridSizes: { big: 1 },
                           color: "orange",

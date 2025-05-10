@@ -4,12 +4,13 @@ import { getMinDeadline } from "../helpers/date"
 
 const order: TNewOrder = {
   client: "",
+  shippedAt: null,
   orderDate: new Date().getTime(),
   value: 0,
   status: "queued",
   products: [],
   productsIds: [],
-  total: {
+  totals: {
     products: 0,
     value: 0,
   },

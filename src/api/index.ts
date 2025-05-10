@@ -15,6 +15,7 @@ import { apiRepresentatives } from "./api/representative"
 import { apiProductTypes } from "./api/productTypes"
 import { apiFormBare } from "./api/formBare"
 import { apiAuth } from "./api/auth"
+import { apiDashboard } from "./api/dashboard"
 
 export const initialResponse: TErrorResponse = {
   ok: false,
@@ -87,6 +88,8 @@ export const service = axios
 
 export const Api: TApi = {
   auth: apiAuth,
+
+  dashboard: apiDashboard,
 
   formBare: apiFormBare,
 

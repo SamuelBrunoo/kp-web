@@ -1,6 +1,7 @@
 import { TApi_Auth } from "../api/auth"
 import { TApi_Clients } from "../api/clients"
 import { TApi_Colors } from "../api/colors"
+import { TApi_Dashboard } from "../api/dashboard"
 import { TApi_FormBare } from "../api/formBare"
 import { TApi_Models } from "../api/models"
 import { TApi_Orders } from "../api/orders"
@@ -11,6 +12,8 @@ import { TApi_Representatives } from "../api/representative"
 
 export type TApi = {
   auth: TApi_Auth
+
+  dashboard: TApi_Dashboard
 
   formBare: TApi_FormBare
 
