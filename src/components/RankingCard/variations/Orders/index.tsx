@@ -33,7 +33,9 @@ const ListItem = ({ data }: { data: POrdersVariation["data"][number] }) => {
     <S.ListItem>
       <S.Info $role="id">#{String(data.id).padStart(2, "0")}</S.Info>
       <S.InfoArea $fill={true} $align="left">
-        <S.OrderInfo $role="primary">{data.clientName}</S.OrderInfo>
+        <S.OrderInfo $role="primary" style={{ whiteSpace: "nowrap" }}>
+          {data.clientName}
+        </S.OrderInfo>
         <S.OrderInfo $role="tertiary">
           {formatDate(new Date(data.orderDate), "dd/MM/yyyy")}
         </S.OrderInfo>

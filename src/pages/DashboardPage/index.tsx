@@ -12,13 +12,29 @@ import { PListVariation } from "../../components/RankingCard/variations/List"
 import { POrdersVariation } from "../../components/RankingCard/variations/Orders"
 import { Api } from "../../api"
 import { parseOrdersToDashboardList } from "../../utils/helpers/parsers/orders"
+import { TComponents } from "../../utils/@types/components"
 
 const DashboardPage = () => {
   const { controllers } = getStore()
 
   /* Data */
+  const [monthlySells, setMonthlySells] = useState<
+    TComponents["cards"]["dashboard"]["monthlySells"]
+  >({
+    current: 0,
+    last: 0,
+    past: 0,
+  })
+  const [totalSells, setTotalSells] = useState<
+    TComponents["cards"]["dashboard"]["totalSells"]
+  >({ balance: 0, sells: 0, spends: 0 })
+
   const [bestSellers, setBestSellers] = useState<PListVariation["data"]>([])
+
   const [shippedToday, setShippedToday] = useState<POrdersVariation["data"]>([])
+  const [waitingToShip, setWaitingToShip] = useState<POrdersVariation["data"]>(
+    []
+  )
   const [productionOrders, setProductionOrders] = useState<
     POrdersVariation["data"]
   >([])
@@ -35,9 +51,13 @@ const DashboardPage = () => {
       if (req.ok) {
         const info = req.data
 
+        setMonthlySells(info.monthlySells)
+        setTotalSells(info.totalSells)
+
         setBestSellers(info.bastSellers)
 
         setShippedToday(parseOrdersToDashboardList(info.orders.shippedToday))
+        setWaitingToShip(parseOrdersToDashboardList(info.orders.waitingToShip))
         setProductionOrders(parseOrdersToDashboardList(info.orders.production))
         setLastOrders(parseOrdersToDashboardList(info.orders.lastOrders))
       }
@@ -72,17 +92,17 @@ const DashboardPage = () => {
           <DashboardSellsCard
             data={{
               title: "Vendas mensais",
-              mainInfo: { title: "Maio", value: 400000 },
-              secondaryInfo: { title: "Abril", value: 400000 },
-              tertiaryInfo: { title: "Março", value: 400000 },
+              mainInfo: { title: "Maio", value: monthlySells.current },
+              secondaryInfo: { title: "Abril", value: monthlySells.last },
+              tertiaryInfo: { title: "Março", value: monthlySells.past },
             }}
           />
           <DashboardSellsCard
             data={{
               title: "Total de vendas",
-              mainInfo: { title: "Saldo", value: 600000 },
-              secondaryInfo: { title: "Vendas", value: 800000 },
-              tertiaryInfo: { title: "Custos", value: 200000 },
+              mainInfo: { title: "Saldo", value: totalSells.balance },
+              secondaryInfo: { title: "Vendas", value: totalSells.sells },
+              tertiaryInfo: { title: "Custos", value: totalSells.spends },
             }}
           />
           <RankingCard
@@ -106,6 +126,11 @@ const DashboardPage = () => {
             title="Enviados hoje"
             type="orders"
             data={shippedToday}
+          />
+          <RankingCard
+            title="Aguardando envio"
+            type="orders"
+            data={waitingToShip}
           />
           <RankingCard
             title="Em produção"
