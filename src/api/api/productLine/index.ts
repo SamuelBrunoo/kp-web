@@ -138,6 +138,50 @@ export const getProductionLine: TApi["productionLines"]["getProductionLine"] =
     })
   }
 
+export const updateProductionLine: TApi["productionLines"]["updateProductionLine"] =
+  async (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await service
+          .put(`${baseURL}/${data.id}`, data)
+          .then((res) => {
+            const info = res.data
+
+            if (info) {
+              resolve({
+                ok: true,
+                data: info,
+              })
+            } else {
+              resolve({
+                ok: false,
+                error: {
+                  message:
+                    "Não foi possível atualizar as informações. Tente novamente mais tarde.",
+                },
+              })
+            }
+          })
+          .catch((err: AxiosError) => {
+            resolve({
+              ok: false,
+              error: {
+                message:
+                  "Não foi possível atualizar as informações. Tente novamente mais tarde.",
+              },
+            })
+          })
+      } catch (error) {
+        reject({
+          error: {
+            message:
+              "Não foi possível atualizar as informações. Tente novamente mais tarde.",
+          },
+        })
+      }
+    })
+  }
+
 export type TApi_ProductionLines = {
   getProductionLinesPageList: (
     p: TParams["productionLines"]["getProductionLinesPageList"]
@@ -148,10 +192,14 @@ export type TApi_ProductionLines = {
   getProductionLine: (
     p: TParams["productionLines"]["getProductionLine"]
   ) => TResponses["productionLines"]["getProductionLine"]
+  updateProductionLine: (
+    p: TParams["productionLines"]["updateProductionLine"]
+  ) => TResponses["productionLines"]["updateProductionLine"]
 }
 
 export const apiProductionLines: TApi["productionLines"] = {
   getProductionLinesPageList: getProductionLinesPageList,
   getProductionLines: getProductionLines,
   getProductionLine: getProductionLine,
+  updateProductionLine: updateProductionLine,
 }

@@ -8,7 +8,10 @@ import Table from "../../components/Table"
 
 import { Api } from "../../api"
 import ExpansibleRow from "../../components/ExpandRow"
-import { TPageListProductionLine } from "../../utils/@types/data/productionLine"
+import {
+  TAttribution,
+  TPageListProductionLine,
+} from "../../utils/@types/data/productionLine"
 import LoadingModal from "../../components/Modal/variations/Loading"
 import { TOPStatus, TOPStatusWeight } from "../../utils/@types/data/order"
 import { parseRoOption } from "../../utils/helpers/parsers/roOption"
@@ -34,8 +37,31 @@ const ProductionLinesPage = () => {
 
   const [search, setSearch] = useState("")
 
-  const handleSave = async () => {
-    // setProductionLines((pls) => pls.filter((m) => m.id !== id))
+  const handleSave = async (itemId: string) => {
+    const item = (productionLines as any[]).find(
+      (p: TList[number]) => p.id === itemId
+    ) as TList[number]
+
+    try {
+      const updateData: {
+        id: string
+        products: TAttribution[]
+      } = {
+        id: item.id,
+        products: item.details.attributions as TAttribution[],
+      }
+
+      const req = await Api.productionLines.updateProductionLine(updateData)
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Informações atualizadas com sucesso.",
+          state: "success",
+          visible: true,
+        })
+        setHasChanges(false)
+      }
+    } catch (error) {}
   }
 
   const onChangeResponsable = (

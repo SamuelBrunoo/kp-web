@@ -17,7 +17,7 @@ type Props = {
   item: TPageListProductionLine["order"]
   onChangeResponsable: (plId: string, id: any, newResponsable: string) => void
   onChangeStatus: (plId: string, id: any, newStatus: TOPStatus) => void
-  handleSave: () => Promise<void>
+  handleSave: (productionLineId: string) => Promise<void>
 }
 
 const ProductionLineExpand = ({
@@ -72,7 +72,7 @@ const ProductionLineExpand = ({
             text="Salvar alterações"
             endIcon={<Icons.Check />}
             color="green"
-            action={handleSave}
+            action={() => handleSave(item.id)}
           />
         </div>
       </S.InfoGroup>

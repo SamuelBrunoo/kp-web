@@ -121,6 +121,7 @@ export type TOrderPLDetailsProduct = {
 }
 
 export type TOrderPLDetailsProductListItem = {
+  productionId: string
   lineNumber: number
   color: string
   code: string
@@ -138,6 +139,7 @@ export type TAttribution = {
   color: string
   code: string
   status: TOPStatus
+  productionId: string
   attributedAt: string | null
 }
 

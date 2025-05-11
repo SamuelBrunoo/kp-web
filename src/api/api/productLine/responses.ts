@@ -21,5 +21,6 @@ export type TApi_Responses_ProductionLines = {
       }>
     >
     getProductionLine: Promise<TDefaultRes<TProductionLine>>
+    updateProductionLine: Promise<TDefaultRes<TProductionLine>>
   }
 }

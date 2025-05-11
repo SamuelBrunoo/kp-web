@@ -161,8 +161,6 @@ const ModelForm = () => {
           }))
         }
 
-        console.log("newOptions", newOptions)
-
         setOptions((opts) => ({
           ...opts,
           ...newOptions,
