@@ -12,6 +12,7 @@ import Button from "../../Button"
 import Icons from "../../../assets/icons"
 
 type Props = {
+  pageAutoFocusId?: string
   hasChanges: boolean
   responsableList: TRoOption[]
   item: TPageListProductionLine["order"]

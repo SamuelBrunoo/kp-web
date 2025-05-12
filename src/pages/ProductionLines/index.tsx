@@ -17,12 +17,15 @@ import { TOPStatus, TOPStatusWeight } from "../../utils/@types/data/order"
 import { parseRoOption } from "../../utils/helpers/parsers/roOption"
 import { TRoOption } from "../../utils/@types/sys/roOptions"
 import getStore from "../../store"
+import { useParams } from "react-router-dom"
 
 type TList =
   | TPageListProductionLine["order"][]
   | TPageListProductionLine["products"][]
 
 const ProductionLinesPage = () => {
+  const { id } = useParams()
+
   const { controllers } = getStore()
 
   const [loading, setLoading] = useState(false)
@@ -237,6 +240,7 @@ const ProductionLinesPage = () => {
 
       {/* Table */}
       <Table
+        pageAutoFocusId={id}
         config={tableConfig.productionLines}
         data={productionLines}
         search={search}

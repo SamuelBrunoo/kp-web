@@ -73,7 +73,10 @@ const Router = () => {
               <Route path={":id"} element={<OrdersForm />} />
             </Route>
           </Route>
-          <Route path="production" element={<ProductionLinesPage />} />
+          <Route path="production">
+            <Route path="" element={<ProductionLinesPage />} />
+            <Route path="single/:id" element={<ProductionLinesPage />} />
+          </Route>
         </Route>
 
         {/* sys routes */}

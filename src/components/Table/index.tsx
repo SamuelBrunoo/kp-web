@@ -13,6 +13,7 @@ import {
 import { theme } from "../../theme"
 
 type Props = {
+  pageAutoFocusId?: string
   config: TConfig
   data: any[]
   actions?: {
@@ -29,6 +30,7 @@ type Props = {
 }
 
 const Table = ({
+  pageAutoFocusId,
   config,
   data = [],
   noHover,
@@ -92,6 +94,7 @@ const Table = ({
           })
           .map((item, itemKey) => (
             <RowItem
+              pageAutoFocusId={pageAutoFocusId}
               key={itemKey}
               item={item}
               config={config}
@@ -108,6 +111,7 @@ const Table = ({
 }
 
 type TRowItemProps = {
+  pageAutoFocusId?: string
   item: any
   config: TConfig
   actions: Props["actions"]
@@ -118,10 +122,18 @@ type TRowItemProps = {
 }
 
 const RowItem = (props: TRowItemProps) => {
-  const { item, config, actions, expandComponent, noHover, extra, itemColor } =
-    props
+  const {
+    item,
+    config,
+    actions,
+    expandComponent,
+    noHover,
+    extra,
+    itemColor,
+    pageAutoFocusId,
+  } = props
 
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(pageAutoFocusId === item.id)
 
   const toggleExpand = () => setIsExpanded(!isExpanded)
 
