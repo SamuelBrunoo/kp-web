@@ -7,6 +7,7 @@ import { ReactComponent as Orders } from "./Orders.svg"
 import { ReactComponent as Prods } from "./Prods.svg"
 
 import { ReactComponent as Add } from "./add.svg"
+import { ReactComponent as Burguer } from "./burger.svg"
 import { ReactComponent as Bookmark } from "./bookmark.svg"
 import { ReactComponent as Calendar } from "./calendar.svg"
 import { ReactComponent as Cancel } from "./cancel.svg"
@@ -37,6 +38,7 @@ const Icons = {
 
   // sm
   Add: Add,
+  Burguer: Burguer,
   Cancel: Cancel,
   Check: Check,
   Dropdown: Dropdown,
