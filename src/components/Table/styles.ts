@@ -1,33 +1,12 @@
 import styled from "styled-components"
 
 export const Wrapper = styled.div`
-  flex: 1;
   width: 100%;
-  min-width: fit-content;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`
-
-export const Table = styled.table`
-  border-spacing: 0;
+  overflow: auto;
 `
 
 export const TableHead = styled.thead`
   border-collapse: collapse;
-`
-
-export const TCol = styled.th<{
-  $size?: string | number
-  $align?: string
-  $width?: string
-}>`
-  width: ${({ $width }) => $width ?? "unset"};
-  text-align: ${({ $align }) => $align ?? "left"};
-  font-size: 14px;
-  font-weight: 400;
-  padding: 13px 12px;
-  color: ${({ theme }) => theme.colors.green[260]};
 `
 
 export const TableBody = styled.tbody<{ $noHover?: boolean }>`
@@ -57,6 +36,13 @@ export const TableBody = styled.tbody<{ $noHover?: boolean }>`
   &:has(.highlighted) {
     tr:not(.highlighted):not(.normal) {
       opacity: 0.2;
+    }
+  }
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    tr td p .actions-area {
+      background: orange;
+      opacity: 1 !important;
     }
   }
 `

@@ -19,6 +19,12 @@ export const SelectArea = styled.div<{ $qt?: number; $reverse?: boolean }>`
       }
     }
   `}
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    max-width: unset;
+    width: 100%;
+    height: fit-content;
+  }
 `
 
 export const DataArea = styled.div`

@@ -4,6 +4,10 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    max-width: max(100svw - 48px);
+  }
 `
 
 export const HeaderTop = styled.div`
@@ -39,6 +43,11 @@ export const Main = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  flex-wrap: wrap;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    flex-direction: column;
+  }
 `
 
 export const SearchArea = styled.div`
@@ -47,6 +56,7 @@ export const SearchArea = styled.div`
   align-items: center;
   gap: 12px;
   align-self: stretch;
+  flex-wrap: wrap;
 
   color: ${({ theme }) => theme.colors.neutral[500]};
 
@@ -69,29 +79,5 @@ export const SearchInput = styled.input`
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.neutral[500]};
-  }
-`
-
-export const Button = styled.button<{ $role: "new" | "update" | "cancel" }>`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  outline: none;
-  background-color: ${({ $role, theme }) =>
-    $role === "new"
-      ? theme.colors.green[360]
-      : $role === "cancel"
-      ? theme.colors.orange[560]
-      : theme.colors.green[360]};
-  border: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.neutral[900]};
-
-  svg {
-    width: 16px;
-    height: 16px;
   }
 `

@@ -42,71 +42,74 @@ const Table = ({
   itemColor,
 }: Props) => {
   return (
-    <MuiTable
-      sx={{
-        "& th": {
-          borderBottom: "none",
-        },
-        "& td": {
-          borderBottom: "none",
-        },
-      }}
-    >
-      <TableHead>
-        <TableRow>
-          {config.columns.map((col, colKey) =>
-            col.field !== "actions" ||
-            (col.field === "actions" &&
-              actions &&
-              Object.keys(actions).length > 0) ? (
-              <TableCell
-                key={colKey}
-                sx={{
-                  fontWeight: 600,
-                  color: (theme) => theme.palette.green[460],
-                }}
-                align={col.align}
-              >
-                {col.title}
-              </TableCell>
-            ) : null
-          )}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data
-          .filter((item) => {
-            let ok = false
+    <S.Wrapper>
+      <MuiTable
+        sx={{
+          "& th": {
+            borderBottom: "none",
+          },
+          "& td": {
+            borderBottom: "none",
+          },
+        }}
+      >
+        <TableHead>
+          <TableRow>
+            {config.columns.map((col, colKey) =>
+              col.field !== "actions" ||
+              (col.field === "actions" &&
+                actions &&
+                Object.keys(actions).length > 0) ? (
+                <TableCell
+                  key={colKey}
+                  sx={{
+                    fontWeight: 600,
+                    color: (theme) => theme.palette.green[460],
+                    whiteSpace: "nowrap",
+                  }}
+                  align={col.align}
+                >
+                  {col.title}
+                </TableCell>
+              ) : null
+            )}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data
+            .filter((item) => {
+              let ok = false
 
-            if (!!search) {
-              searchFields?.forEach((sf) => {
-                if (!ok) {
-                  const v = sf.includes(".")
-                    ? item[sf.split(".")[0]][sf.split(".")[1]]
-                    : item[sf]
+              if (!!search) {
+                searchFields?.forEach((sf) => {
+                  if (!ok) {
+                    const v = sf.includes(".")
+                      ? item[sf.split(".")[0]][sf.split(".")[1]]
+                      : item[sf]
 
-                  ok = String(v).toLowerCase().includes(search.toLowerCase())
-                }
-              })
-            } else ok = true
+                    ok = String(v).toLowerCase().includes(search.toLowerCase())
+                  }
+                })
+              } else ok = true
 
-            return ok
-          })
-          .map((item, itemKey) => (
-            <RowItem
-              pageAutoFocusId={pageAutoFocusId}
-              key={itemKey}
-              item={item}
-              config={config}
-              actions={actions}
-              extra={extra}
-              expandComponent={expandComponent}
-              noHover={noHover}
-              itemColor={itemColor}
-            />
-          ))}
-      </TableBody>
-    </MuiTable>
+              return ok
+            })
+            .map((item, itemKey) => (
+              <RowItem
+                pageAutoFocusId={pageAutoFocusId}
+                key={itemKey}
+                item={item}
+                config={config}
+                actions={actions}
+                extra={extra}
+                expandComponent={expandComponent}
+                noHover={noHover}
+                itemColor={itemColor}
+              />
+            ))}
+        </TableBody>
+      </MuiTable>
+    </S.Wrapper>
   )
 }
 

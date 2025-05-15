@@ -10,6 +10,7 @@ export const Page = styled.div`
 
 export const Wrapper = styled.div`
   flex: 1;
+  max-width: 100%;
   min-height: 100%;
 `
 
