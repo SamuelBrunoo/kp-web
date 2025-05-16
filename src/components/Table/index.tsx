@@ -206,7 +206,7 @@ const RowItem = (props: TRowItemProps) => {
                 <Typography
                   fontSize={14}
                   align={col.align}
-                  style={{ textAlign: col.align ?? undefined }}
+                  style={{ whiteSpace: 'nowrap', textAlign: col.align ?? undefined }}
                 >
                   {content}
                 </Typography>

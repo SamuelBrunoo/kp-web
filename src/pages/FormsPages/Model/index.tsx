@@ -23,6 +23,7 @@ import { TColor } from "../../../utils/@types/data/color"
 import { Grid2, Typography } from "@mui/material"
 import LoadingModal from "../../../components/Modal/variations/Loading"
 import Form from "../../../components/Form"
+import { theme } from "../../../theme"
 
 const ModelForm = () => {
   const { id } = useParams()
@@ -206,19 +207,46 @@ const ModelForm = () => {
   const renderColorsControl = () => {
     let columns: any[] = []
 
-    const cols = 4
-    const perColumn = 4
+    const isMobile = window.screen.width <= theme.bp.small
+    const isXSMobile = window.screen.width <= theme.bp.xsmall
 
-    for (let i = 0; i < Math.ceil(allowedColors.length / cols); i++) {
+    const cols = isXSMobile ? 1 : isMobile ? 2 : 4
+    const perColumn = isMobile ? Math.ceil(allowedColors.length / cols) : 4
+
+    for (let i = 0; i < cols; i++) {
       columns.push(
-        <Grid2 container direction={"column"} gap={1}>
+        <Grid2
+          container
+          direction={"column"}
+          gap={1}
+          sx={{
+            flex: 1,
+            maxWidth: 180,
+          }}
+        >
           {allowedColors
             .sort((a, b) => a.name.localeCompare(b.name))
             .slice(i * perColumn, (i + 1) * perColumn)
             .map((item, itemKey) => (
-              <Grid2 key={itemKey} container direction={"row"}>
+              <Grid2
+                key={itemKey}
+                container
+                direction={"row"}
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}
+                sx={{
+                  [`@media (max-width: ${theme.bp.small}px)`]: {
+                    height: 48,
+                    alignItems: "flex-start",
+                  },
+                }}
+              >
                 <Typography
-                  width={180}
+                  flex={1}
+                  // width={"100%"}
+                  // maxWidth={180}
                   fontWeight={300}
                   sx={{
                     transition: "color 0.3s ease",
@@ -226,6 +254,9 @@ const ModelForm = () => {
                       item.checked
                         ? theme.palette.neutral[100]
                         : theme.palette.neutral[300],
+                    // [`@media (max-width: ${theme.bp.small}px)`]: {
+                    //   width: 'unset'
+                    // },
                   }}
                 >
                   {item.name}
@@ -275,21 +306,21 @@ const ModelForm = () => {
                           label: "Tipo do modelo",
                           options: options.prodTypes,
                           value: model.type,
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "default",
                           field: "name",
                           label: "Nome do modelo",
                           value: model.name,
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "default",
                           field: "code",
                           label: "Código",
                           value: model.code,
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                       ],
                     ],

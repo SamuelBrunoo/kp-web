@@ -8,7 +8,7 @@ export const Wrapper = styled.div<{
   $zIndex?: number
 }>`
   grid-column: span
-    ${({ $gridSizes }) => $gridSizes?.small ?? $gridSizes?.big ?? "unset"};
+    ${({ $gridSizes }) => $gridSizes?.big ?? "unset"};
 
   flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   /* display: flex; */

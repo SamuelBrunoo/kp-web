@@ -139,6 +139,15 @@ export const muiTheme = createTheme({
     fontFamily: "'Poppins', 'Roboto', sans-serif",
     fontSize: 14
   },
+  breakpoints: {
+    values: {
+      xl: 1440,
+      lg: 1240,
+      md: 920,
+      sm: 520,
+      xs: 320,
+    }
+  },
   palette: {
     neutral: palleteNeutral,
     green: palleteGreen,

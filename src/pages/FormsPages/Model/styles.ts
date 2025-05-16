@@ -36,4 +36,14 @@ export const ButtonsArea = styled.div`
 export const ColorsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 48px;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    gap: 24px;
+
+    & > div {
+      max-width: calc(50% - 8px);
+    }
+  }
 `
