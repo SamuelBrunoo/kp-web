@@ -16,7 +16,7 @@ type TColumn = {
 type TContent = FormField | FormField[]
 
 export type TBlock = {
-  title: string
+  title?: string
   groups: TGroup[]
 }
 

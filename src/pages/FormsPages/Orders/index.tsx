@@ -419,10 +419,10 @@ const OrdersForm = () => {
           {
             blocks: [
               {
-                title: "Comprador",
                 groups: [
                   {
                     type: "fields",
+                    title: "Comprador",
                     fields: [
                       {
                         label: "Cliente",

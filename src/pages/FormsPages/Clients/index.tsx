@@ -284,10 +284,10 @@ const ClientsForm = () => {
           {
             blocks: [
               {
-                title: "Informações gerais",
                 groups: [
                   {
                     type: "fields",
+                    title: "Informações gerais",
                     columns: 12,
                     fields: [
                       [
@@ -336,10 +336,10 @@ const ClientsForm = () => {
                 ],
               },
               {
-                title: "Informações de contato",
                 groups: [
                   {
                     type: "fields",
+                    title: "Informações de contato",
                     columns: 12,
                     fields: [
                       [
@@ -370,10 +370,10 @@ const ClientsForm = () => {
                 ],
               },
               {
-                title: "Documentações",
                 groups: [
                   {
                     type: "fields",
+                    title: "Documentações",
                     columns: 12,
                     fields: [
                       (client.type === "physical"
@@ -409,10 +409,10 @@ const ClientsForm = () => {
                 ],
               },
               {
-                title: "Informações de envio",
                 groups: [
                   {
                     type: "fields",
+                    title: "Informações de envio",
                     columns: 12,
                     fields: [
                       {

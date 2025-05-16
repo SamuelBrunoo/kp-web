@@ -303,10 +303,10 @@ const ProductForm = () => {
           {
             blocks: [
               {
-                title: "Informações gerais",
                 groups: [
                   {
                     type: "fields",
+                    title: "Informações gerais",
                     columns: 12,
                     fields: [
                       [
@@ -347,10 +347,10 @@ const ProductForm = () => {
                 ],
               },
               {
-                title: "Estoque",
                 groups: [
                   {
                     type: "fields",
+                    title: "Estoque",
                     columns: 12,
                     fields: [
                       [

@@ -293,10 +293,10 @@ const ModelForm = () => {
           {
             blocks: [
               {
-                title: "Informações gerais",
                 groups: [
                   {
                     type: "fields",
+                    title: "Informações gerais",
                     columns: 12,
                     fields: [
                       [
@@ -328,10 +328,10 @@ const ModelForm = () => {
                 ],
               },
               {
-                title: "Informações de venda",
                 groups: [
                   {
                     type: "fields",
+                    title: "Informações de venda",
                     columns: 12,
                     fields: [
                       {
@@ -346,10 +346,10 @@ const ModelForm = () => {
                 ],
               },
               {
-                title: "Cores",
                 groups: [
                   {
                     type: "custom",
+                    title: "Cores",
                     columns: 12,
                     element: (
                       <S.ColorsWrapper>{renderColorsControl()}</S.ColorsWrapper>
@@ -358,10 +358,10 @@ const ModelForm = () => {
                 ],
               },
               {
-                title: "Variações do modelo",
                 groups: [
                   {
                     type: "custom",
+                    title: "Variações do modelo",
                     columns: 12,
                     element: (
                       <Table

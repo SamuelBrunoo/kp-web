@@ -40,7 +40,7 @@ export const Block = styled.div<{
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 48px;
   padding: 10px;
   border-radius: 8px;
   height: fit-content;
@@ -49,6 +49,13 @@ export const Block = styled.div<{
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     z-index: ${({ $mobileZIndex }) => $mobileZIndex};
   }
+`
+
+export const GroupsArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  min-width: 100%;
 `
 
 export const BlockTitle = styled.span`

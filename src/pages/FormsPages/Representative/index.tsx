@@ -46,10 +46,6 @@ const RepresentativesForm = () => {
   // Page control
 
   const [options, setOptions] = useState<{ [key: string]: TRoOption[] }>({
-    clientType: [
-      { key: "juridical", value: "Pessoa Jurídica" },
-      { key: "physical", value: "Pessoa Física" },
-    ],
     states: states,
     representatives: [],
     commissionTypes: [
@@ -68,7 +64,7 @@ const RepresentativesForm = () => {
     ],
     dateLimit: [
       { key: "15", value: "Dia 15" },
-      { key: "15", value: "Dia 25" },
+      { key: "25", value: "Dia 25" },
     ],
   })
 
@@ -186,7 +182,6 @@ const RepresentativesForm = () => {
       if (req.ok) {
         const newOptions = {
           ...options,
-          clientType: options.clientType as TRoOption[],
           states: parseRoOption(req.data.states, "name", "id"),
         }
 
@@ -299,35 +294,33 @@ const RepresentativesForm = () => {
           {
             blocks: [
               {
-                title: "Informações gerais",
                 groups: [
                   {
                     type: "fields",
-                    columns: 12,
+                    title: "Informações gerais",
+                    columns: 8,
                     fields: [
+                      {
+                        type: "default",
+                        field: "name",
+                        value: representative.name,
+                        label: "Nome do representante",
+                        gridSizes: { big: 2, small: 12 },
+                      },
                       [
-                        {
-                          type: "default",
-                          field: "name",
-                          value: representative.name,
-                          label: "Nome do representante",
-                          gridSizes: { big: 2 },
-                        },
                         {
                           type: "default",
                           field: "email",
                           value: representative.email,
                           label: "Email",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
-                      ],
-                      [
                         {
                           type: "default",
                           field: "phone",
                           value: formatPhone(representative.phone),
                           label: "Telefone",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                     ],
@@ -344,7 +337,7 @@ const RepresentativesForm = () => {
                           options: options.commissionTypes,
                           value: representative.paymentConfig.commissionType,
                           label: "Tipo da comissão",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "default",
@@ -367,7 +360,7 @@ const RepresentativesForm = () => {
                                   ) ?? "0"
                                 }`,
                           label: "Valor da comissão",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "select",
@@ -375,14 +368,14 @@ const RepresentativesForm = () => {
                           options: options.paymentMethods,
                           value: representative.paymentConfig.paymentMethod,
                           label: "Forma de pagamento",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "default",
                           field: "commission.paymentAddress",
                           value: representative.paymentConfig.paymentAddress,
                           label: "Nº da conta ou cód. Pix",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                       [
@@ -392,7 +385,7 @@ const RepresentativesForm = () => {
                           options: options.paymentPeriod,
                           value: representative.paymentConfig.period,
                           label: "Período",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "select",
@@ -402,7 +395,7 @@ const RepresentativesForm = () => {
                             ? String(representative.paymentConfig.dateLimit)
                             : "15",
                           label: "Data Limite",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                     ],
@@ -418,7 +411,7 @@ const RepresentativesForm = () => {
                           value: formatCpf(representative.registers.cpf),
                           field: "registers.cpf",
                           label: "CPF",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "default",
@@ -427,7 +420,7 @@ const RepresentativesForm = () => {
                           ),
                           field: "registers.cnpj",
                           label: "CNPJ",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                     ],
@@ -444,7 +437,7 @@ const RepresentativesForm = () => {
                           ? representative.address.full
                           : "O endereço vai aparecer aqui",
                         label: "Endereço completo",
-                        gridSizes: { big: 2 },
+                        gridSizes: { big: 12 },
                       },
                       [
                         {
@@ -453,21 +446,21 @@ const RepresentativesForm = () => {
                           value: representative.address.state,
                           options: options.states,
                           label: "Estado",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                         {
                           type: "default",
                           field: "address.city",
                           value: representative.address.city,
                           label: "Cidade",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 7 },
                         },
                         {
                           type: "default",
                           field: "address.cep",
                           value: formatCep(representative.address.cep),
                           label: "CEP",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 5 },
                         },
                       ],
                       [
@@ -476,21 +469,21 @@ const RepresentativesForm = () => {
                           field: "address.neighborhood",
                           value: representative.address.neighborhood,
                           label: "Bairro",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                         {
                           type: "default",
                           field: "address.street",
                           value: representative.address.street,
                           label: "Rua",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 5 },
                         },
                         {
                           type: "default",
                           field: "address.number",
                           value: representative.address.number,
                           label: "Número",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 7 },
                         },
                       ],
                     ],
@@ -498,10 +491,10 @@ const RepresentativesForm = () => {
                 ],
               },
               {
-                title: "Clientes",
                 groups: [
                   {
                     type: "custom",
+                    title: "Clientes",
                     columns: 12,
                     element: (
                       <Table
