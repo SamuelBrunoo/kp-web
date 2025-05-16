@@ -316,7 +316,7 @@ const ProductForm = () => {
                           label: "Tipo do modelo",
                           options: options.prodTypes,
                           value: product.type,
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                         {
                           type: "select",
@@ -324,7 +324,7 @@ const ProductForm = () => {
                           label: "Modelo",
                           options: options.models,
                           value: product.model,
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "select",
@@ -332,7 +332,7 @@ const ProductForm = () => {
                           label: "Cor",
                           options: options.colors,
                           value: product.color,
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                       {
@@ -340,7 +340,7 @@ const ProductForm = () => {
                         field: "code",
                         label: "Código",
                         value: product.code,
-                        gridSizes: { big: 2 },
+                        gridSizes: { big: 2, small: 12 },
                       },
                     ],
                   },
@@ -360,7 +360,7 @@ const ProductForm = () => {
                           label: "Tem estoque",
                           options: options.storage,
                           value: String(product.storage.has),
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "default",
@@ -372,7 +372,7 @@ const ProductForm = () => {
                                 ? product.storage.quantity
                                 : 0
                             ).replace(/\D/g, "") ?? "0",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                     ],
