@@ -70,7 +70,7 @@ export const GroupArea = styled.div`
 export const FormArea = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 32px;
   min-width: 100%;
   max-width: 520px;
 
@@ -92,6 +92,7 @@ export const FormLine = styled.div<{
   );
 
   gap: 10px;
+  row-gap: 32px;
   align-items: ${({ $align }) => $align ?? "flex-start"};
   max-width: 100%;
   z-index: ${({ $k }) => 10 - ($k + 1)};

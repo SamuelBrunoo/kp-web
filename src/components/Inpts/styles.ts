@@ -7,8 +7,7 @@ export const Wrapper = styled.div<{
   $fixedWidth?: number
   $zIndex?: number
 }>`
-  grid-column: span
-    ${({ $gridSizes }) => $gridSizes?.big ?? "unset"};
+  grid-column: span ${({ $gridSizes }) => $gridSizes?.big ?? "unset"};
 
   flex: ${({ $gridSizes }) => $gridSizes?.big ?? 1};
   /* display: flex; */
@@ -145,6 +144,8 @@ export const ValueArea = styled.div`
 `
 
 export const Input = styled.input<{ $hasError: boolean }>`
+  min-width: unset;
+  max-width: 100%;
   color: ${({ $hasError, theme }) =>
     $hasError ? theme.colors.red[460] : theme.colors.neutral[100]};
   font-size: inherit;

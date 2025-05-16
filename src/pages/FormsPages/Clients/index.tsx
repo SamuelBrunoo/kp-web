@@ -297,7 +297,7 @@ const ClientsForm = () => {
                           options: options.clientType,
                           value: client.type,
                           label: "Tipo do cliente",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "select",
@@ -305,7 +305,7 @@ const ClientsForm = () => {
                           options: options.representatives,
                           value: client.representative,
                           label: "Representante",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                       [
@@ -314,51 +314,23 @@ const ClientsForm = () => {
                           field: "clientName",
                           value: client.clientName,
                           label: "Nome do cliente",
-                          gridSizes: { big: 2 },
-                        },
-                        {
-                          type: "default",
-                          field: "personName",
-                          value: client.personName,
-                          label: "Nome do(a) proprietário(a)",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                         {
                           type: "default",
                           field: "socialRole",
                           value: client.socialRole,
                           label: "Razão social",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
+                        },
+                        {
+                          type: "default",
+                          field: "personName",
+                          value: client.personName,
+                          label: "Proprietário(a)",
+                          gridSizes: { big: 2, small: 12 },
                         },
                       ],
-                      (client.type === "physical"
-                        ? [
-                            {
-                              type: "default",
-                              field: "documents.register",
-                              value: formatCpf(client.documents.register),
-                              label: "CPF",
-                              gridSizes: { big: 2 },
-                            },
-                          ]
-                        : [
-                            {
-                              type: "default",
-                              field: "documents.register",
-                              value: formatCnpj(client.documents.register),
-                              label: "CNPJ",
-                              gridSizes: { big: 2 },
-                            },
-                            {
-                              type: "default",
-                              field: "documents.stateInscription",
-                              value: formatStateRegister(
-                                client.documents.stateInscription
-                              ),
-                              label: "Inscrição estadual",
-                              gridSizes: { big: 2 },
-                            },
-                          ]) as FormField[],
                     ],
                   },
                 ],
@@ -376,23 +348,62 @@ const ClientsForm = () => {
                           field: "email",
                           value: client.email,
                           label: "Email",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                         {
                           type: "default",
                           field: "phone1",
                           value: formatPhone(client.phone1),
                           label: "Telefone 1",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                         {
                           type: "default",
                           field: "phone2",
                           value: formatPhone(client.phone2),
                           label: "Telefone 2",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
+                    ],
+                  },
+                ],
+              },
+              {
+                title: "Documentações",
+                groups: [
+                  {
+                    type: "fields",
+                    columns: 12,
+                    fields: [
+                      (client.type === "physical"
+                        ? [
+                            {
+                              type: "default",
+                              field: "documents.register",
+                              value: formatCpf(client.documents.register),
+                              label: "CPF",
+                              gridSizes: { big: 2, small: 12 },
+                            },
+                          ]
+                        : [
+                            {
+                              type: "default",
+                              field: "documents.register",
+                              value: formatCnpj(client.documents.register),
+                              label: "CNPJ",
+                              gridSizes: { big: 2, small: 6 },
+                            },
+                            {
+                              type: "default",
+                              field: "documents.stateInscription",
+                              value: formatStateRegister(
+                                client.documents.stateInscription
+                              ),
+                              label: "Inscrição estadual",
+                              gridSizes: { big: 2, small: 6 },
+                            },
+                          ]) as FormField[],
                     ],
                   },
                 ],
@@ -411,7 +422,7 @@ const ClientsForm = () => {
                           ? client.address.full
                           : "O endereço vai aparecer aqui",
                         label: "Endereço completo",
-                        gridSizes: { big: 2 },
+                        gridSizes: { big: 12 },
                       },
                       [
                         {
@@ -420,21 +431,21 @@ const ClientsForm = () => {
                           value: client.address.state,
                           options: options.states,
                           label: "Estado",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                         {
                           type: "default",
                           field: "address.city",
                           value: client.address.city,
                           label: "Cidade",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 7 },
                         },
                         {
                           type: "default",
                           field: "address.cep",
                           value: formatCep(client.address.cep),
                           label: "CEP",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 5 },
                         },
                       ],
                       [
@@ -443,21 +454,21 @@ const ClientsForm = () => {
                           field: "address.neighborhood",
                           value: client.address.neighborhood,
                           label: "Bairro",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 12 },
                         },
                         {
                           type: "default",
                           field: "address.street",
                           value: client.address.street,
                           label: "Rua",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 5 },
                         },
                         {
                           type: "default",
                           field: "address.number",
                           value: client.address.number,
                           label: "Número",
-                          gridSizes: { big: 2 },
+                          gridSizes: { big: 2, small: 7 },
                         },
                       ],
                     ],
