@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import * as DS from "../styles"
 import * as C from "../stylesSelect"
 import * as S from "./styles"
 import icons from "../../../assets/icons"
@@ -26,7 +27,7 @@ type Props = TInputDate & {
   gridSizes?: FormField["gridSizes"]
 }
 
-const DateInput = ({ field, label, value, onChange }: Props) => {
+const DateInput = ({ field, label, value, onChange, gridSizes }: Props) => {
   const [showing, setShowing] = useState(false)
 
   // # Refs
@@ -80,24 +81,26 @@ const DateInput = ({ field, label, value, onChange }: Props) => {
   // }, [wrapperRef, dataRef, pickerRef, showing])
 
   return (
-    <C.SelectArea ref={wrapperRef}>
-      {label && <C.Label>{label}</C.Label>}
-      <S.DataArea ref={dataRef} onClick={togglePicker}>
-        <C.Left>
-          <C.SelectedInfo>{renderDate()}</C.SelectedInfo>
-        </C.Left>
-        <icons.Calendar />
-      </S.DataArea>
-      <S.PickerArea>
-        <DatePicker
-          className="picker-component"
-          ref={pickerRef}
-          open={showing}
-          onChange={handleDate}
-          minDate={dayjs(new Date())}
-        />
-      </S.PickerArea>
-    </C.SelectArea>
+    <DS.Wrapper $gridSizes={gridSizes}>
+      <C.SelectArea ref={wrapperRef}>
+        {label && <C.Label>{label}</C.Label>}
+        <S.DataArea ref={dataRef} onClick={togglePicker}>
+          <C.Left>
+            <C.SelectedInfo>{renderDate()}</C.SelectedInfo>
+          </C.Left>
+          <icons.Calendar />
+        </S.DataArea>
+        <S.PickerArea>
+          <DatePicker
+            className="picker-component"
+            ref={pickerRef}
+            open={showing}
+            onChange={handleDate}
+            minDate={dayjs(new Date())}
+          />
+        </S.PickerArea>
+      </C.SelectArea>
+    </DS.Wrapper>
   )
 }
 

@@ -140,7 +140,7 @@ export type TAttribution = {
   code: string
   status: TOPStatus
   productionId: string
-  attributedAt: string | null
+  attributedAt: string | number | null
 }
 
 export type TPageListPLProductsDetailsAttribution = {
@@ -151,5 +151,5 @@ export type TPageListPLProductsDetailsAttribution = {
     name: string
   }
   status: TOPStatus
-  attributedAt: string | null
+  attributedAt: string | number | null
 }

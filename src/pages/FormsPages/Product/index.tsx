@@ -292,6 +292,7 @@ const ProductForm = () => {
         title={"Produtos"}
         subtitle={`${id ? "Edição" : "Cadastro"} de produto`}
         forForm={true}
+        withoutNewButton={true}
       />
 
       {/* form */}

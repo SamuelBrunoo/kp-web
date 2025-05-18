@@ -268,7 +268,11 @@ export const tableConfig: {
       color: (item: TOrder["products"][number]) => item.color,
       unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
       statusIndicator: (item: TOrder["products"][number]) => (
-        <StatusIndicator status={item.status} onChange={() => {}} />
+        <StatusIndicator
+          status={item.status}
+          onChange={() => {}}
+          shouldHideOptions={true}
+        />
       ),
       total: (item: TOrder["products"][number]) =>
         formatMoney(item.price * item.quantity),
@@ -353,7 +357,7 @@ export const tableConfig: {
     specialFields: {
       statusIndicator: (item: TPageListProductionLine["order"]) => (
         <div style={{ margin: "auto", width: "fit-content" }}>
-          <StatusIndicator status={item.status} />
+          <StatusIndicator status={item.status} shouldHideOptions={true} />
         </div>
       ),
     },
@@ -368,7 +372,7 @@ export const tableConfig: {
     ],
     specialFields: {
       status: (item: TProductionLine["products"][number]) => (
-        <StatusIndicator status={item.status} />
+        <StatusIndicator status={item.status} shouldHideOptions={true} />
       ),
     },
     isExpandable: true,
@@ -438,7 +442,9 @@ export const tableConfig: {
         item: TPageListProductionLine["order"]["details"]["attributions"][number]
       ) =>
         item.attributedAt
-          ? dateFns.format(item.attributedAt, "dd/MM/yyyy")
+          ? typeof item.attributedAt === "number"
+            ? dateFns.format(item.attributedAt, "dd/MM/yyyy")
+            : item.attributedAt
           : "Não atribuído",
     },
   },

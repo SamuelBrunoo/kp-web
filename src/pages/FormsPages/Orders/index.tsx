@@ -36,6 +36,7 @@ import { theme } from "../../../theme"
 import { TRepresentative } from "../../../utils/@types/data/representative"
 import { getRepresentativeComissionString } from "../../../utils/helpers/formatters/commission"
 import { TPaymentConfig } from "../../../utils/@types/data/payment"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
 const OrdersForm = () => {
   const { id } = useParams()
@@ -45,7 +46,7 @@ const OrdersForm = () => {
   const { controllers } = getStore()
 
   const [order, setOrder] = useState<TNewOrder | TOrder>(
-    initialForm.order as any
+    initialForm.order as TNewOrder
   )
 
   // Page control
@@ -295,6 +296,26 @@ const OrdersForm = () => {
     return list
   }
 
+  // # Comission
+
+  const calcComission = () => {
+    let val = 0
+    if (order.representative && order.totals.value > 0) {
+      const representativeInfo = representatives.find(
+        (i) => i.id === order.representative
+      ) as TRepresentative
+
+      if (representativeInfo.paymentConfig.commissionType === "fixed")
+        val = representativeInfo.paymentConfig.value
+      else {
+        const commissionValue =
+          order.totals.value * (representativeInfo.paymentConfig.value / 100)
+        val = commissionValue
+      }
+    }
+    return val
+  }
+
   // # Initial loading
 
   useEffect(() => {
@@ -342,22 +363,8 @@ const OrdersForm = () => {
         }))
 
         if (id) {
-          const orderInfo = await Api.orders.getOrder({ id })
-
-          if (orderInfo.ok) {
-            setTimeout(() => {
-              const data = orderInfo.data.order
-
-              setOrder(data)
-
-              handleField("emmitter", data.emmitter)
-              const c = pageInfo.clients.find(
-                (c) => c.id === (data.client as any)
-              ) as TClient
-
-              setSelectedClient(c)
-            }, 150)
-          }
+          const orderInfo = pageInfo.order as TOrder
+          setOrder(orderInfo)
         }
       } else {
         controllers.feedback.setData({
@@ -398,16 +405,10 @@ const OrdersForm = () => {
   return (
     <S.Content>
       <PageHead
+        forForm={true}
         title={"Pedidos"}
         subtitle={`${id ? "Edição" : "Cadastro"} de pedido`}
-        buttons={[
-          { role: "cancel", text: "Cancelar", onClick: handleCancel },
-          {
-            role: id ? "update" : "new",
-            text: id ? "Salvar" : "Cadastrar",
-            onClick: handleSave,
-          },
-        ]}
+        withoutNewButton={true}
       />
 
       {/* form */}
@@ -423,6 +424,7 @@ const OrdersForm = () => {
                   {
                     type: "fields",
                     title: "Comprador",
+                    columns: 12,
                     fields: [
                       {
                         label: "Cliente",
@@ -431,7 +433,7 @@ const OrdersForm = () => {
                         options: options.clients,
                         value: order.client as string,
                         type: "select",
-                        gridSizes: { big: 3 },
+                        gridSizes: { big: 2, small: 12 },
                         avoidAutoSelect: true,
                       },
                     ],
@@ -439,37 +441,37 @@ const OrdersForm = () => {
                 ],
               },
               {
-                title: "Detalhes da venda",
                 groups: [
                   {
                     type: "fields",
-                    columns: 8,
+                    title: "Detalhes da venda",
+                    columns: 12,
                     fields: [
-                      [
-                        {
-                          label: "Data da venda",
-                          field: "orderDate",
-                          value: order.orderDate as any,
-                          type: "date",
-                          gridSizes: { big: 2 },
-                        },
-                        {
-                          label: "Data do envio",
-                          field: "deadline",
-                          value: order.deadline as any,
-                          type: "date",
-                          gridSizes: { big: 2 },
-                        },
-                      ],
                       {
                         label: "Emissora",
                         field: "emmitter",
                         options: options.emmitters,
                         value: order.emmitter as string,
                         type: "select",
-                        gridSizes: { big: 2 },
+                        gridSizes: { big: 2, small: 12 },
                         avoidAutoSelect: true,
                       },
+                      [
+                        {
+                          label: "Data da venda",
+                          field: "orderDate",
+                          value: order.orderDate as any,
+                          type: "date",
+                          gridSizes: { big: 2, small: 6 },
+                        },
+                        {
+                          label: "Data do envio",
+                          field: "deadline",
+                          value: order.deadline as any,
+                          type: "date",
+                          gridSizes: { big: 2, small: 6 },
+                        },
+                      ],
                       [
                         {
                           label: "Envio",
@@ -477,18 +479,22 @@ const OrdersForm = () => {
                           options: options.shippingTypes,
                           value: order.shippingType,
                           type: "select",
-                          gridSizes: { big: 1 },
+                          gridSizes: { big: 2, small: 6 },
                           avoidAutoSelect: true,
                         },
-                        {
-                          label: "Emissora",
-                          field: "shippingMode",
-                          options: options.shippingModes,
-                          value: order.shippingMode as string,
-                          type: "select",
-                          gridSizes: { big: 1 },
-                          avoidAutoSelect: true,
-                        },
+                        ...((order.shippingType === "mail"
+                          ? [
+                              {
+                                label: "Emissora",
+                                field: "shippingMode",
+                                options: options.shippingModes,
+                                value: order.shippingMode as string,
+                                type: "select",
+                                gridSizes: { big: 2, small: 6 },
+                                avoidAutoSelect: true,
+                              },
+                            ]
+                          : []) as FormField[]),
                       ],
                       [
                         {
@@ -497,7 +503,7 @@ const OrdersForm = () => {
                           options: options.representatives,
                           value: order.representative as string,
                           type: "select",
-                          gridSizes: { big: 1 },
+                          gridSizes: { big: 2, small: 6 },
                           avoidAutoSelect: true,
                         },
                         {
@@ -509,10 +515,10 @@ const OrdersForm = () => {
                                   (r) => r.id === order.representative
                                 )
                                   ?.paymentConfig as TPaymentConfig["representative"]
-                              )}%`
+                              )}`
                             : "-",
                           type: "readonly",
-                          gridSizes: { big: 1 },
+                          gridSizes: { big: 2, small: 6 },
                         },
                       ],
                     ],
@@ -520,10 +526,10 @@ const OrdersForm = () => {
                 ],
               },
               {
-                title: "Produtos",
                 groups: [
                   {
                     type: "custom",
+                    title: "Produtos",
                     element: (
                       <S.FormGroup $fullSize={true}>
                         <S.FormLine>
@@ -554,10 +560,10 @@ const OrdersForm = () => {
                 ],
               },
               {
-                title: "Pagamento",
                 groups: [
                   {
                     type: "fields",
+                    title: "Pagamento",
                     fields: [
                       {
                         label: "Forma",
@@ -580,7 +586,7 @@ const OrdersForm = () => {
                         {
                           label: "Comissão",
                           field: "comission",
-                          value: formatMoney(0),
+                          value: formatMoney(calcComission()),
                           type: "readonly",
                           gridSizes: { big: 1 },
                           color: "orange",
@@ -588,7 +594,9 @@ const OrdersForm = () => {
                         {
                           label: "Valor líquido",
                           field: "netValue",
-                          value: formatMoney(order.totals.value),
+                          value: formatMoney(
+                            order.totals.value - calcComission()
+                          ),
                           type: "readonly",
                           gridSizes: { big: 1 },
                           color: "orange",

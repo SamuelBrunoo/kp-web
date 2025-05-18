@@ -40,7 +40,7 @@ export const BurguerWrapper = styled.div<{
   $type?: "primary" | "secondary"
 }>`
   position: absolute;
-  top: ${({ $type }) => (!$type || $type === "primary" ? 12 : 64)}px;
+  top: ${({ $type }) => (!$type || $type === "primary" ? 32 : 64)}px;
   right: -12px;
   transform: translateX(
     ${({ $opened }) => ($opened ? "calc(50% - 12px)" : "calc(100% + 7px)")}
@@ -52,14 +52,14 @@ export const BurguerWrapper = styled.div<{
       : theme.colors.orange[460]};
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
   border-radius: 200px;
-  padding: 8px;
+  padding: 6px;
   z-index: 2;
   display: none;
   place-items: center;
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
   }
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {

@@ -12,7 +12,7 @@ export const DataArea = styled.div`
   transition: color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.neutral[800]};
+  background-color: ${({ theme }) => theme.colors.neutral[900]};
 
   svg {
     width: 14px;

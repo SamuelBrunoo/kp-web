@@ -19,16 +19,15 @@ const OrderExpand = (order: TPageListOrder) => {
 
   const handleSeeProductionLine = () => {
     const url = `/dashboard/production/single/${productionLineId ?? ""}`
-    console.log(url)
     navigate(url)
   }
 
   const handleEdit = () => {
-    navigate(`/single/${order.id}`)
+    navigate(`/dashboard/orders/single/${order.id}`)
   }
 
   const handleDelete = () => {
-    navigate(`/single/${order.id}`)
+    // ...
   }
 
   return (

@@ -13,9 +13,10 @@ const textRelation: { [key in TOPStatus]: string } = {
 type Props = {
   status: TOPStatus
   onChange?: (newValue: TOPStatus) => void
+  shouldHideOptions?: boolean
 }
 
-const StatusIndicator = ({ status, onChange }: Props) => {
+const StatusIndicator = ({ status, onChange, shouldHideOptions }: Props) => {
   // # Refs
   const wrapperRef = useRef<null | HTMLDivElement>(null)
   const dataRef = useRef<null | HTMLDivElement>(null)
@@ -52,22 +53,24 @@ const StatusIndicator = ({ status, onChange }: Props) => {
       <S.Box ref={dataRef} $status={status} onClick={() => setOpen(!open)}>
         <S.Text>{textRelation[status]}</S.Text>
       </S.Box>
-      <S.Dropdown ref={dropRef} $opened={open}>
-        {Object.entries(textRelation)
-          .filter(([option]) => option !== status)
-          .map(([option, value], index) => (
-            <S.Option
-              key={index}
-              $status={option as TOPStatus}
-              onClick={() => {
-                setOpen(false)
-                if (onChange) onChange(option as TOPStatus)
-              }}
-            >
-              <span>{value}</span>
-            </S.Option>
-          ))}
-      </S.Dropdown>
+      {!shouldHideOptions && (
+        <S.Dropdown ref={dropRef} $opened={open}>
+          {Object.entries(textRelation)
+            .filter(([option]) => option !== status)
+            .map(([option, value], index) => (
+              <S.Option
+                key={index}
+                $status={option as TOPStatus}
+                onClick={() => {
+                  setOpen(false)
+                  if (onChange) onChange(option as TOPStatus)
+                }}
+              >
+                <span>{value}</span>
+              </S.Option>
+            ))}
+        </S.Dropdown>
+      )}
     </S.Wrapper>
   )
 }

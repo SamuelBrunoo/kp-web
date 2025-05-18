@@ -2,7 +2,10 @@ import styled from "styled-components"
 
 export const Wrapper = styled.div`
   width: 100%;
-  overflow: auto;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    overflow: auto;
+  }
 `
 
 export const TableHead = styled.thead`

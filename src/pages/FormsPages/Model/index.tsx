@@ -282,6 +282,7 @@ const ModelForm = () => {
         title={"Modelos"}
         forForm={true}
         subtitle={`${id ? "Edição" : "Cadastro"}`}
+        withoutNewButton={true}
       />
 
       {/* form */}
