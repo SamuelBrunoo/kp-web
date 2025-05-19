@@ -16,6 +16,16 @@ type Props = {
   withoutNewButton?: boolean
   buttons?: TButton[]
   forForm?: boolean
+
+  /* Tabs Control */
+  tabs?: TTab[]
+  onChangeTab?: (newTab: string) => void
+  tab?: string
+}
+
+export type TTab = {
+  key: string
+  name: string
 }
 
 export type TFilter = {
@@ -41,6 +51,9 @@ const PageHead = ({
   withoutNewButton,
   buttons,
   forForm,
+  tabs,
+  onChangeTab,
+  tab,
 }: Props) => {
   const navigate = useNavigate()
 
@@ -54,6 +67,10 @@ const PageHead = ({
 
   const handleSearch = () => {
     // ...
+  }
+
+  const handleTab = (newTab: string) => {
+    if (onChangeTab) onChangeTab(newTab)
   }
 
   return (
@@ -75,6 +92,17 @@ const PageHead = ({
           />
         )}
       </S.HeaderTop>
+
+      {tabs && (
+        <S.TabsArea>
+          {tabs.map((t, tKey) => (
+            <S.Tab key={tKey} $active={tab === t.key}>
+              <S.TabName onClick={() => handleTab(t.key)}>{t.name}</S.TabName>
+            </S.Tab>
+          ))}
+        </S.TabsArea>
+      )}
+
       {!forForm && (
         <S.Main>
           <S.SearchArea>

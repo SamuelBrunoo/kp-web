@@ -120,6 +120,11 @@ export const Info = styled.span<{
       : theme.colors.neutral[600]};
   font-weight: ${({ $role }) =>
     $role === "id" || $role === "text" || $role === "value" ? 600 : 300};
+  text-align: left;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    font-size: 14px;
+  }
 `
 
 export const OrderInfo = styled.span<{
@@ -134,4 +139,8 @@ export const OrderInfo = styled.span<{
       : theme.colors.neutral[500]};
   font-weight: ${({ $role }) =>
     $role === "primary" || $role === "secondary" ? 500 : 400};
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    font-size: 14px;
+  }
 `

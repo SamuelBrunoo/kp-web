@@ -40,7 +40,7 @@ export const BurguerWrapper = styled.div<{
   $type?: "primary" | "secondary"
 }>`
   position: absolute;
-  top: ${({ $type }) => (!$type || $type === "primary" ? 32 : 64)}px;
+  top: ${({ $type }) => (!$type || $type === "primary" ? 60 : 64)}px;
   right: -12px;
   transform: translateX(
     ${({ $opened }) => ($opened ? "calc(50% - 12px)" : "calc(100% + 7px)")}

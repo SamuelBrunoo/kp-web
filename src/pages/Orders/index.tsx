@@ -12,7 +12,14 @@ import { TOrder } from "../../utils/@types/data/order"
 import ExpansibleRow from "../../components/ExpandRow"
 import LoadingModal from "../../components/Modal/variations/Loading"
 
+const tabs = [
+  { key: "todo", name: "À Fazer" },
+  { key: "shipped", name: "Enviados" },
+]
+
 const OrdersPage = () => {
+  const [tab, setTab] = useState<string>("todo")
+
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
@@ -32,7 +39,7 @@ const OrdersPage = () => {
     setLoading(true)
 
     try {
-      const req = await Api.orders.getPageListOrders({})
+      const req = await Api.orders.getPageListOrders({ shippingStatus: tab })
       if (req.ok) {
         const list = req.data.list
         setOrders(list)
@@ -42,11 +49,11 @@ const OrdersPage = () => {
     }
 
     setLoading(false)
-  }, [])
+  }, [tab])
 
   useEffect(() => {
     loadData()
-  }, [loadData])
+  }, [loadData, tab])
 
   return (
     <S.Content>
@@ -57,6 +64,9 @@ const OrdersPage = () => {
         search={search}
         onChangeSearch={setSearch}
         buttons={[{ role: "new", text: "Novo", onClick: handleNew }]}
+        tab={tab}
+        tabs={tabs}
+        onChangeTab={setTab}
       />
 
       {/* Table */}

@@ -23,6 +23,29 @@ export const HeaderTopLeft = styled.div`
   gap: 0;
 `
 
+export const TabsArea = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const Tab = styled.div<{ $active?: boolean }>`
+  display: grid;
+  place-items: center;
+  width: 90px;
+  cursor: pointer;
+
+  opacity: ${({ $active }) => ($active ? 1 : 0.5)};
+  filter: saturate(${({ $active }) => ($active ? 1 : 0)});
+
+  transition: opacity 0.3s, filter 0.3s;
+`
+
+export const TabName = styled.span`
+  font-size: 16px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.orange[460]};
+`
+
 export const Title = styled.h1`
   margin: 0;
   font-size: 24px;
