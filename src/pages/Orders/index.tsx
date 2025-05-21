@@ -11,13 +11,17 @@ import { Api } from "../../api"
 import { TOrder } from "../../utils/@types/data/order"
 import ExpansibleRow from "../../components/ExpandRow"
 import LoadingModal from "../../components/Modal/variations/Loading"
+import getStore from "../../store"
 
 const tabs = [
   { key: "todo", name: "À Fazer" },
+  { key: "waitingShip", name: "À Enviar" },
   { key: "shipped", name: "Enviados" },
 ]
 
 const OrdersPage = () => {
+  const { controllers } = getStore()
+
   const [tab, setTab] = useState<string>("todo")
 
   const navigate = useNavigate()
@@ -45,15 +49,25 @@ const OrdersPage = () => {
         setOrders(list)
       } else throw new Error(req.error.message)
     } catch (error) {
-      // feedbackError
+      controllers.feedback.setData({
+        message:
+          "Houve um problema ao carregar as informações. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
     }
 
     setLoading(false)
-  }, [tab])
+  }, [controllers.feedback, tab])
 
   useEffect(() => {
     loadData()
   }, [loadData, tab])
+
+  const removeOrderFromList = (orderId: string) => {
+    const newList = orders.filter((o) => o.id !== orderId)
+    setOrders(newList)
+  }
 
   return (
     <S.Content>
@@ -76,7 +90,12 @@ const OrdersPage = () => {
         actions={{ deleteCallback }}
         search={search}
         searchFields={["clientName", "value"]}
-        expandComponent={ExpansibleRow.OrderExpand}
+        expandComponent={(props) => (
+          <ExpansibleRow.OrderExpand
+            {...props}
+            removeOrderFromList={removeOrderFromList}
+          />
+        )}
       />
     </S.Content>
   )

@@ -95,6 +95,52 @@ export const updateOrder: TApi["orders"]["updateOrder"] = async ({ order }) => {
   })
 }
 
+export const shipOrder: TApi["orders"]["shipOrder"] = async ({
+  orderId,
+  shippedAt,
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .put(`${baseURL}/shipOrder/${orderId}`, { orderId, shippedAt })
+        .then((res) => {
+          const info = res.data
+
+          if (info && info.success) {
+            resolve({
+              ok: true,
+              data: info.data,
+            })
+          } else {
+            resolve({
+              ok: false,
+              error: {
+                message:
+                  "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+              },
+            })
+          }
+        })
+        .catch((err: AxiosError) => {
+          resolve({
+            ok: false,
+            error: {
+              message:
+                "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+            },
+          })
+        })
+    } catch (error) {
+      reject({
+        error: {
+          message:
+            "Não foi possível atualizar o pedido. Tente novamente mais tarde.",
+        },
+      })
+    }
+  })
+}
+
 export const getPageListOrders: TApi["orders"]["getPageListOrders"] = async (
   filters
 ) => {
@@ -318,6 +364,9 @@ export type TApi_Orders = {
   updateOrder: (
     p: TParams["orders"]["updateOrder"]
   ) => TResponses["orders"]["updateOrder"]
+  shipOrder: (
+    p: TParams["orders"]["shipOrder"]
+  ) => TResponses["orders"]["shipOrder"]
   getPageListOrders: (
     p: TParams["orders"]["getPageListOrders"]
   ) => TResponses["orders"]["getPageListOrders"]
@@ -338,6 +387,7 @@ export type TApi_Orders = {
 export const apiOrders: TApi["orders"] = {
   createOrder: createOrder,
   updateOrder: updateOrder,
+  shipOrder: shipOrder,
   getPageListOrders: getPageListOrders,
   getOrders: getOrders,
   getOrder: getOrder,

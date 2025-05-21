@@ -5,6 +5,7 @@ export type TApi_Responses_Orders = {
   orders: {
     createOrder: Promise<TDefaultRes<TOrder>>
     updateOrder: Promise<TDefaultRes<TOrder>>
+    shipOrder: Promise<TDefaultRes<{ shipDate: number }>>
     getPageListOrders: Promise<
       TDefaultRes<{
         list: TOrder[]

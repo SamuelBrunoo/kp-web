@@ -10,8 +10,15 @@ import AdditionalInfo from "../../AdditionalInfo"
 import Button from "../../Button"
 import OrderDetailsTable from "../../OrderDetailsTable"
 import * as S from "./styles"
+import { Api } from "../../../api"
+import getStore from "../../../store"
 
-const OrderExpand = (order: TPageListOrder) => {
+const OrderExpand = (
+  order: TPageListOrder,
+  removeOrderFromList: (orderId: string) => void
+) => {
+  const { controllers } = getStore()
+
   const navigate = useNavigate()
 
   const { details } = order
@@ -28,6 +35,31 @@ const OrderExpand = (order: TPageListOrder) => {
 
   const handleDelete = () => {
     // ...
+  }
+
+  const handleShip = async () => {
+    const shippedAt = new Date().getTime()
+
+    try {
+      const req = await Api.orders.shipOrder({ orderId: order.id, shippedAt })
+
+      if (req.ok) {
+        removeOrderFromList(order.id)
+
+        controllers.feedback.setData({
+          message: "Enviado com sucesso.",
+          state: "success",
+          visible: true,
+        })
+      } else throw new Error()
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Houve um problema ao marcar como enviado. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+    }
   }
 
   return (
@@ -177,21 +209,40 @@ const OrderExpand = (order: TPageListOrder) => {
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            alignItems: "center",
+            justifyContent:
+              order.status === "done" ? "space-between" : "flex-end",
           }}
         >
-          <Button
-            type="secondary"
-            endIcon={<Icons.Edit />}
-            color="orange"
-            action={handleEdit}
-          />
-          <Button
-            type="secondary"
-            endIcon={<Icons.Trash />}
-            color="red"
-            action={handleDelete}
-          />
+          {order.status === "done" && (
+            <Button
+              type="secondary"
+              color="green"
+              text={"Marcar como enviado"}
+              action={handleShip}
+              disabled={order.details.additional.shippedAt !== null}
+            />
+          )}
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              type="secondary"
+              endIcon={<Icons.Edit />}
+              color="orange"
+              action={handleEdit}
+            />
+            <Button
+              type="secondary"
+              endIcon={<Icons.Trash />}
+              color="red"
+              action={handleDelete}
+            />
+          </div>
         </div>
       </S.InfoGroup>
     </S.Area>

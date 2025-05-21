@@ -234,6 +234,7 @@ const ProductionLinesPage = () => {
         search={search}
         onChangeSearch={setSearch}
         // buttons={[{ role: "new", text: "Novo", onClick: handleNew }]}
+        withoutNewButton={true}
       />
 
       {/* TODO: Tabs */}
