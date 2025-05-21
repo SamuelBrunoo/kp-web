@@ -179,10 +179,10 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
           {
             blocks: [
               {
-                title: "Escolha o produto",
                 groups: [
                   {
                     type: "fields",
+                    title: "Escolha o produto",
                     fields: [
                       [
                         {
@@ -191,7 +191,7 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
                           options: options.types,
                           value: info.type,
                           label: "Tipo",
-                          gridSizes: { big: 3 },
+                          gridSizes: { big: 4 },
                         },
                         {
                           type: "select",
@@ -199,7 +199,7 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
                           options: options.models,
                           value: info.model,
                           label: "Modelo",
-                          gridSizes: { big: 3 },
+                          gridSizes: { big: 4 },
                         },
                         {
                           type: "select",
@@ -207,7 +207,7 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
                           options: options.colors,
                           value: info.color,
                           label: "Cor",
-                          gridSizes: { big: 3 },
+                          gridSizes: { big: 4 },
                         },
                       ],
                     ],
@@ -215,10 +215,10 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
                 ],
               },
               {
-                title: "Controle de estoque",
                 groups: [
                   {
                     type: "fields",
+                    title: "Controle de estoque",
                     fields: [
                       [
                         {
@@ -226,14 +226,14 @@ const MAddOrderProduct = ({ onClose, data, handleOp }: Props) => {
                           field: "quantity",
                           value: info.quantity,
                           label: "Quantidade",
-                          gridSizes: { big: 3 },
+                          gridSizes: { big: 4 },
                         },
                         {
                           type: "readonly",
                           field: "available",
                           value: String(product?.storage.quantity ?? 0),
                           label: "Disponível",
-                          gridSizes: { big: 3 },
+                          gridSizes: { big: 4 },
                         },
                       ],
                     ],

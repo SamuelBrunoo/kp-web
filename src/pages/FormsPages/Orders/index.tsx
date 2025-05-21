@@ -434,12 +434,11 @@ const OrdersForm = () => {
                     fields: [
                       {
                         label: "Cliente",
-                        placeholder: "Cliente",
                         field: "client",
                         options: options.clients,
                         value: order.client as string,
-                        type: "select",
-                        gridSizes: { big: 2, small: 12 },
+                        type: "searchSelect",
+                        gridSizes: { big: 4, small: 12 },
                         avoidAutoSelect: true,
                       },
                     ],
@@ -577,7 +576,7 @@ const OrdersForm = () => {
                         options: options.payments,
                         value: order.payment.type,
                         type: "select",
-                        gridSizes: { big: 3 },
+                        gridSizes: { big: 3, small: 6 },
                         avoidAutoSelect: true,
                       },
                       [
@@ -586,7 +585,7 @@ const OrdersForm = () => {
                           field: "grossValue",
                           value: formatMoney(order.totals.value),
                           type: "readonly",
-                          gridSizes: { big: 1 },
+                          gridSizes: { big: 1, small: 4 },
                           color: "orange",
                         },
                         {
@@ -594,7 +593,7 @@ const OrdersForm = () => {
                           field: "comission",
                           value: formatMoney(calcComission()),
                           type: "readonly",
-                          gridSizes: { big: 1 },
+                          gridSizes: { big: 1, small: 4 },
                           color: "orange",
                         },
                         {
@@ -604,7 +603,7 @@ const OrdersForm = () => {
                             order.totals.value - calcComission()
                           ),
                           type: "readonly",
-                          gridSizes: { big: 1 },
+                          gridSizes: { big: 1, small: 4 },
                           color: "orange",
                         },
                       ],
@@ -617,7 +616,7 @@ const OrdersForm = () => {
                           fields: [
                             [
                               {
-                                label: "Possui parcelamento?",
+                                label: "Parcelado",
                                 field: "hasInstallments",
                                 options: [
                                   { key: true, value: "Sim" },
@@ -625,27 +624,27 @@ const OrdersForm = () => {
                                 ],
                                 value: order.payment.hasInstallments,
                                 type: "select",
-                                gridSizes: { big: 2 },
+                                gridSizes: { big: 2, small: 4 },
                                 avoidAutoSelect: true,
                               },
                               ...(order.payment.hasInstallments
                                 ? [
                                     {
-                                      label: "Quantidade",
+                                      label: "Vezes",
                                       field: "installments",
                                       options: options.installments,
                                       value: String(order.payment.installments),
                                       type: "select",
-                                      gridSizes: { big: 2 },
+                                      gridSizes: { big: 2, small: 4 },
                                       avoidAutoSelect: true,
                                     },
                                     {
-                                      label: "Data do vencimento",
+                                      label: "Vencimento",
                                       field: "installmentsDue",
                                       options: options.installmentsDue,
                                       value: String(order.payment.due),
                                       type: "select",
-                                      gridSizes: { big: 2 },
+                                      gridSizes: { big: 2, small: 4 },
                                       avoidAutoSelect: true,
                                     },
                                   ]

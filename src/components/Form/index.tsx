@@ -21,6 +21,8 @@ const getElement = (
       return <Input.Date {...field} onChange={handleField} key={key} />
     case "readonly":
       return <Input.Readonly {...field} onChange={handleField} key={key} />
+    case "searchSelect":
+      return <Input.SearchSelect {...field} onChange={handleField} key={key} />
     case "select":
       return (
         <Input.Select
