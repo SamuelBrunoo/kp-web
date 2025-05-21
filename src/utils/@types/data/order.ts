@@ -13,6 +13,8 @@ export type TNewOrder = {
   totals: {
     products: number
     value: number
+    commission: number
+    liquid: number
   }
   representative: string
   payment: TPaymentConfig
@@ -64,7 +66,7 @@ export type TPageListOrder = {
       valueTotal: number
       valueCommission: number
       valueLiquid: number
-      paymentMethod: string
+      paymentMethod: TPayment
       hasInstallments: string
       installments: number
       paidInstallments: number

@@ -1,5 +1,6 @@
 import * as S from "./styles"
 import icons from "../../assets/icons"
+import { FormField } from "../../utils/@types/components/FormFields"
 
 const iconsRelations = {
   bookmark: <icons.Bookmark />,
@@ -15,11 +16,12 @@ type Props = {
   label: string
   value: string
   size?: number
+  gridSizes?: FormField["gridSizes"]
 }
 
-const AdditionalInfo = ({ icon, label, value, size }: Props) => {
+const AdditionalInfo = ({ icon, label, value, size, gridSizes }: Props) => {
   return (
-    <S.Box $size={size}>
+    <S.Box $size={size} $gridSizes={gridSizes}>
       <S.Main>
         {icon && iconsRelations[icon]}
         <S.InfoName>{label}</S.InfoName>

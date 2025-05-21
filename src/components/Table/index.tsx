@@ -66,6 +66,12 @@ const Table = ({
                     fontWeight: 600,
                     color: (theme) => theme.palette.green[460],
                     whiteSpace: "nowrap",
+                    [`@media (max-width:${theme.bp.small}px)`]: {
+                      display:
+                        col.hideOn && col.hideOn.includes("small")
+                          ? "none"
+                          : undefined,
+                    },
                   }}
                   align={col.align}
                 >
@@ -191,6 +197,13 @@ const RowItem = (props: TRowItemProps) => {
                 width: col.width ? +col.width.replace("px", "") : undefined,
                 cursor: noHover ? "default" : "pointer",
                 color: itemColor ?? theme.colors.neutral[300],
+                whiteSpace: "nowrap",
+                [`@media (max-width:${theme.bp.small}px)`]: {
+                  display:
+                    col.hideOn && col.hideOn.includes("small")
+                      ? "none"
+                      : undefined,
+                },
               }}
               align={col.align}
               onClick={
@@ -206,7 +219,10 @@ const RowItem = (props: TRowItemProps) => {
                 <Typography
                   fontSize={14}
                   align={col.align}
-                  style={{ whiteSpace: 'nowrap', textAlign: col.align ?? undefined }}
+                  style={{
+                    whiteSpace: "nowrap",
+                    textAlign: col.align ?? undefined,
+                  }}
                 >
                   {content}
                 </Typography>

@@ -27,9 +27,9 @@ export const AdditionalInfosArea = styled.div`
   gap: 24px;
 `
 
-export const AIRow = styled.div`
+export const AIRow = styled.div<{ $columns?: number }>`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(16, 1fr);
+  grid-template-columns: repeat(${({ $columns }) => $columns ?? 16}, 1fr);
   gap: 24px;
 `

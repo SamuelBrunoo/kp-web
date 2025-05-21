@@ -231,7 +231,7 @@ export const tableConfig: {
       { title: "Nº", field: "code" },
       { title: "Cliente", field: "clientName" },
       { title: "Data do pedido", field: "orderDate" },
-      { title: "Valor", field: "value" },
+      { title: "Valor", field: "value", hideOn: ["small"] },
       { title: "Quantidade", field: "quantity", align: "center" },
     ],
     specialFields: {
@@ -251,11 +251,11 @@ export const tableConfig: {
   orderDetailsProducts: {
     columns: [
       { title: "Modelo", field: "model" },
-      { title: "Cor / Variação", field: "color" },
-      { title: "Código", field: "code" },
+      { title: "Cor", field: "color" },
+      { title: "Código", field: "code", hideOn: ["small"] },
       { title: "Qnt", field: "quantity", align: "center" },
-      { title: "Valor Un.", field: "unitary" },
-      { title: "Valor Total", field: "total" },
+      { title: "Valor Un.", field: "unitary", hideOn: ["small"] },
+      { title: "Valor Total", field: "total", hideOn: ["small"] },
       {
         title: "Status",
         field: "statusIndicator",
@@ -456,7 +456,10 @@ type TColumn = {
   size?: string | number
   align?: "left" | "center" | "right"
   width?: string
+  hideOn?: TTableColHideConfig[]
 }
+
+type TTableColHideConfig = keyof typeof theme.bp
 
 export type TConfig = {
   columns: TColumn[]

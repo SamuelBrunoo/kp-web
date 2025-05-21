@@ -5,13 +5,14 @@ import { formatCnpj } from "../../../utils/helpers/formatters/cnpj"
 import { formatCpf } from "../../../utils/helpers/formatters/cpf"
 import { formatMoney } from "../../../utils/helpers/formatters/money"
 import { formatStateRegister } from "../../../utils/helpers/formatters/stateRegister"
-import { tableConfig } from "../../../utils/sys/table"
+import { tableConfig, TConfig } from "../../../utils/sys/table"
 import AdditionalInfo from "../../AdditionalInfo"
 import Button from "../../Button"
 import OrderDetailsTable from "../../OrderDetailsTable"
 import * as S from "./styles"
 import { Api } from "../../../api"
 import getStore from "../../../store"
+import { payments } from "../../../utils/sys/payments"
 
 const OrderExpand = (
   order: TPageListOrder,
@@ -62,13 +63,23 @@ const OrderExpand = (
     }
   }
 
+  const getProductsListConfig: () => TConfig = () => {
+    let config: TConfig = tableConfig.orderDetailsProducts
+    if (order.details.additional.shippedAt) {
+      config.columns = config.columns.filter(
+        (i) => i.field !== "statusIndicator"
+      )
+    }
+    return config
+  }
+
   return (
     <S.Area>
       <S.InfoGroup>
         <S.IGTitle>Produtos pedidos</S.IGTitle>
 
         <OrderDetailsTable
-          config={tableConfig.orderDetailsProducts}
+          config={getProductsListConfig()}
           data={order.details.products}
           noHover={true}
           totals={{ products: order.quantity, value: order.value }}
@@ -100,13 +111,51 @@ const OrderExpand = (
         <S.IGTitle>Informações adicionais</S.IGTitle>
 
         <S.AdditionalInfosArea>
-          <S.AIRow>
+          <S.AIRow $columns={12}>
+            <AdditionalInfo
+              icon={"user"}
+              label={"Emissor"}
+              value={additional.emmitter}
+              gridSizes={{ big: 2, small: 6 }}
+            />
+            <AdditionalInfo
+              icon={"user"}
+              label={"Representante"}
+              value={additional.representative ?? "Não atribuído"}
+              gridSizes={{ big: 2, small: 6 }}
+            />
+          </S.AIRow>
+          <S.AIRow $columns={12}>
+            <AdditionalInfo
+              icon={"calendar"}
+              label={"Pedido em"}
+              value={additional.orderDate}
+              gridSizes={{ big: 2, small: additional.shippedAt ? 4 : 6 }}
+            />
+            <AdditionalInfo
+              icon={"calendar"}
+              label={"Prazo"}
+              value={additional.deadline}
+              gridSizes={{ big: 2, small: additional.shippedAt ? 4 : 6 }}
+            />
+            {additional.shippedAt && (
+              <AdditionalInfo
+                icon={"calendar"}
+                label={"Enviado em"}
+                value={additional.shippedAt as string}
+                gridSizes={{ big: 2, small: 4 }}
+              />
+            )}
+          </S.AIRow>
+          <S.AIRow $columns={12}>
             <AdditionalInfo
               icon={"user"}
               label={"Cliente"}
               value={additional.clientName}
-              size={3}
+              gridSizes={{ big: 2, small: 6 }}
             />
+          </S.AIRow>
+          <S.AIRow $columns={12}>
             <AdditionalInfo
               icon={"user"}
               label={"CPF / CNPJ"}
@@ -115,7 +164,7 @@ const OrderExpand = (
                   ? formatCnpj(additional.clientRegister)
                   : formatCpf(additional.clientRegister)
               }
-              size={3}
+              gridSizes={{ big: 2, small: 6 }}
             />
             <AdditionalInfo
               icon={"user"}
@@ -125,81 +174,55 @@ const OrderExpand = (
                   ? formatStateRegister(additional.clientRegister)
                   : "Não possui"
               }
-              size={3}
+              gridSizes={{ big: 2, small: 6 }}
             />
           </S.AIRow>
-          <S.AIRow>
-            <AdditionalInfo
-              icon={"calendar"}
-              label={"Data do pedido"}
-              value={additional.orderDate}
-              size={3}
-            />
-            <AdditionalInfo
-              icon={"calendar"}
-              label={"Prazo de envio"}
-              value={additional.deadline}
-              size={3}
-            />
-          </S.AIRow>
-          <S.AIRow>
+          <S.AIRow $columns={12}>
             <AdditionalInfo
               icon={"dollarCircle"}
               label={"Valor total"}
               value={formatMoney(additional.valueTotal)}
-              size={3}
+              gridSizes={{ big: 2, small: 6 }}
             />
             <AdditionalInfo
               icon={"dollarCircle"}
               label={"Método de pagamento"}
-              value={additional.paymentMethod}
-              size={3}
+              value={payments[additional.paymentMethod]}
+              gridSizes={{ big: 2, small: 6 }}
             />
           </S.AIRow>
-          <S.AIRow>
-            <AdditionalInfo
-              icon={"dollarCircle"}
-              label={"Parcelado"}
-              value={additional.hasInstallments ? "Sim" : "Não"}
-              size={3}
-            />
-            {additional.hasInstallments && (
+          {additional.paymentMethod === "slip" && (
+            <S.AIRow $columns={12}>
               <AdditionalInfo
                 icon={"dollarCircle"}
-                label={"Número de parcelas"}
-                value={String(additional.installments)}
-                size={3}
+                label={"Parcelado"}
+                value={additional.hasInstallments ? "Sim" : "Não"}
+                gridSizes={{ big: 2, small: 6 }}
               />
-            )}
-            {additional.hasInstallments && (
-              <AdditionalInfo
-                icon={"dollarCircle"}
-                label={"Parcelas pagas"}
-                value={`${additional.paidInstallments} de ${additional.installments}`}
-                size={3}
-              />
-            )}
-          </S.AIRow>
-          <S.AIRow>
+              {additional.hasInstallments && (
+                <AdditionalInfo
+                  icon={"dollarCircle"}
+                  label={"Vezes"}
+                  value={String(additional.installments)}
+                  gridSizes={{ big: 2, small: 6 }}
+                />
+              )}
+              {additional.hasInstallments && (
+                <AdditionalInfo
+                  icon={"dollarCircle"}
+                  label={"Parcelas pagas"}
+                  value={`${additional.paidInstallments} de ${additional.installments}`}
+                  gridSizes={{ big: 2, small: 6 }}
+                />
+              )}
+            </S.AIRow>
+          )}
+          <S.AIRow $columns={12}>
             <AdditionalInfo
-              icon={"user"}
-              label={"Emissor"}
-              value={additional.emmitter}
-              size={3}
-            />
-            <AdditionalInfo
-              icon={"user"}
-              label={"Representante"}
-              value={additional.representative ?? "Não atribuído"}
-              size={3}
-            />
-          </S.AIRow>
-          <S.AIRow>
-            <AdditionalInfo
-              icon={"user"}
+              icon={"location"}
               label={"Endereço"}
               value={additional.address}
-              size={6}
+              gridSizes={{ big: 12 }}
             />
           </S.AIRow>
         </S.AdditionalInfosArea>
@@ -211,10 +234,12 @@ const OrderExpand = (
             display: "flex",
             alignItems: "center",
             justifyContent:
-              order.status === "done" ? "space-between" : "flex-end",
+              order.status === "done" && !order.details.additional.shippedAt
+                ? "space-between"
+                : "flex-end",
           }}
         >
-          {order.status === "done" && (
+          {order.status === "done" && !order.details.additional.shippedAt && (
             <Button
               type="secondary"
               color="green"
@@ -224,25 +249,27 @@ const OrderExpand = (
             />
           )}
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Button
-              type="secondary"
-              endIcon={<Icons.Edit />}
-              color="orange"
-              action={handleEdit}
-            />
-            <Button
-              type="secondary"
-              endIcon={<Icons.Trash />}
-              color="red"
-              action={handleDelete}
-            />
-          </div>
+          {!order.details.additional.shippedAt && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button
+                type="secondary"
+                endIcon={<Icons.Edit />}
+                color="orange"
+                action={handleEdit}
+              />
+              <Button
+                type="secondary"
+                endIcon={<Icons.Trash />}
+                color="red"
+                action={handleDelete}
+              />
+            </div>
+          )}
         </div>
       </S.InfoGroup>
     </S.Area>

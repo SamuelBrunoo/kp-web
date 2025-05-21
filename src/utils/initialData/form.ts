@@ -13,6 +13,8 @@ const order: TNewOrder = {
   totals: {
     products: 0,
     value: 0,
+    commission: 0,
+    liquid: 0,
   },
   deadline: getMinDeadline(14),
   representative: "",

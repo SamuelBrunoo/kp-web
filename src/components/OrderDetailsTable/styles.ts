@@ -22,6 +22,7 @@ export const TCol = styled.th<{
   $size?: string | number
   $align?: string
   $width?: string
+  $hideOnMobile?: boolean
 }>`
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
@@ -29,6 +30,10 @@ export const TCol = styled.th<{
   padding: 12px 4px;
   color: ${({ theme }) => theme.colors.green[360]};
   width: ${({ $width }) => $width ?? "unset"};
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    ${({ $hideOnMobile }) => ($hideOnMobile ? "display: none;" : "")};
+  }
 `
 
 export const TableBody = styled.tbody<{ $noHover?: boolean }>`
@@ -92,6 +97,7 @@ export const ItemData = styled.td<{
   $align?: string
   $hasPointer?: boolean
   $width?: string
+  $hideOnMobile?: boolean
 }>`
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
@@ -101,11 +107,16 @@ export const ItemData = styled.td<{
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   width: ${({ $width }) => $width ?? "unset"};
   color: ${({ theme }) => theme.colors.neutral[300]};
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    ${({ $hideOnMobile }) => ($hideOnMobile ? "display: none;" : "")};
+  }
 `
 
 export const ResumeProductsData = styled.td<{
   $align?: string
   $hasPointer?: boolean
+  $hideOnMobile?: boolean
 }>`
   text-align: ${({ $align }) => $align ?? "left"};
   font-size: 14px;
@@ -114,4 +125,8 @@ export const ResumeProductsData = styled.td<{
   border: none;
   cursor: ${({ $hasPointer }) => ($hasPointer ? "pointer" : "unset")};
   color: ${({ theme }) => theme.colors.green[360]};
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    ${({ $hideOnMobile }) => ($hideOnMobile ? "display: none;" : "")};
+  }
 `

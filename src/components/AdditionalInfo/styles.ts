@@ -1,11 +1,28 @@
 import styled from "styled-components"
+import { FormField } from "../../utils/@types/components/FormFields"
 
-export const Box = styled.div<{ $size?: number }>`
-  ${({ $size }) => $size && `grid-column: span ${$size};`}
+export const Box = styled.div<{
+  $size?: number
+  $gridSizes?: FormField["gridSizes"]
+}>`
+  ${({ $size, $gridSizes }) =>
+    ($gridSizes?.big || $size) &&
+    `grid-column: span ${$gridSizes?.big ?? $size};`}
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: fit-content;
+
+  @media (max-width: ${({ theme }) => theme.bp.small}px) {
+    grid-column: span
+      ${({ $size, $gridSizes }) =>
+        $gridSizes?.small ?? $gridSizes?.big ?? $size ?? "unset"};
+    flex: unset;
+
+    min-width: unset;
+    max-width: unset;
+    width: unset;
+  }
 `
 
 export const Main = styled.div`
@@ -26,6 +43,7 @@ export const InfoName = styled.span`
   color: ${({ theme }) => theme.colors.green[360]};
   font-weight: 500;
   font-size: 14px;
+  white-space: nowrap;
 `
 
 export const Value = styled.span`

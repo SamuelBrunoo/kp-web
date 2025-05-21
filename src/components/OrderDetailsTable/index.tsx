@@ -2,6 +2,7 @@ import * as S from "./styles"
 import { TConfig } from "../../utils/sys/table"
 import { useState } from "react"
 import { formatMoney } from "../../utils/helpers/formatters/money"
+import { theme } from "../../theme"
 
 type Props = {
   config: TConfig
@@ -34,6 +35,7 @@ const OrderDetailsTable = ({
                 $size={col.size}
                 $align={col.align}
                 $width={col.width}
+                $hideOnMobile={col.hideOn?.includes("small")}
               >
                 {col.title}
               </S.TCol>
@@ -54,14 +56,25 @@ const OrderDetailsTable = ({
           {/* Total */}
 
           <S.RowItem className={"normal totals noHover"}>
-            <S.ResumeProductsData colSpan={3} $align={"left"}>
+            <S.ResumeProductsData
+              colSpan={
+                config.columns.some(
+                  (i) =>
+                    i.field === "statusIndicator" ||
+                    window.document.body.clientWidth >= theme.bp.small
+                )
+                  ? 3
+                  : 2
+              }
+              $align={"left"}
+            >
               Total
             </S.ResumeProductsData>
             <S.ResumeProductsData $align={"center"}>
               {totals.products}
             </S.ResumeProductsData>
             <S.ResumeProductsData />
-            <S.ResumeProductsData>
+            <S.ResumeProductsData $hideOnMobile={true}>
               {formatMoney(totals.value)}
             </S.ResumeProductsData>
           </S.RowItem>
@@ -103,6 +116,7 @@ const RowItem = (props: TRowItemProps) => {
               $hasPointer={expandComponent && k !== config.columns.length - 1}
               $align={col.align}
               $width={col.width}
+              $hideOnMobile={col.hideOn?.includes("small")}
               onClick={
                 expandComponent && k !== config.columns.length - 1
                   ? toggleExpand

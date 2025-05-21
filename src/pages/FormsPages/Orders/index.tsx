@@ -321,10 +321,16 @@ const OrdersForm = () => {
   useEffect(() => {
     const total = calcTotal()
     const prodsQnt = order.products.reduce((sum, p) => sum + p.quantity, 0)
+    const commission = calcComission()
     setOrder((ord) => ({
       ...ord,
       value: total,
-      totals: { products: prodsQnt, value: total },
+      totals: {
+        products: prodsQnt,
+        value: total,
+        commission: commission,
+        liquid: total - commission,
+      },
     }))
   }, [order.products])
 
