@@ -79,7 +79,6 @@ export type TPageListOrder = {
 
 type TOrderDetailsProduct = {
   id: string
-  code: string
   model: string
   name: string
   color: string

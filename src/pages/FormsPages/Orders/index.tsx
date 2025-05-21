@@ -507,7 +507,7 @@ const OrdersForm = () => {
                           field: "representative",
                           options: options.representatives,
                           value: order.representative as string,
-                          type: "select",
+                          type: "searchSelect",
                           gridSizes: { big: 2, small: 6 },
                           avoidAutoSelect: true,
                         },

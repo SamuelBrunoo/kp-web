@@ -312,6 +312,7 @@ export const tableConfig: {
           deleteCallback={callbacks.deleteCallback}
           canDelete={true}
           noEdit={true}
+          customDelete={true}
         />
       ),
     },
@@ -367,12 +368,21 @@ export const tableConfig: {
     columns: [
       { title: "Tipo", field: "type" },
       { title: "Modelo", field: "model" },
-      { title: "Código", field: "code" },
       { title: "Qnt", field: "quantity", align: "center" },
+      {
+        title: "Status",
+        field: "statusIndicator",
+        align: "center",
+        hideOn: ["small"],
+      },
     ],
     specialFields: {
-      status: (item: TProductionLine["products"][number]) => (
-        <StatusIndicator status={item.status} shouldHideOptions={true} />
+      statusIndicator: (item: TProductionLine["products"][number]) => (
+        <StatusIndicator
+          status={item.status}
+          shouldHideOptions={true}
+          onChange={() => {}}
+        />
       ),
     },
     isExpandable: true,

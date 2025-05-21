@@ -21,6 +21,7 @@ type Props = {
   noEdit?: boolean
   noDelete?: boolean
   canDelete?: boolean
+  customDelete?: boolean
 }
 
 const TableActions = ({
@@ -30,6 +31,7 @@ const TableActions = ({
   noEdit,
   noDelete,
   canDelete,
+  customDelete,
 }: Props) => {
   const navigate = useNavigate()
 
@@ -80,19 +82,23 @@ const TableActions = ({
   const handleDelete = async () => {
     // confirm modal...
 
-    const action = (await getDeleteEndpoint({ id })) as TDefaultBodyRes<any>
+    if (customDelete) {
+      if (deleteCallback) deleteCallback(id)
+    } else {
+      const action = (await getDeleteEndpoint({ id })) as TDefaultBodyRes<any>
 
-    if (action.ok) {
-      try {
-        if (deleteCallback) deleteCallback(id)
-      } catch (error) {
-        controllers.feedback.setData({
-          message:
-            error.message ??
-            "Não foi possível excluir. Tente novamente mais tarde.",
-          state: "error",
-          visible: true,
-        })
+      if (action.ok) {
+        try {
+          if (deleteCallback) deleteCallback(id)
+        } catch (error) {
+          controllers.feedback.setData({
+            message:
+              error.message ??
+              "Não foi possível excluir. Tente novamente mais tarde.",
+            state: "error",
+            visible: true,
+          })
+        }
       }
     }
   }
