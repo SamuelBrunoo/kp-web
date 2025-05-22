@@ -27,6 +27,7 @@ import { states } from "../../../utils/sys/states"
 import { formatMoney } from "../../../utils/helpers/formatters/money"
 import Table from "../../../components/Table"
 import { tableConfig } from "../../../utils/sys/table"
+import { FormField } from "../../../utils/@types/components/FormFields"
 
 const RepresentativesForm = () => {
   const { id } = useParams()
@@ -397,6 +398,22 @@ const RepresentativesForm = () => {
                           label: "Data Limite",
                           gridSizes: { big: 2, small: 6 },
                         },
+                        ...((representative.paymentConfig.period === "dualweek"
+                          ? [
+                              {
+                                type: "select",
+                                field: "commission.dateLimit2",
+                                options: options.dateLimit,
+                                value: representative.paymentConfig.dateLimit2
+                                  ? String(
+                                      representative.paymentConfig.dateLimit2
+                                    )
+                                  : "15",
+                                label: "Data Limite 2",
+                                gridSizes: { big: 2, small: 6 },
+                              },
+                            ]
+                          : []) as FormField[]),
                       ],
                     ],
                   },
