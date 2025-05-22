@@ -117,6 +117,7 @@ export type TOrderPLDetailsProduct = {
   model: string
   code: string
   quantity: number
+  status: TOPStatus
   list: TOrderPLDetailsProductListItem[]
 }
 

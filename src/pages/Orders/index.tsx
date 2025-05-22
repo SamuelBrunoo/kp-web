@@ -90,9 +90,9 @@ const OrdersPage = () => {
         actions={{ deleteCallback }}
         search={search}
         searchFields={["clientName", "value"]}
-        expandComponent={(props) => (
+        expandComponent={(orderInfo) => (
           <ExpansibleRow.OrderExpand
-            {...props}
+            order={orderInfo}
             removeOrderFromList={removeOrderFromList}
           />
         )}

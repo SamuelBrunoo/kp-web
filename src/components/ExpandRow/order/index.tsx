@@ -14,10 +14,12 @@ import { Api } from "../../../api"
 import getStore from "../../../store"
 import { payments } from "../../../utils/sys/payments"
 
-const OrderExpand = (
-  order: TPageListOrder,
+type Props = {
+  order: TPageListOrder
   removeOrderFromList: (orderId: string) => void
-) => {
+}
+
+const OrderExpand = ({ order, removeOrderFromList }: Props) => {
   const { controllers } = getStore()
 
   const navigate = useNavigate()
@@ -45,15 +47,17 @@ const OrderExpand = (
       const req = await Api.orders.shipOrder({ orderId: order.id, shippedAt })
 
       if (req.ok) {
-        removeOrderFromList(order.id)
-
         controllers.feedback.setData({
           message: "Enviado com sucesso.",
           state: "success",
           visible: true,
         })
+
+        if (removeOrderFromList) removeOrderFromList(order.id)
+        else console.log("Função não existe")
       } else throw new Error()
     } catch (error) {
+      console.log(error)
       controllers.feedback.setData({
         message:
           "Houve um problema ao marcar como enviado. Tente novamente mais tarde.",

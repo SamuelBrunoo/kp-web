@@ -10,6 +10,8 @@ import { Api } from "../../api"
 import ExpansibleRow from "../../components/ExpandRow"
 import {
   TAttribution,
+  TOrderPLDetailsProduct,
+  TOrderPLDetailsProductListItem,
   TPageListProductionLine,
 } from "../../utils/@types/data/productionLine"
 import LoadingModal from "../../components/Modal/variations/Loading"
@@ -18,6 +20,7 @@ import { parseRoOption } from "../../utils/helpers/parsers/roOption"
 import { TRoOption } from "../../utils/@types/sys/roOptions"
 import getStore from "../../store"
 import { useParams } from "react-router-dom"
+import { getListOverralStatus } from "../../utils/helpers/parsers/status"
 
 type TList =
   | TPageListProductionLine["order"][]
@@ -40,6 +43,13 @@ const ProductionLinesPage = () => {
 
   const [search, setSearch] = useState("")
 
+  const removeProductionFromView = (plId: string) => {
+    const newList: any = (productionLines as any[]).filter(
+      (i: TList[number]) => i.id !== plId
+    )
+    setProductionLines(newList)
+  }
+
   const handleSave = async (itemId: string) => {
     const item = (productionLines as any[]).find(
       (p: TList[number]) => p.id === itemId
@@ -57,11 +67,14 @@ const ProductionLinesPage = () => {
       const req = await Api.productionLines.updateProductionLine(updateData)
 
       if (req.ok) {
+        removeProductionFromView(itemId)
+
         controllers.feedback.setData({
           message: "Informações atualizadas com sucesso.",
           state: "success",
           visible: true,
         })
+
         setHasChanges(false)
       }
     } catch (error) {}
@@ -123,13 +136,22 @@ const ProductionLinesPage = () => {
 
     if (productionLineItem) {
       const newProductsList = productionLineItem.details.products.map(
-        (i: any, key: number) =>
-          key + 1 !== id
-            ? i
-            : {
-                ...i,
-                status: newStatus,
-              }
+        (i: TOrderPLDetailsProduct) => {
+          let nl: TOrderPLDetailsProductListItem[] = []
+
+          i.list.forEach((ii) => {
+            const info =
+              ii.lineNumber !== id ? ii : { ...ii, status: newStatus }
+            nl.push(info)
+          })
+
+          const nItem: TOrderPLDetailsProduct = {
+            ...i,
+            list: nl,
+            status: getListOverralStatus(nl),
+          }
+          return nItem
+        }
       )
       const newAttributionsList = productionLineItem.details.attributions.map(
         (i: any, key: number) =>
