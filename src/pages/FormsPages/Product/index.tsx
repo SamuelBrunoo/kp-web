@@ -20,6 +20,8 @@ import Button from "../../../components/Button"
 import { FormControlLabel, Switch } from "@mui/material"
 import LoadingModal from "../../../components/Modal/variations/Loading"
 import Form from "../../../components/Form"
+import { checkErrors } from "../../../utils/helpers/checkErrors"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const ProductForm = () => {
   const { id } = useParams()
@@ -52,84 +54,95 @@ const ProductForm = () => {
   const [models, setModels] = useState<TModel[]>([])
   const [colors, setColors] = useState<TColor[]>([])
 
+  const [errors, setErrors] = useState<TErrorsCheck>({ has: false, fields: [] })
+
   const handleCancel = () => {
     navigate(-1)
+  }
+
+  const updateErrors = () => {
+    const check = checkErrors.product(product)
+    return check
   }
 
   const handleSave = async () => {
     setSubmitting(true)
 
-    // Check errors
+    const errorCheck = updateErrors()
 
-    try {
-      const m = models.find((m) => m.code === product.model)
+    if (!errorCheck.has) {
+      try {
+        const m = models.find((m) => m.code === product.model)
 
-      if (id) {
-        // edit ...
-        const productInfo: TProduct = {
-          ...product,
-          id: id,
-          price: m?.price as number,
-          model: m?.id as string,
-          storage: {
-            ...product.storage,
-            quantity: product.storage.has ? product.storage.quantity : 0,
-          },
-        }
-
-        const update = await Api.products.updateProduct({
-          product: productInfo,
-        })
-
-        if (update.ok) {
-          controllers.feedback.setData({
-            message: "Produto atualizado com sucesso",
-            state: "success",
-            visible: true,
-          })
-          navigate(-1)
-        } else {
-          controllers.feedback.setData({
-            message: update.error.message,
-            state: "alert",
-            visible: true,
-          })
-        }
-      } else {
-        const create = await Api.products.createProduct({
-          newProduct: {
-            ...(product as TNewProduct),
+        if (id) {
+          // edit ...
+          const productInfo: TProduct = {
+            ...product,
+            id: id,
+            price: m?.price as number,
             model: m?.id as string,
             storage: {
               ...product.storage,
               quantity: product.storage.has ? product.storage.quantity : 0,
             },
-          },
-        })
+          }
 
-        if (create.ok) {
-          controllers.feedback.setData({
-            message: "Produto cadastrado com sucesso",
-            state: "success",
-            visible: true,
+          const update = await Api.products.updateProduct({
+            product: productInfo,
           })
-          navigate(-1)
+
+          if (update.ok) {
+            controllers.feedback.setData({
+              message: "Produto atualizado com sucesso",
+              state: "success",
+              visible: true,
+            })
+            navigate(-1)
+          } else {
+            controllers.feedback.setData({
+              message: update.error.message,
+              state: "alert",
+              visible: true,
+            })
+          }
         } else {
-          controllers.feedback.setData({
-            message: create.error.message,
-            state: "alert",
-            visible: true,
+          const create = await Api.products.createProduct({
+            newProduct: {
+              ...(product as TNewProduct),
+              model: m?.id as string,
+              storage: {
+                ...product.storage,
+                quantity: product.storage.has ? product.storage.quantity : 0,
+              },
+            },
           })
+
+          if (create.ok) {
+            controllers.feedback.setData({
+              message: "Produto cadastrado com sucesso",
+              state: "success",
+              visible: true,
+            })
+            navigate(-1)
+          } else {
+            controllers.feedback.setData({
+              message: create.error.message,
+              state: "alert",
+              visible: true,
+            })
+          }
         }
+      } catch (error) {
+        controllers.feedback.setData({
+          message: `Houve um erro ao ${
+            id ? "atualizar" : "cadastrar"
+          } o produto.`,
+          state: "alert",
+          visible: true,
+        })
       }
-    } catch (error) {
-      controllers.feedback.setData({
-        message: `Houve um erro ao ${
-          id ? "atualizar" : "cadastrar"
-        } o produto.`,
-        state: "alert",
-        visible: true,
-      })
+    } else {
+      setErrors(errorCheck)
     }
 
     setSubmitting(false)
@@ -318,6 +331,10 @@ const ProductForm = () => {
                           options: options.prodTypes,
                           value: product.type,
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("type"),
+                            message: "Selecione o tipo do produto",
+                          },
                         },
                         {
                           type: "select",
@@ -326,6 +343,10 @@ const ProductForm = () => {
                           options: options.models,
                           value: product.model,
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("modelo"),
+                            message: "Selecione o modelo",
+                          },
                         },
                         {
                           type: "select",
@@ -334,6 +355,10 @@ const ProductForm = () => {
                           options: options.colors,
                           value: product.color,
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("color"),
+                            message: "Selecione a cor",
+                          },
                         },
                       ],
                       {

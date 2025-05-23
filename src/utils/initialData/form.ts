@@ -52,6 +52,7 @@ export const initialForm = {
       has: true,
       quantity: 0,
     },
+    active: false,
   },
   model: {
     type: "",
