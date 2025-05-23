@@ -24,6 +24,8 @@ import { Grid2, Typography } from "@mui/material"
 import LoadingModal from "../../../components/Modal/variations/Loading"
 import Form from "../../../components/Form"
 import { theme } from "../../../theme"
+import { checkErrors } from "../../../utils/helpers/checkErrors"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const ModelForm = () => {
   const { id } = useParams()
@@ -35,6 +37,7 @@ const ModelForm = () => {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
+  const [errors, setErrors] = useState<TErrorsCheck>({ has: false, fields: [] })
   const [model, setModel] = useState<TModel>(initialForm.model as any)
   const [allowedColors, setAllowedColors] = useState<
     (TColor & { checked: boolean })[]
@@ -64,74 +67,105 @@ const ModelForm = () => {
     navigate(-1)
   }
 
+  const updateErrors = () => {
+    const check = checkErrors.model(model)
+    return check
+  }
+
   const handleSave = async () => {
     setSubmitting(true)
 
-    try {
-      if (id) {
-        // edit ...
-        const cls = allowedColors
-          .map((ac) => (ac.checked ? ac.code : null))
-          .filter((ac) => ac)
+    const errorCheck = updateErrors()
 
-        const update = await Api.models.updateModel({
-          model: { ...model, colors: cls } as TModel,
-        })
+    if (!errorCheck.has) {
+      try {
+        if (id) {
+          // edit ...
+          const cls = allowedColors
+            .map((ac) => (ac.checked ? ac.code : null))
+            .filter((ac) => ac)
 
-        if (update.ok) {
-          controllers.feedback.setData({
-            message: "Modelo atualizado com sucesso",
-            state: "success",
-            visible: true,
+          const update = await Api.models.updateModel({
+            model: { ...model, colors: cls } as TModel,
           })
-          navigate(-1)
+
+          if (update.ok) {
+            controllers.feedback.setData({
+              message: "Modelo atualizado com sucesso",
+              state: "success",
+              visible: true,
+            })
+            navigate(-1)
+          } else {
+            controllers.feedback.setData({
+              message: update.error.message,
+              state: "alert",
+              visible: true,
+            })
+          }
         } else {
-          controllers.feedback.setData({
-            message: update.error.message,
-            state: "alert",
-            visible: true,
-          })
-        }
-      } else {
-        const cls = allowedColors
-          .map((ac) => (ac.checked ? ac.code : null))
-          .filter((ac) => ac)
+          const cls = allowedColors
+            .map((ac) => (ac.checked ? ac.code : null))
+            .filter((ac) => ac)
 
-        const create = await Api.models.createModel({
-          newModel: { ...model, colors: cls } as TNewModel,
+          const create = await Api.models.createModel({
+            newModel: { ...model, colors: cls } as TNewModel,
+          })
+
+          if (create.ok) {
+            controllers.feedback.setData({
+              message: "Modelo adicionado com sucesso",
+              state: "success",
+              visible: true,
+            })
+            navigate(-1)
+          } else {
+            controllers.feedback.setData({
+              message: create.error.message,
+              state: "error",
+              visible: true,
+            })
+          }
+        }
+      } catch (error) {
+        controllers.feedback.setData({
+          message: `Houve um erro ao ${
+            id ? "editar" : "salvar"
+          } o modelo. Tente novamente mais tarde.`,
+          state: "error",
+          visible: true,
         })
-
-        if (create.ok) {
-          controllers.feedback.setData({
-            message: "Modelo adicionado com sucesso",
-            state: "success",
-            visible: true,
-          })
-          navigate(-1)
-        } else {
-          controllers.feedback.setData({
-            message: create.error.message,
-            state: "error",
-            visible: true,
-          })
-        }
       }
-    } catch (error) {
-      controllers.feedback.setData({
-        message: `Houve um erro ao ${
-          id ? "editar" : "salvar"
-        } o modelo. Tente novamente mais tarde.`,
-        state: "error",
-        visible: true,
-      })
-    }
-
+    } else setErrors(errorCheck)
     setSubmitting(false)
   }
 
-  const handleField = useCallback((field: string, value: any) => {
-    setModel((p) => ({ ...p, [field]: value }))
-  }, [])
+  const updateErrorsField = useCallback(
+    (field: string) => {
+      if (errors.fields.includes(field)) {
+        const newFieldsList = [...errors.fields].filter(
+          (errorItem) => errorItem !== field
+        )
+
+        const newErrors = {
+          fields: newFieldsList,
+          has: newFieldsList.length > 0,
+        }
+
+        setErrors(newErrors)
+      }
+    },
+    [errors]
+  )
+
+  const handleField = useCallback(
+    (field: string, value: any) => {
+      updateErrorsField(field)
+
+      setModel((p) => ({ ...p, [field]: value }))
+    },
+    [updateErrorsField]
+  )
 
   // # Initial loading
 
@@ -170,9 +204,7 @@ const ModelForm = () => {
         setAllowedColors(
           req.data.colors.map((c) => ({
             ...c,
-            checked: modelInfo
-              ? modelInfo.model.colors.includes(c.code)
-              : false,
+            checked: modelInfo ? modelInfo.model.colors.includes(c.code) : true,
           }))
         )
 
@@ -308,6 +340,10 @@ const ModelForm = () => {
                           options: options.prodTypes,
                           value: model.type,
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("tyoe"),
+                            message: "Escolha o tipo do modelo",
+                          },
                         },
                         {
                           type: "default",
@@ -315,6 +351,10 @@ const ModelForm = () => {
                           label: "Nome do modelo",
                           value: model.name,
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("name"),
+                            message: "Digite o nome do modelo",
+                          },
                         },
                         {
                           type: "default",
@@ -322,6 +362,10 @@ const ModelForm = () => {
                           label: "Código",
                           value: model.code,
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("code"),
+                            message: "Digite o código base",
+                          },
                         },
                       ],
                     ],
@@ -341,6 +385,10 @@ const ModelForm = () => {
                         label: "Preço unitário",
                         value: model.price,
                         gridSizes: { big: 2 },
+                        error: {
+                          has: errors.fields.includes("price"),
+                          message: "Preço mín.: R$0,01",
+                        },
                       },
                     ],
                   },

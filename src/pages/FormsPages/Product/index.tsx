@@ -148,18 +148,35 @@ const ProductForm = () => {
     setSubmitting(false)
   }
 
-  const handleField = useCallback((field: string, value: any) => {
-    if (field === "hasStorage") {
-      setProduct((p) => ({
-        ...p,
-        storage: { ...p.storage, has: value === "true" },
-      }))
-    } else if (field === "storage") {
-      const v = !Number.isNaN(value) ? +value : 0
+  const updateErrorsField = (field: string) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = [...errors.fields].filter(
+        (errorItem) => errorItem !== field
+      )
 
-      setProduct((p) => ({ ...p, storage: { ...p.storage, quantity: v } }))
-    } else setProduct((p) => ({ ...p, [field]: value }))
-  }, [])
+      const newErrors = { fields: newFieldsList, has: newFieldsList.length > 0 }
+
+      setErrors(newErrors)
+    }
+  }
+
+  const handleField = useCallback(
+    (field: string, value: any) => {
+      updateErrorsField(field)
+
+      if (field === "hasStorage") {
+        setProduct((p) => ({
+          ...p,
+          storage: { ...p.storage, has: value === "true" },
+        }))
+      } else if (field === "storage") {
+        const v = !Number.isNaN(value) ? +value : 0
+
+        setProduct((p) => ({ ...p, storage: { ...p.storage, quantity: v } }))
+      } else setProduct((p) => ({ ...p, [field]: value }))
+    },
+    [errors]
+  )
 
   const computeCode = () => {
     if (
