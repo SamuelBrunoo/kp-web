@@ -51,6 +51,8 @@ const SelectDefault = ({
   fixedWidth,
   zIndex,
   elevation,
+
+  error,
 }: Props) => {
   const [showing, setShowing] = useState(false)
   const [selected, setSelected] = useState<TRoOption | undefined>({
@@ -127,7 +129,7 @@ const SelectDefault = ({
       $fixedWidth={fixedWidth}
       $zIndex={zIndex}
     >
-      <C.Area $elevation={elevation}>
+      <C.Area $elevation={elevation} $hasError={error?.has}>
         <S.SelectArea ref={wrapperRef}>
           {label && <S.Label>{label}</S.Label>}
           <S.DataArea
@@ -152,6 +154,7 @@ const SelectDefault = ({
             ))}
           </S.OptionsArea>
         </S.SelectArea>
+        <span>{error?.has ? error?.message : ""}</span>
       </C.Area>
     </C.Wrapper>
   )

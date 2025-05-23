@@ -202,6 +202,7 @@ const Input = ({
             )}
           </SelectStyles.OptionsArea>
         </S.InputArea>
+        <span>{error?.has ? error?.message : ""}</span>
       </S.Area>
     </S.Wrapper>
   )

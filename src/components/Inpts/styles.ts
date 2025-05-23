@@ -35,12 +35,22 @@ export const Wrapper = styled.div<{
   }
 `
 
-export const Area = styled.div<{ $elevation?: number }>`
+export const Area = styled.div<{ $elevation?: number; $hasError?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 8px;
   flex: 1;
   z-index: ${({ $elevation }) => 100 - ($elevation ?? 90)};
+
+  & > span {
+    color: ${({ $hasError, theme }) =>
+      $hasError ? theme.colors.red[460] : "transparent"};
+    transition: color 0.3s;
+    position: absolute;
+    margin-left: 4px;
+    top: 100%;
+    font-size: 0.8rem;
+  }
 `
 
 export const InputArea = styled.div<{

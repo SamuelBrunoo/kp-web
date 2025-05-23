@@ -28,6 +28,8 @@ import { formatMoney } from "../../../utils/helpers/formatters/money"
 import Table from "../../../components/Table"
 import { tableConfig } from "../../../utils/sys/table"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { checkErrors } from "../../../utils/helpers/checkErrors"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 
 const RepresentativesForm = () => {
   const { id } = useParams()
@@ -43,6 +45,7 @@ const RepresentativesForm = () => {
   const [representative, setRepresentative] = useState<
     TNewRepresentative | TRepresentative
   >(initialForm.representative as any)
+  const [errors, setErrors] = useState<TErrorsCheck>({ has: false, fields: [] })
 
   // Page control
 
@@ -80,97 +83,123 @@ const RepresentativesForm = () => {
       phone2: representative.phone2.replace(/\D/g, ""),
       registers: {
         cpf: representative.registers.cpf.replace(/\D/g, ""),
-        cnpj: representative.registers.cnpj
-          ? representative.registers.cnpj.replace(/\D/g, "")
-          : null,
+        cnpj: representative.registers.cnpj.replace(/\D/g, ""),
       },
     }
 
     return d
   }
 
+  const updateErrors = () => {
+    const check = checkErrors.representative(representative)
+    return check
+  }
+
   const handleSave = async () => {
     setSubmitting(true)
 
-    if (id) {
-      // edit ...
-      const update = await Api.representatives.updateRepresentative({
-        representative: representative as TRepresentative,
-      })
-      if (update.ok) {
-        controllers.feedback.setData({
-          message: "Representante atualizado com sucesso",
-          state: "success",
-          visible: true,
+    const errorCheck = updateErrors()
+
+    if (!errorCheck.has) {
+      if (id) {
+        // edit ...
+        const update = await Api.representatives.updateRepresentative({
+          representative: representative as TRepresentative,
         })
-        navigate(-1)
+        if (update.ok) {
+          controllers.feedback.setData({
+            message: "Representante atualizado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: update.error.message,
+            state: "alert",
+            visible: true,
+          })
+        }
       } else {
-        controllers.feedback.setData({
-          message: update.error.message,
-          state: "alert",
-          visible: true,
+        const create = await Api.representatives.createRepresentative({
+          newRepresentative: getNewRepresentativeData(),
         })
+        if (create.ok) {
+          controllers.feedback.setData({
+            message: "Representante cadastrado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: create.error.message,
+            state: "alert",
+            visible: true,
+          })
+        }
       }
     } else {
-      const create = await Api.representatives.createRepresentative({
-        newRepresentative: getNewRepresentativeData(),
-      })
-      if (create.ok) {
-        controllers.feedback.setData({
-          message: "Representante cadastrado com sucesso",
-          state: "success",
-          visible: true,
-        })
-        navigate(-1)
-      } else {
-        controllers.feedback.setData({
-          message: create.error.message,
-          state: "alert",
-          visible: true,
-        })
-      }
+      setErrors(errorCheck)
     }
 
     setSubmitting(false)
   }
 
-  const handleField = useCallback((field: string, value: any) => {
-    if (field === "cnpj") {
-      value = formatCnpj(value)
-      setRepresentative((c) => ({ ...c, [field]: value }))
-    } else if (field === "cpf") {
-      value = formatCpf(value)
-      setRepresentative((c) => ({ ...c, [field]: value }))
-    } else if (field.includes("registers.")) {
-      const realField = field.split(".")[1]
+  const updateErrorsField = (field: string) => {
+    if (errors.fields.includes(field)) {
+      const newFieldsList = [...errors.fields].filter(
+        (errorItem) => errorItem !== field
+      )
 
-      value = realField === "cpf" ? formatCpf(value) : formatCnpj(value)
+      const newErrors = { fields: newFieldsList, has: newFieldsList.length > 0 }
 
-      setRepresentative((c) => ({
-        ...c,
-        registers: { ...c.registers, [realField]: value },
-      }))
-    } else if (["phone", "phone2"].includes(field)) {
-      value = formatPhone(value)
-      setRepresentative((c) => ({ ...c, [field]: value }))
-    } else if (field.includes("address.")) {
-      const realField = field.split(".")[1]
+      setErrors(newErrors)
+    }
+  }
 
-      if (realField === "cep") value = formatCep(value)
+  const handleField = useCallback(
+    (field: string, value: any) => {
+      updateErrorsField(field)
 
-      setRepresentative((c) => ({
-        ...c,
-        address: { ...c.address, [realField]: value },
-      }))
-    } else if (field.includes("commission.")) {
-      const realField = field.split(".")[1]
+      if (field === "cnpj") {
+        value = formatCnpj(value)
+        setRepresentative((c) => ({ ...c, [field]: value }))
+      } else if (field === "cpf") {
+        value = formatCpf(value)
+        setRepresentative((c) => ({ ...c, [field]: value }))
+      } else if (field.includes("registers.")) {
+        const realField = field.split(".")[1]
 
-      setRepresentative((c) => ({
-        ...c,
-        paymentConfig: { ...c.paymentConfig, [realField]: value },
-      }))
-    } else setRepresentative((c) => ({ ...c, [field]: value }))
-  }, [])
+        value = realField === "cpf" ? formatCpf(value) : formatCnpj(value)
+
+        setRepresentative((c) => ({
+          ...c,
+          registers: { ...c.registers, [realField]: value },
+        }))
+      } else if (["phone", "phone2"].includes(field)) {
+        value = formatPhone(value)
+        setRepresentative((c) => ({ ...c, [field]: value }))
+      } else if (field.includes("address.")) {
+        const realField = field.split(".")[1]
+
+        if (realField === "cep") value = formatCep(value)
+
+        setRepresentative((c) => ({
+          ...c,
+          address: { ...c.address, [realField]: value },
+        }))
+      } else if (field.includes("commission.")) {
+        const realField = field.split(".")[1]
+
+        setRepresentative((c) => ({
+          ...c,
+          paymentConfig: { ...c.paymentConfig, [realField]: value },
+        }))
+      } else setRepresentative((c) => ({ ...c, [field]: value }))
+    },
+    [errors]
+  )
 
   // # Initial loading
 
@@ -307,6 +336,10 @@ const RepresentativesForm = () => {
                         value: representative.name,
                         label: "Nome do representante",
                         gridSizes: { big: 2, small: 12 },
+                        error: {
+                          has: errors.fields.includes("name"),
+                          message: "Digite o nome",
+                        },
                       },
                       [
                         {
@@ -315,6 +348,10 @@ const RepresentativesForm = () => {
                           value: representative.email,
                           label: "Email",
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("email"),
+                            message: "Digite o email",
+                          },
                         },
                         {
                           type: "default",
@@ -322,6 +359,25 @@ const RepresentativesForm = () => {
                           value: formatPhone(representative.phone),
                           label: "Telefone",
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("phone"),
+                            message: `Digite um telefone ${
+                              representative.phone.length > 0 ? "válido" : ""
+                            }`,
+                          },
+                        },
+                        {
+                          type: "default",
+                          field: "phone2",
+                          value: formatPhone(representative.phone2),
+                          label: "Telefone 2",
+                          gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("phone2"),
+                            message: `Digite um telefone ${
+                              representative.phone2.length > 0 ? "válido" : ""
+                            }`,
+                          },
                         },
                       ],
                     ],
@@ -362,6 +418,10 @@ const RepresentativesForm = () => {
                                 }`,
                           label: "Valor da comissão",
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("commission.value"),
+                            message: "Valor mín: 1%",
+                          },
                         },
                         {
                           type: "select",
@@ -429,6 +489,10 @@ const RepresentativesForm = () => {
                           field: "registers.cpf",
                           label: "CPF",
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("registers.cpf"),
+                            message: "Digite um cpf válido",
+                          },
                         },
                         {
                           type: "default",
@@ -438,6 +502,10 @@ const RepresentativesForm = () => {
                           field: "registers.cnpj",
                           label: "CNPJ",
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("registers.cnpj"),
+                            message: "Digite um cnpj válido",
+                          },
                         },
                       ],
                     ],
@@ -464,6 +532,10 @@ const RepresentativesForm = () => {
                           options: options.states,
                           label: "Estado",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("address.state"),
+                            message: "Escolha uma UF",
+                          },
                         },
                         {
                           type: "default",
@@ -471,6 +543,10 @@ const RepresentativesForm = () => {
                           value: representative.address.city,
                           label: "Cidade",
                           gridSizes: { big: 2, small: 7 },
+                          error: {
+                            has: errors.fields.includes("address.city"),
+                            message: "Digite o nome da cidade",
+                          },
                         },
                         {
                           type: "default",
@@ -478,6 +554,10 @@ const RepresentativesForm = () => {
                           value: formatCep(representative.address.cep),
                           label: "CEP",
                           gridSizes: { big: 2, small: 5 },
+                          error: {
+                            has: errors.fields.includes("address.cep"),
+                            message: "Digite o CEP",
+                          },
                         },
                       ],
                       [
@@ -487,6 +567,10 @@ const RepresentativesForm = () => {
                           value: representative.address.neighborhood,
                           label: "Bairro",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("address.neighborhood"),
+                            message: "Digite o bairro",
+                          },
                         },
                         {
                           type: "default",
@@ -494,6 +578,10 @@ const RepresentativesForm = () => {
                           value: representative.address.street,
                           label: "Rua",
                           gridSizes: { big: 2, small: 5 },
+                          error: {
+                            has: errors.fields.includes("address.street"),
+                            message: "Digite o nome da rua",
+                          },
                         },
                         {
                           type: "default",
@@ -501,6 +589,10 @@ const RepresentativesForm = () => {
                           value: representative.address.number,
                           label: "Número",
                           gridSizes: { big: 2, small: 7 },
+                          error: {
+                            has: errors.fields.includes("address.number"),
+                            message: "Digite um número válido",
+                          },
                         },
                       ],
                     ],

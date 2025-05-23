@@ -21,7 +21,7 @@ export type TNewRepresentative = {
   paymentConfig: TPaymentConfig["representative"]
   registers: {
     cpf: string
-    cnpj: string | null
+    cnpj: string
   }
   address: TAddress
 }
