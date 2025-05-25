@@ -25,7 +25,6 @@ import { TProductType } from "../../../utils/@types/data/productType"
 import { TColor } from "../../../utils/@types/data/color"
 import { TModel } from "../../../utils/@types/data/model"
 import { formatMoney } from "../../../utils/helpers/formatters/money"
-import { validateNewOrder } from "../../../utils/helpers/validators/order"
 import getStore from "../../../store"
 import Form from "../../../components/Form"
 import Button from "../../../components/Button"
@@ -37,6 +36,8 @@ import { TRepresentative } from "../../../utils/@types/data/representative"
 import { getRepresentativeComissionString } from "../../../utils/helpers/formatters/commission"
 import { TPaymentConfig } from "../../../utils/@types/data/payment"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
+import { checkErrors } from "../../../utils/helpers/checkErrors"
 
 const OrdersForm = () => {
   const { id } = useParams()
@@ -87,6 +88,11 @@ const OrdersForm = () => {
   const [deleting, setDeleting] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    has: false,
+    fields: [],
+  })
+
   const handleCancel = () => {
     navigate(-1)
   }
@@ -97,12 +103,17 @@ const OrdersForm = () => {
     setDeleting(false)
   }
 
+  const updateErrors = () => {
+    const check = checkErrors.order(order as TNewOrder)
+    return check
+  }
+
   const handleSave = async () => {
     setSubmitting(true)
 
-    const check = validateNewOrder(order)
+    const errorCheck = updateErrors()
 
-    if (!check.hasErrors) {
+    if (!errorCheck.has) {
       if (id) {
         // edit ...
         const update = await Api.orders.updateOrder({ order: order as TOrder })
@@ -127,19 +138,32 @@ const OrdersForm = () => {
           navigate(-1)
         }
       }
-    } else {
-      controllers.feedback.setData({
-        message: check.message,
-        state: "error",
-        visible: true,
-      })
-    }
+    } else setErrors(errorCheck)
 
     setSubmitting(false)
   }
 
+  const updateErrorsField = useCallback(
+    (field: string) => {
+      if (errors.fields.includes(field)) {
+        const newFieldsList = [...errors.fields].filter(
+          (errorItem) => errorItem !== field
+        )
+
+        const newErrors = {
+          fields: newFieldsList,
+          has: newFieldsList.length > 0,
+        }
+
+        setErrors(newErrors)
+      }
+    },
+    [errors]
+  )
+
   const handleField = useCallback(
     (field: string, value: any) => {
+      updateErrorsField(field)
       if (field === "client") {
         const c = clients.find((c) => c.id === value) as TClient
 
@@ -178,7 +202,7 @@ const OrdersForm = () => {
 
       setOrder((c) => ({ ...c, [field]: value }))
     },
-    [clients, order]
+    [clients, order, errors]
   )
 
   const toggleModal = () => setShowingModal(!showingModal)
@@ -440,6 +464,10 @@ const OrdersForm = () => {
                         type: "searchSelect",
                         gridSizes: { big: 4, small: 12 },
                         avoidAutoSelect: true,
+                        error: {
+                          has: errors.fields.includes("searchSelect"),
+                          message: "Escolha um cliente",
+                        },
                       },
                     ],
                   },
@@ -587,6 +615,10 @@ const OrdersForm = () => {
                           type: "readonly",
                           gridSizes: { big: 1, small: 4 },
                           color: "orange",
+                          error: {
+                            has: errors.fields.includes("value"),
+                            message: "O valor não pode ser 0",
+                          },
                         },
                         {
                           label: "Comissão",
