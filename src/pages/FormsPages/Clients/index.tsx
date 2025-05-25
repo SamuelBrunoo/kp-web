@@ -27,6 +27,8 @@ import Button from "../../../components/Button"
 import getStore from "../../../store"
 import Form from "../../../components/Form"
 import { FormField } from "../../../utils/@types/components/FormFields"
+import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
+import { checkErrors } from "../../../utils/helpers/checkErrors"
 
 const ClientsForm = () => {
   const { id } = useParams()
@@ -38,6 +40,11 @@ const ClientsForm = () => {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [deleting, setDeleting] = useState(false)
+
+  const [errors, setErrors] = useState<TErrorsCheck>({
+    has: false,
+    fields: [],
+  })
 
   const [client, setClient] = useState<TNewClient | TBaseClient>(
     initialForm.client as any
@@ -73,88 +80,121 @@ const ClientsForm = () => {
     return d
   }
 
+  const updateErrors = () => {
+    const check = checkErrors.client(client)
+    return check
+  }
+
   const handleSave = async () => {
     setSubmitting(true)
 
-    if (id) {
-      // edit ...
-      const update = await Api.clients.updateClient({
-        client: client as TClient,
-      })
-      if (update.ok) {
-        controllers.feedback.setData({
-          message: "Cliente atualizado com sucesso",
-          state: "success",
-          visible: true,
+    const errorCheck = updateErrors()
+
+    if (!errorCheck.has) {
+      if (id) {
+        // edit ...
+        const update = await Api.clients.updateClient({
+          client: client as TClient,
         })
-        navigate(-1)
+        if (update.ok) {
+          controllers.feedback.setData({
+            message: "Cliente atualizado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: update.error.message,
+            state: "alert",
+            visible: true,
+          })
+        }
       } else {
-        controllers.feedback.setData({
-          message: update.error.message,
-          state: "alert",
-          visible: true,
+        const create = await Api.clients.createClient({
+          newClient: getNewClientData(),
         })
+        if (create.ok) {
+          controllers.feedback.setData({
+            message: "Cliente cadastrado com sucesso",
+            state: "success",
+            visible: true,
+          })
+          navigate(-1)
+        } else {
+          controllers.feedback.setData({
+            message: create.error.message,
+            state: "alert",
+            visible: true,
+          })
+        }
       }
-    } else {
-      const create = await Api.clients.createClient({
-        newClient: getNewClientData(),
-      })
-      if (create.ok) {
-        controllers.feedback.setData({
-          message: "Cliente cadastrado com sucesso",
-          state: "success",
-          visible: true,
-        })
-        navigate(-1)
-      } else {
-        controllers.feedback.setData({
-          message: create.error.message,
-          state: "alert",
-          visible: true,
-        })
-      }
-    }
+    } else setErrors(errorCheck)
 
     setSubmitting(false)
   }
 
-  const handleField = useCallback((field: string, value: any) => {
-    if (field === "cnpj") {
-      value = formatCnpj(value)
-      setClient((c) => ({ ...c, [field]: value }))
-    } else if (field === "cpf") {
-      value = formatCpf(value)
-      setClient((c) => ({ ...c, [field]: value }))
-    } else if (field === "documents.register") {
-      const realField = field.split(".")[1]
+  const updateErrorsField = useCallback(
+    (field: string) => {
+      if (errors.fields.includes(field)) {
+        const newFieldsList = [...errors.fields].filter(
+          (errorItem) => errorItem !== field
+        )
 
-      value = client.type === "physical" ? formatCpf(value) : formatCnpj(value)
-      setClient((c) => ({
-        ...c,
-        documents: { ...c.documents, [realField]: value },
-      }))
-    } else if (field === "documents.stateInscription") {
-      const realField = field.split(".")[1]
+        const newErrors = {
+          fields: newFieldsList,
+          has: newFieldsList.length > 0,
+        }
 
-      value = formatStateRegister(value)
-      setClient((c) => ({
-        ...c,
-        documents: { ...c.documents, [realField]: value },
-      }))
-    } else if (["phone1", "phone2"].includes(field)) {
-      value = formatPhone(value)
-      setClient((c) => ({ ...c, [field]: value }))
-    } else if (field.includes("address.")) {
-      const realField = field.split(".")[1]
+        setErrors(newErrors)
+      }
+    },
+    [errors]
+  )
 
-      if (realField === "cep") value = formatCep(value)
+  const handleField = useCallback(
+    (field: string, value: any) => {
+      updateErrorsField(field)
 
-      setClient((c) => ({
-        ...c,
-        address: { ...c.address, [realField]: value },
-      }))
-    } else setClient((c) => ({ ...c, [field]: value }))
-  }, [])
+      if (field === "cnpj") {
+        value = formatCnpj(value)
+        setClient((c) => ({ ...c, [field]: value }))
+      } else if (field === "cpf") {
+        value = formatCpf(value)
+        setClient((c) => ({ ...c, [field]: value }))
+      } else if (field === "documents.register") {
+        const realField = field.split(".")[1]
+
+        value =
+          client.type === "physical" ? formatCpf(value) : formatCnpj(value)
+        setClient((c) => ({
+          ...c,
+          documents: { ...c.documents, [realField]: value },
+        }))
+      } else if (field === "documents.stateInscription") {
+        const realField = field.split(".")[1]
+
+        value = formatStateRegister(value)
+        setClient((c) => ({
+          ...c,
+          documents: { ...c.documents, [realField]: value },
+        }))
+      } else if (["phone1", "phone2"].includes(field)) {
+        value = formatPhone(value)
+        setClient((c) => ({ ...c, [field]: value }))
+      } else if (field.includes("address.")) {
+        const realField = field.split(".")[1]
+
+        if (realField === "cep") value = formatCep(value)
+
+        setClient((c) => ({
+          ...c,
+          address: { ...c.address, [realField]: value },
+        }))
+      } else setClient((c) => ({ ...c, [field]: value }))
+    },
+    [errors]
+  )
 
   // # Initial loading
 
@@ -182,10 +222,7 @@ const ClientsForm = () => {
           setClient((client) => ({
             ...client,
             type: newOptions.clientType[0].key as TClientType,
-            representative:
-              newOptions.representatives.length > 0
-                ? newOptions.representatives[0].key
-                : "",
+            representative: null,
           }))
       } else {
         controllers.feedback.setData({
@@ -306,6 +343,7 @@ const ClientsForm = () => {
                           value: client.representative,
                           label: "Representante",
                           gridSizes: { big: 2, small: 6 },
+                          avoidAutoSelect: true,
                         },
                       ],
                       [
@@ -315,6 +353,10 @@ const ClientsForm = () => {
                           value: client.clientName,
                           label: "Nome do cliente",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("clientName"),
+                            message: "Digite o nome do comércio",
+                          },
                         },
                         {
                           type: "default",
@@ -322,6 +364,10 @@ const ClientsForm = () => {
                           value: client.socialRole,
                           label: "Razão social",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("socialRole"),
+                            message: "Digite a razão social",
+                          },
                         },
                         {
                           type: "default",
@@ -329,6 +375,10 @@ const ClientsForm = () => {
                           value: client.personName,
                           label: "Proprietário(a)",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("personName"),
+                            message: "Digite o nome do proprietário",
+                          },
                         },
                       ],
                     ],
@@ -349,6 +399,10 @@ const ClientsForm = () => {
                           value: client.email,
                           label: "Email",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("email"),
+                            message: "Digite o email",
+                          },
                         },
                         {
                           type: "default",
@@ -356,6 +410,10 @@ const ClientsForm = () => {
                           value: formatPhone(client.phone1),
                           label: "Telefone 1",
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("phone1"),
+                            message: "Digite um telefone válido",
+                          },
                         },
                         {
                           type: "default",
@@ -363,6 +421,10 @@ const ClientsForm = () => {
                           value: formatPhone(client.phone2),
                           label: "Telefone 2",
                           gridSizes: { big: 2, small: 6 },
+                          error: {
+                            has: errors.fields.includes("phone2"),
+                            message: "Digite um telefone válido",
+                          },
                         },
                       ],
                     ],
@@ -384,6 +446,12 @@ const ClientsForm = () => {
                               value: formatCpf(client.documents.register),
                               label: "CPF",
                               gridSizes: { big: 2, small: 12 },
+                              error: {
+                                has: errors.fields.includes(
+                                  "documents.register"
+                                ),
+                                message: "Digite um CPF válido",
+                              },
                             },
                           ]
                         : [
@@ -393,6 +461,12 @@ const ClientsForm = () => {
                               value: formatCnpj(client.documents.register),
                               label: "CNPJ",
                               gridSizes: { big: 2, small: 6 },
+                              error: {
+                                has: errors.fields.includes(
+                                  "documents.register"
+                                ),
+                                message: "Digite um CNPJ válido",
+                              },
                             },
                             {
                               type: "default",
@@ -402,6 +476,10 @@ const ClientsForm = () => {
                               ),
                               label: "Inscrição estadual",
                               gridSizes: { big: 2, small: 6 },
+                              error: {
+                                has: errors.fields.includes("stateInscription"),
+                                message: "Digite o nome do comércio",
+                              },
                             },
                           ]) as FormField[],
                     ],
@@ -432,6 +510,10 @@ const ClientsForm = () => {
                           options: options.states,
                           label: "Estado",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("address.state"),
+                            message: "Selecione uma UF",
+                          },
                         },
                         {
                           type: "default",
@@ -439,6 +521,10 @@ const ClientsForm = () => {
                           value: client.address.city,
                           label: "Cidade",
                           gridSizes: { big: 2, small: 7 },
+                          error: {
+                            has: errors.fields.includes("address.city"),
+                            message: "Digite o nome da cidade",
+                          },
                         },
                         {
                           type: "default",
@@ -446,6 +532,10 @@ const ClientsForm = () => {
                           value: formatCep(client.address.cep),
                           label: "CEP",
                           gridSizes: { big: 2, small: 5 },
+                          error: {
+                            has: errors.fields.includes("address.cep"),
+                            message: "Digite o CEP",
+                          },
                         },
                       ],
                       [
@@ -455,6 +545,10 @@ const ClientsForm = () => {
                           value: client.address.neighborhood,
                           label: "Bairro",
                           gridSizes: { big: 2, small: 12 },
+                          error: {
+                            has: errors.fields.includes("address.neighborhood"),
+                            message: "Digite o bairro",
+                          },
                         },
                         {
                           type: "default",
@@ -462,6 +556,10 @@ const ClientsForm = () => {
                           value: client.address.street,
                           label: "Rua",
                           gridSizes: { big: 2, small: 5 },
+                          error: {
+                            has: errors.fields.includes("address.street"),
+                            message: "Digite a rua",
+                          },
                         },
                         {
                           type: "default",
@@ -469,6 +567,10 @@ const ClientsForm = () => {
                           value: client.address.number,
                           label: "Número",
                           gridSizes: { big: 2, small: 7 },
+                          error: {
+                            has: errors.fields.includes("address.number"),
+                            message: "Digite um número válido",
+                          },
                         },
                       ],
                     ],

@@ -17,7 +17,7 @@ export type TBaseClient = {
   }
   address: TAddress
   email: string
-  representative: string
+  representative: string | null
 }
 
 export type TClient = {
@@ -44,7 +44,7 @@ export type TClient = {
   }
   email: string
   orders: string[]
-  representative: string
+  representative: string | null
 }
 
 export type TNewClient = {
@@ -69,7 +69,7 @@ export type TNewClient = {
     cep: string
   }
   email: string
-  representative: string
+  representative: string | null
 }
 
 export type TPageListClient = {

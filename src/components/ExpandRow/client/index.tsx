@@ -100,7 +100,7 @@ const ClientExpand = (clientData: TPageListClient) => {
           <S.AIRow>
             <AdditionalInfo
               label={"Representante"}
-              value={client.representative}
+              value={client.representative ?? ""}
               size={3}
             />
             <AdditionalInfo
