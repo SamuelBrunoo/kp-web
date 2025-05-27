@@ -10,6 +10,7 @@ export const Box = styled.div<{
   transform: translate(-50%, ${({ $visible }) => ($visible ? "50" : "0")}%);
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
   transition: transform 0.3s, opacity 0.3s, background-color 0.3s, height 0.3s;
+  backdrop-filter: blur(4px);
 
   max-width: 75vw;
   width: fit-content;
@@ -34,7 +35,8 @@ export const Box = styled.div<{
 
   @media (max-width: ${({ theme }) => theme.bp.small}px) {
     padding: 6px 32px;
-
-    margin: 0 36px;
+    left: 0;
+    transform: translate(calc(50vw - 50%), 50%);
+    margin: 0;
   }
 `

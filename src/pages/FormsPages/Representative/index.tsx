@@ -76,23 +76,26 @@ const RepresentativesForm = () => {
     navigate(-1)
   }
 
-  const getNewRepresentativeData = () => {
-    const d: TNewRepresentative = {
-      ...representative,
+  const updateErrors = () => {
+    const check = checkErrors.representative(representative)
+    return check
+  }
+
+  const getObj: () => TNewRepresentative | TRepresentative = () => {
+    const info: TNewRepresentative | TRepresentative = {
+      ...(representative as TNewRepresentative),
       phone: representative.phone.replace(/\D/g, ""),
       phone2: representative.phone2.replace(/\D/g, ""),
       registers: {
         cpf: representative.registers.cpf.replace(/\D/g, ""),
         cnpj: representative.registers.cnpj.replace(/\D/g, ""),
       },
+      paymentConfig: {
+        ...representative.paymentConfig,
+        value: +String(representative.paymentConfig.value).replace(/\D/g, ""),
+      },
     }
-
-    return d
-  }
-
-  const updateErrors = () => {
-    const check = checkErrors.representative(representative)
-    return check
+    return info
   }
 
   const handleSave = async () => {
@@ -101,10 +104,11 @@ const RepresentativesForm = () => {
     const errorCheck = updateErrors()
 
     if (!errorCheck.has) {
+      const obj = getObj()
+
       if (id) {
-        // edit ...
         const update = await Api.representatives.updateRepresentative({
-          representative: representative as TRepresentative,
+          representative: obj as TRepresentative,
         })
         if (update.ok) {
           controllers.feedback.setData({
@@ -122,7 +126,7 @@ const RepresentativesForm = () => {
         }
       } else {
         const create = await Api.representatives.createRepresentative({
-          newRepresentative: getNewRepresentativeData(),
+          newRepresentative: obj,
         })
         if (create.ok) {
           controllers.feedback.setData({

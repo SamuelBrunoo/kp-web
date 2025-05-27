@@ -8,7 +8,7 @@ export const getRepresentativeComissionString = (
 
   if (paymentConfig.commissionType === "fixed")
     str = formatMoney(paymentConfig.value)
-  else str = `${(paymentConfig.value).toFixed(1)}%`
+  else str = `${paymentConfig.value.toFixed(1)}%`
 
   return str
 }

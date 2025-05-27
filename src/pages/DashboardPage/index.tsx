@@ -132,6 +132,8 @@ const DashboardPage = () => {
             type="orders"
             data={waitingToShip}
           />
+        </S.InfoRow>
+        <S.InfoRow>
           <RankingCard
             title="Em produção"
             type="orders"
