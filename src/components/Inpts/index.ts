@@ -7,6 +7,7 @@ import InputMonetary from "./monetary"
 import Readonly from "./readonly"
 import SelectDefault from "./Select"
 import SearchSelect from "./SearchSelect"
+import TextArea from "./Textarea"
 
 const Input = {
   PageSearch: PageSearch,
@@ -18,6 +19,7 @@ const Input = {
   Readonly: Readonly,
   Select: SelectDefault,
   SearchSelect: SearchSelect,
+  TextArea: TextArea,
 }
 
 export default Input

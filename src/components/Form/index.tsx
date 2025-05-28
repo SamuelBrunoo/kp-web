@@ -32,6 +32,8 @@ const getElement = (
           key={key}
         />
       )
+    case "textarea":
+      return <Input.TextArea {...field} onChange={handleField} key={key} />
     default:
       return null
   }

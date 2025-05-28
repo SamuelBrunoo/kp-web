@@ -596,6 +596,25 @@ const OrdersForm = () => {
                 groups: [
                   {
                     type: "fields",
+                    title: "Detalhes",
+                    fields: [
+                      {
+                        label: "Observações",
+                        placeholder:
+                          "Digite observações do cliente para este pedido.",
+                        field: "observations",
+                        value: order.observations,
+                        type: "textarea",
+                        gridSizes: { big: 4, small: 12 },
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                groups: [
+                  {
+                    type: "fields",
                     title: "Pagamento",
                     fields: [
                       {

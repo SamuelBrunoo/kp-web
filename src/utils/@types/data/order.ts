@@ -9,6 +9,7 @@ export type TNewOrder = {
   value: number
   status: TOPStatus
   products: TOrderProduct[]
+  observations: string
   productsIds: string[]
   totals: {
     products: number
@@ -34,6 +35,7 @@ export type TOrder = {
   status: TOPStatus
   products: TOrderProduct[]
   productsIds: string[]
+  observations: string
   totals: {
     products: number
     value: number
@@ -61,6 +63,7 @@ export type TPageListOrder = {
       clientRegister: string
       clientStateInscription: string | null
       orderDate: string
+      observations: string
       deadline: string
       shippedAt: string | number | number
       valueTotal: number

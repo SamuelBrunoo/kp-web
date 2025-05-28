@@ -170,6 +170,24 @@ export const Input = styled.input<{ $hasError: boolean }>`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `
 
+export const TextArea = styled.textarea<{ $hasError: boolean }>`
+  min-width: unset;
+  max-width: 100%;
+  color: ${({ $hasError, theme }) =>
+    $hasError ? theme.colors.red[460] : theme.colors.neutral[100]};
+  font-size: inherit;
+  font-weight: 300;
+  white-space: nowrap;
+  outline: none;
+  border: none;
+  padding: 9px 10px;
+  border-radius: 4px;
+  flex: 1;
+  transition: color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  resize: vertical;
+`
+
 export const Value = styled.span`
   color: ${({ theme }) => theme.colors.neutral[100]};
   font-size: inherit;
