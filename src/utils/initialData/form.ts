@@ -9,7 +9,6 @@ const order: TNewOrder = {
   value: 0,
   status: "queued",
   products: [],
-  productsIds: [],
   observations: "",
   totals: {
     products: 0,
