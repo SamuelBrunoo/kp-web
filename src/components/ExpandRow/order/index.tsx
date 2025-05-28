@@ -54,10 +54,8 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
         })
 
         if (removeOrderFromList) removeOrderFromList(order.id)
-        else console.log("Função não existe")
       } else throw new Error()
     } catch (error) {
-      console.log(error)
       controllers.feedback.setData({
         message:
           "Houve um problema ao marcar como enviado. Tente novamente mais tarde.",
@@ -75,6 +73,83 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
       )
     }
     return config
+  }
+
+  const handleDownloadPdf = async () => {
+    controllers.modal.open({
+      role: "loading",
+      visible: true,
+      bluredBack: true,
+    })
+
+    try {
+      const req = await Api.pdfs.getOrderPdf({
+        orderId: order.id,
+        forAdmin: false,
+      })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Arquivo gerado com sucesso.",
+          state: "success",
+          visible: true,
+        })
+      } else {
+        controllers.feedback.setData({
+          message:
+            "Não foi possível baixar o arquivo. Tente novamente mais tarde.",
+          state: "error",
+          visible: true,
+        })
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Houve um problema ao baixar o arquivo. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+    }
+
+    controllers.modal.close()
+  }
+
+  const handleDownloadAdminPdf = async () => {
+    controllers.modal.open({
+      role: "loading",
+      visible: true,
+      bluredBack: true,
+    })
+
+    try {
+      const req = await Api.pdfs.getOrderPdf({
+        orderId: order.id,
+        forAdmin: true,
+      })
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Arquivos gerados com sucesso.",
+          state: "success",
+          visible: true,
+        })
+      } else {
+        controllers.feedback.setData({
+          message:
+            "Não foi possível baixar o arquivo. Tente novamente mais tarde.",
+          state: "error",
+          visible: true,
+        })
+      }
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Houve um problema ao baixar os arquivos. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
+    }
+
+    controllers.modal.close()
   }
 
   return (
@@ -253,27 +328,41 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
             />
           )}
 
-          {!order.details.additional.shippedAt && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              type="secondary"
+              endIcon={<Icons.DownloadFile2 />}
+              color="blue"
+              action={handleDownloadAdminPdf}
+            />
+
+            <Button
+              type="secondary"
+              endIcon={<Icons.DownloadFile />}
+              color="blue"
+              action={handleDownloadPdf}
+            />
+
+            {!order.details.additional.shippedAt && [
               <Button
                 type="secondary"
                 endIcon={<Icons.Edit />}
                 color="orange"
                 action={handleEdit}
-              />
+              />,
               <Button
                 type="secondary"
                 endIcon={<Icons.Trash />}
                 color="red"
                 action={handleDelete}
-              />
-            </div>
-          )}
+              />,
+            ]}
+          </div>
         </div>
       </S.InfoGroup>
     </S.Area>

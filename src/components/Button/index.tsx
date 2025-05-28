@@ -31,7 +31,7 @@ const Button = (p: Props) => {
           p.type !== "primary"
             ? "transparent"
             : p.color === "blue"
-            ? theme.palette.blue[430]
+            ? theme.palette.blue[600]
             : p.color === "green"
             ? theme.palette.green[460]
             : p.color === "orange"
@@ -41,7 +41,7 @@ const Button = (p: Props) => {
           p.type === "primary"
             ? theme.palette.neutral[900]
             : p.color === "blue"
-            ? theme.palette.blue[430]
+            ? theme.palette.blue[600]
             : p.color === "green"
             ? theme.palette.green[460]
             : p.color === "orange"

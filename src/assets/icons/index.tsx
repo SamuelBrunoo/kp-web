@@ -15,6 +15,8 @@ import { ReactComponent as Check } from "./check.svg"
 import { ReactComponent as Dropdown } from "./dropdown.svg"
 import { ReactComponent as DollarBox } from "./dollarBox.svg"
 import { ReactComponent as DollarCircle } from "./dollar.svg"
+import { ReactComponent as DownloadFile } from "./downloadFile.svg"
+import { ReactComponent as DownloadFile2 } from "./downloadFile2.svg"
 import { ReactComponent as Edit } from "./edit.svg"
 import { ReactComponent as Expand } from "./edit.svg"
 import { ReactComponent as Location } from "./location.svg"
@@ -42,6 +44,8 @@ const Icons = {
   Cancel: Cancel,
   Check: Check,
   Dropdown: Dropdown,
+  DownloadFile: DownloadFile,
+  DownloadFile2: DownloadFile2,
   Edit: Edit,
   Expand: Expand,
   Search: Search,

@@ -16,6 +16,7 @@ import { apiProductTypes } from "./api/productTypes"
 import { apiFormBare } from "./api/formBare"
 import { apiAuth } from "./api/auth"
 import { apiDashboard } from "./api/dashboard"
+import { apiPdfs } from "./api/pdfs"
 
 export const initialResponse: TErrorResponse = {
   ok: false,
@@ -101,4 +102,6 @@ export const Api: TApi = {
   products: apiProducts,
   productTypes: apiProductTypes,
   representatives: apiRepresentatives,
+
+  pdfs: apiPdfs,
 }

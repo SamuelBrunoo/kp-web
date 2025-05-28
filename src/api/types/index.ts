@@ -5,6 +5,7 @@ import { TApi_Dashboard } from "../api/dashboard"
 import { TApi_FormBare } from "../api/formBare"
 import { TApi_Models } from "../api/models"
 import { TApi_Orders } from "../api/orders"
+import { TApi_Pdfs } from "../api/pdfs"
 import { TApi_ProductionLines } from "../api/productLine"
 import { TApi_Products } from "../api/products"
 import { TApi_ProductTypes } from "../api/productTypes"
@@ -25,4 +26,6 @@ export type TApi = {
   productTypes: TApi_ProductTypes
   productionLines: TApi_ProductionLines
   representatives: TApi_Representatives
+
+  pdfs: TApi_Pdfs
 }
