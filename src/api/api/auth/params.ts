@@ -4,5 +4,8 @@ export type TApi_Params_Auth = {
       email: string
       password: string
     }
+    refreshToken: {
+      token: string
+    }
   }
 }

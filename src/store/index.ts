@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { devtools, persist } from "zustand/middleware"
 import { TStore } from "../utils/@types/store"
 
+import authShelf from "./shelfs/auth"
 import userShelf from "./shelfs/user"
 import feedbackShelf from "./shelfs/feedback"
 import modalShelf from "./shelfs/modal"
@@ -13,6 +14,7 @@ const getStore = create<TStore>()(
     persist(
       (set) => ({
         // store...
+        auth: authShelf(),
         user: userShelf(),
         feedback: feedbackShelf(),
         modal: modalShelf(),
@@ -23,6 +25,7 @@ const getStore = create<TStore>()(
         partialize: (store) => {
           return {
             user: store.user,
+            auth: store.auth,
           }
         },
       }

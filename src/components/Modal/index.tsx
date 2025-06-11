@@ -11,6 +11,7 @@ import { Modal as MuiModal } from "@mui/material"
 import LoadingModal from "./variations/Loading"
 import AddOrderProductModal from "./variations/AddOrderProduct"
 import { theme } from "../../theme"
+import MCodePrintConfig from "./variations/CodePrintConfig"
 
 export type TDefaultProps = {
   visible: boolean
@@ -28,7 +29,7 @@ export type ModalProps = {
   data?: any
 }
 
-export type TModals = "loading" | "addOrderProduct"
+export type TModals = "loading" | "addOrderProduct" | "codePrintConfig"
 
 const Modal = () => {
   const { modal, controllers } = getStore()
@@ -56,6 +57,15 @@ const Modal = () => {
       case "addOrderProduct":
         el = (
           <AddOrderProductModal
+            data={data}
+            onClose={handleClose}
+            handleOp={handleOp}
+          />
+        )
+        break
+      case "codePrintConfig":
+        el = (
+          <MCodePrintConfig
             data={data}
             onClose={handleClose}
             handleOp={handleOp}

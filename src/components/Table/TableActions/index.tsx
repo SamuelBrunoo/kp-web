@@ -18,6 +18,7 @@ type Props = {
     | "orderFormProduct"
   id: string
   deleteCallback?: (params?: any, p2?: any) => void
+  printCallback?: (params?: any, p2?: any) => void
   noEdit?: boolean
   noDelete?: boolean
   canDelete?: boolean
@@ -28,6 +29,7 @@ const TableActions = ({
   table,
   id,
   deleteCallback,
+  printCallback,
   noEdit,
   noDelete,
   canDelete,
@@ -36,6 +38,10 @@ const TableActions = ({
   const navigate = useNavigate()
 
   const { controllers } = getStore()
+
+  const handlePrint = () => {
+    if (printCallback) printCallback(id)
+  }
 
   const handleEdit = () => {
     let url = ""
@@ -106,6 +112,11 @@ const TableActions = ({
   return (
     <S.Wrapper className="actions-area">
       <S.Content>
+        {table === "products" && (
+          <S.Action onClick={handlePrint} $role={"extra"}>
+            <icons.DownloadFile />
+          </S.Action>
+        )}
         {table === "representativeClients" && (
           <S.Action onClick={handleEdit} $role={"extra"}>
             <icons.Expand />

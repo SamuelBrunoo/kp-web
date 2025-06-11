@@ -5,7 +5,14 @@ export type TApi_Responses_Auth = {
   auth: {
     login: Promise<
       TDefaultRes<{
-        token: string
+        accessToken: string
+        refreshToken: string
+        user: TUser
+      }>
+    >
+    refreshToken: Promise<
+      TDefaultRes<{
+        accessToken: string
         refreshToken: string
         user: TUser
       }>

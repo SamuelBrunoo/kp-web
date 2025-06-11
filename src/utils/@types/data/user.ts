@@ -1,6 +1,4 @@
-export type TUser = {
-  userId: string
-  name: string
-  id: string
-  email: string
-}
+import { TEmmitter } from "./emmitter"
+import { TWorker } from "./worker"
+
+export type TUser = TEmmitter | TWorker

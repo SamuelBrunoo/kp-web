@@ -3,7 +3,9 @@ import LoginPage from "../pages/Login"
 
 import Template from "../pages/_template"
 
-// dashboard pages
+import AuthRoute from "./AuthRoute"
+
+// # Dashboard
 import DashboardPage from "../pages/DashboardPage"
 
 // # Models
@@ -35,47 +37,48 @@ const Router = () => {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 
-        {/* <Route path="/" element={<AuthRoute />}> */}
-        <Route path="dashboard" element={<Template />}>
-          <Route path="" element={<DashboardPage />} />
-          <Route path="models">
-            <Route path={""} element={<ModelsPage />} />
-            <Route path="single">
-              <Route path={""} element={<ModelForm />} />
-              <Route path={":id"} element={<ModelForm />} />
+        <Route path="/" element={<AuthRoute />}>
+          <Route path="dashboard" element={<Template />}>
+            <Route path="" element={<DashboardPage />} />
+            <Route path="models">
+              <Route path={""} element={<ModelsPage />} />
+              <Route path="single">
+                <Route path={""} element={<ModelForm />} />
+                <Route path={":id"} element={<ModelForm />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="products">
-            <Route path={""} element={<ProductsPage />} />
-            <Route path="single">
-              <Route path={""} element={<ProductForm />} />
-              <Route path={":id"} element={<ProductForm />} />
+            <Route path="products">
+              <Route path={""} element={<ProductsPage />} />
+              <Route path="single">
+                <Route path={""} element={<ProductForm />} />
+                <Route path={":id"} element={<ProductForm />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="clients">
-            <Route path={""} element={<ClientsPage />} />
-            <Route path="single">
-              <Route path={""} element={<ClientsForm />} />
-              <Route path={":id"} element={<ClientsForm />} />
+            <Route path="clients">
+              <Route path={""} element={<ClientsPage />} />
+              <Route path="single">
+                <Route path={""} element={<ClientsForm />} />
+                <Route path={":id"} element={<ClientsForm />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="representatives">
-            <Route path={""} element={<RepresentativesPage />} />
-            <Route path="single">
-              <Route path={""} element={<RepresentativesForm />} />
-              <Route path={":id"} element={<RepresentativesForm />} />
+            <Route path="representatives">
+              <Route path={""} element={<RepresentativesPage />} />
+              <Route path="single">
+                <Route path={""} element={<RepresentativesForm />} />
+                <Route path={":id"} element={<RepresentativesForm />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="orders">
-            <Route path={""} element={<OrdersPage />} />
-            <Route path="single">
-              <Route path={""} element={<OrdersForm />} />
-              <Route path={":id"} element={<OrdersForm />} />
+            <Route path="orders">
+              <Route path={""} element={<OrdersPage />} />
+              <Route path="single">
+                <Route path={""} element={<OrdersForm />} />
+                <Route path={":id"} element={<OrdersForm />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="production">
-            <Route path="" element={<ProductionLinesPage />} />
-            <Route path="single/:id" element={<ProductionLinesPage />} />
+            <Route path="production">
+              <Route path="" element={<ProductionLinesPage />} />
+              <Route path="single/:id" element={<ProductionLinesPage />} />
+            </Route>
           </Route>
         </Route>
 

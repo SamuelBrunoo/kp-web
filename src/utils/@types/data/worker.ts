@@ -1,8 +1,6 @@
-export type TFBWorker = {
-  userId: string
-  name: string
-}
-
-export type TWorker = TFBWorker & {
+export type TWorker = {
   id: string
+  name: string
+  email: string
+  phone: string
 }

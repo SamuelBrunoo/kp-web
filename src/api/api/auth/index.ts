@@ -27,7 +27,34 @@ export const login: TApi["auth"]["login"] = async ({ email, password }) => {
         })
     } catch (error) {
       reject({
-        error: "Não foi possível listar as cores. Tente novamente mais tarde.",
+        error: "Não foi possível realizar o login. Tente novamente mais tarde.",
+      })
+    }
+  })
+}
+
+export const refreshToken: TApi["auth"]["refreshToken"] = async ({ token }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await service
+        .post(`${baseURL}/refreshToken`, { token })
+        .then((res) => {
+          if (res.data.success) {
+            const info = res.data.data
+
+            resolve({
+              ok: true,
+              data: info,
+            })
+          } else resolve(getApiError(res))
+        })
+        .catch((err: AxiosError) => {
+          resolve(getApiError(err))
+        })
+    } catch (error) {
+      reject({
+        error:
+          "Não foi possível autenticar seu login. Tente novamente mais tarde.",
       })
     }
   })
@@ -35,8 +62,12 @@ export const login: TApi["auth"]["login"] = async ({ email, password }) => {
 
 export type TApi_Auth = {
   login: (p: TParams["auth"]["login"]) => TResponses["auth"]["login"]
+  refreshToken: (
+    p: TParams["auth"]["refreshToken"]
+  ) => TResponses["auth"]["refreshToken"]
 }
 
 export const apiAuth: TApi["auth"] = {
   login: login,
+  refreshToken: refreshToken,
 }

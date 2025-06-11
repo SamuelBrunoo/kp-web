@@ -105,6 +105,7 @@ export const tableConfig: {
           table={"products"}
           id={item.id}
           deleteCallback={callbacks.deleteCallback}
+          printCallback={callbacks.printCallback}
           canDelete={item.deletable}
         />
       ),

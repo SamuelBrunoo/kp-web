@@ -65,6 +65,30 @@ const ProductsPage = () => {
     setLoading(false)
   }, [controllers.feedback, navigate])
 
+  // Code Print
+
+  const handlePrint = (
+    config: { columns: number; rows: number },
+    productId: string
+  ) => {
+    // ... generate pdf for productId, using received config
+  }
+
+  const printCallback = useCallback(
+    (productId: string) => {
+      controllers.modal.open({
+        role: "codePrintConfig",
+        visible: true,
+        width: "sm",
+        bluredBack: true,
+        handleOp: (config: { columns: number; rows: number }) => {
+          handlePrint(config, productId)
+        },
+      })
+    },
+    [controllers.modal]
+  )
+
   useEffect(() => {
     loadData()
   }, [loadData])
@@ -101,7 +125,7 @@ const ProductsPage = () => {
         )}
         search={search}
         searchFields={["model", "code", "color", "price"]}
-        actions={{ deleteCallback }}
+        actions={{ deleteCallback, printCallback }}
         noHover={true}
       />
     </S.Content>

@@ -42,6 +42,14 @@ const LoginPage = () => {
         const req = await Api.auth.login(form)
 
         if (req.ok) {
+          controllers.auth.setData({
+            accessToken: req.data.accessToken,
+            refreshToken: req.data.refreshToken,
+          })
+
+          localStorage.setItem("accessToken", req.data.accessToken)
+          localStorage.setItem("refreshToken", req.data.refreshToken)
+
           controllers.user.setData(req.data.user)
           navigate("/dashboard")
         } else {
@@ -157,7 +165,7 @@ const LoginPage = () => {
                     has: errors.email,
                     message: "Digite um email válido.",
                   }}
-                  onChange={(v) => handleField("email", v)}
+                  onChange={handleField}
                   inputType="email"
                   field={"email"}
                 />
@@ -169,7 +177,7 @@ const LoginPage = () => {
                     has: errors.password,
                     message: "Senha incorreta.",
                   }}
-                  onChange={(v) => handleField("password", v)}
+                  onChange={handleField}
                   inputType={"password"}
                   field={"password"}
                   onEnter={handleSubmit}
