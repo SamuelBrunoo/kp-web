@@ -13,6 +13,7 @@ import { POrdersVariation } from "../../components/RankingCard/variations/Orders
 import { Api } from "../../api"
 import { parseOrdersToDashboardList } from "../../utils/helpers/parsers/orders"
 import { TComponents } from "../../utils/@types/components"
+import { getRelativeMonthName } from "../../utils/helpers/date"
 
 const DashboardPage = () => {
   const { controllers } = getStore()
@@ -92,9 +93,18 @@ const DashboardPage = () => {
           <DashboardSellsCard
             data={{
               title: "Vendas mensais",
-              mainInfo: { title: "Maio", value: monthlySells.current },
-              secondaryInfo: { title: "Abril", value: monthlySells.last },
-              tertiaryInfo: { title: "Março", value: monthlySells.past },
+              mainInfo: {
+                title: getRelativeMonthName(),
+                value: monthlySells.current,
+              },
+              secondaryInfo: {
+                title: getRelativeMonthName(-1),
+                value: monthlySells.last,
+              },
+              tertiaryInfo: {
+                title: getRelativeMonthName(-2),
+                value: monthlySells.past,
+              },
             }}
           />
           <DashboardSellsCard
