@@ -1,4 +1,5 @@
 import { TDefaultBodyRes, TErrorResponse } from "../utils/@types/api/responses"
+import { logout } from "../utils/helpers/api/auth"
 
 export const initialResponse: TErrorResponse = {
   ok: false,
@@ -21,4 +22,10 @@ export const generateResponse = <T>(info: any): TDefaultBodyRes<T> => {
     ok: true,
     data: info,
   }
+}
+
+export const handleLogout = () => {
+  logout()
+
+  window.location.href = "/login"
 }

@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosError, AxiosRequestConfig } from "axios"
 import { TApi } from "./types"
 
 // Api
@@ -16,9 +16,12 @@ import { apiAuth } from "./api/auth"
 import { apiDashboard } from "./api/dashboard"
 import { apiPdfs } from "./api/pdfs"
 
-import store from "../store"
-import { initialResponse, defaultErrors, generateResponse } from "./utils"
-import { logout } from "../utils/helpers/api/auth"
+import {
+  initialResponse,
+  defaultErrors,
+  generateResponse,
+  handleLogout,
+} from "./utils"
 
 export { initialResponse, defaultErrors, generateResponse }
 
@@ -60,19 +63,24 @@ const processQueue = (error: any, token: string | null = null) => {
 
 axios.interceptors.response.use(
   (res) => res,
-  async (err) => {
-    const originalRequest = err.config
+  async (err: AxiosError) => {
+    const originalRequest = err.config as AxiosRequestConfig
 
-    const isTokenError = err.response?.status === 403 && !originalRequest._retry
+    const isTokenError =
+      err.response?.status === 403 && !(originalRequest as any)._retry
 
     if (isTokenError) {
       const localRefreshToken = localStorage.getItem("refreshToken") as string
 
       if (localRefreshToken) {
-        if (isRefreshing) {
+        if (
+          isRefreshing &&
+          !originalRequest.url?.includes("/auth/refreshToken")
+        ) {
           return new Promise((resolve, reject) => {
             failedQueue.push({
               resolve: (token: string) => {
+                // @ts-ignore
                 originalRequest.headers["Authorization"] = "Bearer " + token
                 resolve(axios(originalRequest))
               },
@@ -81,23 +89,35 @@ axios.interceptors.response.use(
           })
         }
 
+        // @ts-ignore
         originalRequest._retry = true
         isRefreshing = true
 
         try {
-          const req = await Api.auth.refreshToken({
-            token: localRefreshToken,
-          })
-
-          if (req.ok) {
-            const data = req.data
-            localStorage.setItem("accessToken", data.accessToken)
-            localStorage.setItem("refreshToken", data.refreshToken)
-            axios.defaults.headers.common["Authorization"] =
-              "Bearer " + data.accessToken
-            processQueue(null, data.accessToken)
-            return axios(originalRequest)
-          } else throw new Error()
+          if (!originalRequest.url?.includes("/auth/refreshToken")) {
+            await Api.auth
+              .refreshToken({
+                token: localRefreshToken,
+              })
+              .then((res) => {
+                if (res.ok) {
+                  const data = res.data
+                  localStorage.setItem("accessToken", data.accessToken)
+                  localStorage.setItem("refreshToken", data.refreshToken)
+                  axios.defaults.headers.common["Authorization"] =
+                    "Bearer " + data.accessToken
+                  processQueue(null, data.accessToken)
+                  return axios(originalRequest)
+                } else {
+                  if (res.instructions?.loginRedirect) {
+                    handleLogout()
+                  } else throw new Error()
+                }
+              })
+              .catch(() => {
+                throw new Error()
+              })
+          }
         } catch (er) {
           processQueue(er, null)
           return Promise.reject(err)
@@ -105,16 +125,7 @@ axios.interceptors.response.use(
           isRefreshing = false
         }
       } else {
-        const storeState = store.getState()
-
-        const { controllers } = storeState
-
-        controllers.auth.clear()
-        controllers.user.clear()
-
-        logout()
-
-        window.location.href = "/login"
+        handleLogout()
       }
     }
 

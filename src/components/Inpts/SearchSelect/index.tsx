@@ -95,10 +95,11 @@ const Input = ({
 
     const v = options.find((o) => o.key === value)
 
-    if (value) setSelected(v)
-    else if (options.length === 0) {
+    if (value) handlePick(v)
+    else if (options.length > 0) {
       if (!avoidAutoSelect) setSelected(options[0])
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setbykey, options, value, selected, options.length, avoidAutoSelect])
 
   useEffect(() => {

@@ -12,7 +12,11 @@ import PageHead from "../../../components/PageHead"
 import { initialForm } from "../../../utils/initialData/form"
 import { TBaseClient, TClient } from "../../../utils/@types/data/client"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
-import { TNewOrder, TOrder } from "../../../utils/@types/data/order"
+import {
+  TNewOrder,
+  TOrder,
+  TOrderProduct,
+} from "../../../utils/@types/data/order"
 import Table from "../../../components/Table"
 import { tableConfig } from "../../../utils/sys/table"
 import {
@@ -38,6 +42,7 @@ import { TPaymentConfig } from "../../../utils/@types/data/payment"
 import { FormField } from "../../../utils/@types/components/FormFields"
 import { TErrorsCheck } from "../../../utils/@types/helpers/checkErrors"
 import { checkErrors } from "../../../utils/helpers/checkErrors"
+import { parseProdToOrderProduct } from "../../../utils/helpers/parsers/products"
 
 const OrdersForm = () => {
   const { id } = useParams()
@@ -261,7 +266,8 @@ const OrdersForm = () => {
     let v = 0
 
     order.products.forEach((p) => {
-      const prodSum = p.quantity * p.price
+      const prodInfo = productsList.find((prod) => prod.id === p.id) as any
+      const prodSum = p.quantity * prodInfo.price
       v += prodSum
     })
 
@@ -394,7 +400,19 @@ const OrdersForm = () => {
 
         if (id) {
           const orderInfo = pageInfo.order as TOrder
-          setOrder(orderInfo)
+
+          const parsedOrderProducts = (
+            pageInfo.order?.products as TOrderProduct[]
+          )
+            .map((p) => parseProdToOrderProduct(p, pageInfo.products))
+            .filter((op) => op) as TNewOrder["products"]
+
+          const orderData: TNewOrder | TOrder = {
+            ...orderInfo,
+            products: parsedOrderProducts,
+          }
+
+          setOrder(orderData)
         }
       } else {
         controllers.feedback.setData({
@@ -537,7 +555,7 @@ const OrdersForm = () => {
                           value: order.representative as string,
                           type: "searchSelect",
                           gridSizes: { big: 2, small: 6 },
-                          avoidAutoSelect: true,
+                          avoidAutoSelect: id !== undefined,
                         },
                         {
                           label: "Comissão",
@@ -669,6 +687,7 @@ const OrdersForm = () => {
                               {
                                 label: "Parcelado",
                                 field: "hasInstallments",
+                                setByKey: true,
                                 options: [
                                   { key: true, value: "Sim" },
                                   { key: false, value: "Não" },

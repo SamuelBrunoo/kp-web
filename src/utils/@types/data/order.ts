@@ -90,7 +90,8 @@ type TOrderDetailsProduct = {
   status: TOPStatus
 }
 
-type TOrderProduct = TProduct & {
+export type TOrderProduct = TProduct & {
+  name?: string
   quantity: number
   status: TOPStatus
 }

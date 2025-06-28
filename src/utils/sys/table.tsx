@@ -301,7 +301,7 @@ export const tableConfig: {
         (extra.productTypes as TProductType[]).find(
           (pt) => pt.code === item.type
         )?.name,
-      model: (item: TOrder["products"][number]) => item.model,
+      model: (item: TOrder["products"][number]) => item.name ?? item.model,
       color: (item: TOrder["products"][number]) => item.color,
       unitary: (item: TOrder["products"][number]) => formatMoney(item.price),
       total: (item: TOrder["products"][number]) =>

@@ -49,7 +49,15 @@ export const refreshToken: TApi["auth"]["refreshToken"] = async ({ token }) => {
           } else resolve(getApiError(res))
         })
         .catch((err: AxiosError) => {
-          resolve(getApiError(err))
+          if (err.response?.status === 403) {
+            resolve({
+              ok: false,
+              instructions: { loginRedirect: true },
+              error: {
+                message: "Sua sessão expirou. Faça o login novamente.",
+              },
+            })
+          } else resolve(getApiError(err))
         })
     } catch (error) {
       reject({

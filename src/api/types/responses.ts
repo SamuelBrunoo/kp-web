@@ -1,6 +1,7 @@
 export type TDefaultRes<T> =
   | {
       ok: false
+      instructions?: TReqResponseInstructions
       error: {
         message: string
       }
@@ -9,6 +10,10 @@ export type TDefaultRes<T> =
       ok: true
       data: T
     }
+
+type TReqResponseInstructions = {
+  loginRedirect?: boolean
+}
 
 export type TDefaultList<T> = {
   totalElements: number

@@ -38,6 +38,8 @@ const Router = () => {
         <Route path="/login" element={<LoginPage />} />
 
         <Route path="/" element={<AuthRoute />}>
+          <Route path="" element={<Navigate to="dashboard" />} />
+
           <Route path="dashboard" element={<Template />}>
             <Route path="" element={<DashboardPage />} />
             <Route path="models">
