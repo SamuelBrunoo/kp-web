@@ -14,6 +14,7 @@ import { apiProductTypes } from "./api/productTypes"
 import { apiFormBare } from "./api/formBare"
 import { apiAuth } from "./api/auth"
 import { apiDashboard } from "./api/dashboard"
+import { apiPayments } from "./api/payments"
 import { apiPdfs } from "./api/pdfs"
 
 import {
@@ -41,6 +42,7 @@ export const Api: TApi = {
   productTypes: apiProductTypes,
   representatives: apiRepresentatives,
 
+  payments: apiPayments,
   pdfs: apiPdfs,
 }
 

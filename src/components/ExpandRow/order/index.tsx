@@ -40,6 +40,16 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
     // ...
   }
 
+  const getProductsListConfig: () => TConfig = () => {
+    let config: TConfig = tableConfig.orderDetailsProducts
+    if (order.details.additional.shippedAt) {
+      config.columns = config.columns.filter(
+        (i) => i.field !== "statusIndicator"
+      )
+    }
+    return config
+  }
+
   const handleShip = async () => {
     const shippedAt = new Date().getTime()
 
@@ -65,14 +75,39 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
     }
   }
 
-  const getProductsListConfig: () => TConfig = () => {
-    let config: TConfig = tableConfig.orderDetailsProducts
-    if (order.details.additional.shippedAt) {
-      config.columns = config.columns.filter(
-        (i) => i.field !== "statusIndicator"
-      )
+  const handleSlipsGenerationAction = async (shippingCost: number) => {
+    try {
+      const req = await Api.payments.generateOrderPayment({
+        orderId: order.id,
+        shippingCost,
+      })
+
+      if (req.ok) {
+        controllers.feedback.setData({
+          message: "Solicitação feita com sucesso.",
+          state: "success",
+          visible: true,
+        })
+      } else throw new Error()
+    } catch (error) {
+      controllers.feedback.setData({
+        message:
+          "Houve um problema ao fazer a solicitação. Tente novamente mais tarde.",
+        state: "error",
+        visible: true,
+      })
     }
-    return config
+  }
+
+  const handleSlipsGeneration = () => {
+    controllers.modal.open({
+      role: "orderPayment",
+      visible: true,
+      width: "sm",
+      onClose: controllers.modal.close,
+      bluredBack: true,
+      handleOp: handleSlipsGenerationAction,
+    })
   }
 
   const handleDownloadPdf = async () => {
@@ -318,15 +353,36 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
                 : "flex-end",
           }}
         >
-          {order.status === "done" && !order.details.additional.shippedAt && (
-            <Button
-              type="secondary"
-              color="green"
-              text={"Marcar como enviado"}
-              action={handleShip}
-              disabled={order.details.additional.shippedAt !== null}
-            />
-          )}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+            }}
+          >
+            {order.status === "done" && !order.details.additional.shippedAt && (
+              <Button
+                type="secondary"
+                color="green"
+                text={"Marcar como enviado"}
+                action={handleShip}
+                disabled={order.details.additional.shippedAt !== null}
+              />
+            )}
+
+            {order.status === "done" &&
+              order.details.additional.paymentMethod === "slip" && (
+                <Button
+                  type="secondary"
+                  color="green"
+                  text={`Gerar boleto${
+                    order.details.additional.installments > 0 ? "s" : ""
+                  }`}
+                  action={handleSlipsGeneration}
+                  disabled={order.details.additional.shippedAt !== null}
+                />
+              )}
+          </div>
 
           <div
             style={{

@@ -12,6 +12,7 @@ import LoadingModal from "./variations/Loading"
 import AddOrderProductModal from "./variations/AddOrderProduct"
 import { theme } from "../../theme"
 import MCodePrintConfig from "./variations/CodePrintConfig"
+import MOrderPayment from "./variations/OrderPayment"
 
 export type TDefaultProps = {
   visible: boolean
@@ -29,7 +30,11 @@ export type ModalProps = {
   data?: any
 }
 
-export type TModals = "loading" | "addOrderProduct" | "codePrintConfig"
+export type TModals =
+  | "loading"
+  | "addOrderProduct"
+  | "codePrintConfig"
+  | "orderPayment"
 
 const Modal = () => {
   const { modal, controllers } = getStore()
@@ -66,6 +71,15 @@ const Modal = () => {
       case "codePrintConfig":
         el = (
           <MCodePrintConfig
+            data={data}
+            onClose={handleClose}
+            handleOp={handleOp}
+          />
+        )
+        break
+      case "orderPayment":
+        el = (
+          <MOrderPayment
             data={data}
             onClose={handleClose}
             handleOp={handleOp}
