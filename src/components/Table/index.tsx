@@ -154,7 +154,7 @@ const RowItem = (props: TRowItemProps) => {
           cursor: noHover ? "default" : "pointer",
           transition: "background-color 0.3s",
           backgroundColor: (theme) =>
-            isExpanded ? theme.palette.neutral[800] : "transparent",
+            isExpanded && !noHover ? theme.palette.neutral[800] : "transparent",
           "& td:nth-child(1)": {
             borderTopLeftRadius: 8,
             borderBottomLeftRadius: 8,

@@ -27,7 +27,7 @@ const order: TNewOrder = {
     paymentNumber: "",
     status: "",
   },
-  shippingType: "representative",
+  shippingType: "mail",
   shippingMode: "sedex",
   emmitter: "",
 }

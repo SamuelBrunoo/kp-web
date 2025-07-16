@@ -13,6 +13,7 @@ import { initialForm } from "../../../utils/initialData/form"
 import { TBaseClient, TClient } from "../../../utils/@types/data/client"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import {
+  Slip,
   TNewOrder,
   TOrder,
   TOrderProduct,
@@ -176,13 +177,16 @@ const OrdersForm = () => {
       } else if (field === "hasInstallments") {
         setOrder((ord) => ({
           ...ord,
-          payment: { ...ord.payment, hasInstallments: value },
+          payment: {
+            ...ord.payment,
+            hasInstallments: String(value) === "true",
+          },
         }))
         return
       } else if (field === "installments") {
         setOrder((ord) => ({
           ...ord,
-          payment: { ...ord.payment, installments: value },
+          payment: { ...ord.payment, installments: +value },
         }))
         return
       } else if (field === "installmentsDue") {
@@ -220,14 +224,18 @@ const OrdersForm = () => {
         ...product,
         model: m.name,
         color: colors.find((c) => c.code === product.color)?.name as string,
-        price: m.price,
+        price: +m.price,
       }
+
+      console.log(`[INFO]: Parsed Product - `, parsedProd)
 
       const obj: TNewOrder["products"][number] = {
         ...parsedProd,
         quantity: quantity,
         status: "queued",
       }
+
+      console.log(`[INFO]: Object - `, obj)
 
       // if id already included, sum qnts.
 
@@ -266,61 +274,35 @@ const OrdersForm = () => {
     let v = 0
 
     order.products.forEach((p) => {
-      const prodInfo = productsList.find((prod) => prod.id === p.id) as any
-      const prodSum = p.quantity * prodInfo.price
-      v += prodSum
+      v += p.quantity * p.price
     })
 
     return v
-  }
-
-  const getSlipDue = (slipStep: number, dueDate: string) => {
-    let str = ""
-
-    const today = new Date()
-    const currentMonth = today.getMonth()
-    const currentYear = today.getFullYear()
-
-    const nextDueMonth =
-      today.getDate() <= +dueDate ? currentMonth : currentMonth + 1
-
-    const getsNextYear = nextDueMonth + slipStep > 12
-
-    const slipMonth = getsNextYear
-      ? nextDueMonth + slipStep - 12
-      : nextDueMonth + slipStep
-    const slipYear = getsNextYear ? currentYear + 1 : currentYear
-
-    const strSlipDate = dueDate.padStart(2, "0")
-    const strSlipMonth = String(slipMonth).padStart(2, "0")
-
-    str = `${strSlipDate}/${strSlipMonth}/${slipYear}`
-
-    return str
   }
 
   const getInstallmentsList = () => {
     let list: any = []
 
     if (order.value > 0 && order.products.length > 0) {
-      for (let i = 1; i <= order.payment.installments; i++) {
-        const pKey = i
+      let currentTotal = 0
+
+      ;(order.payment.slips as Slip[]).forEach((slip: Slip) => {
+        const newTotal = currentTotal + slip.value
 
         const item: any = {
-          installment: `${String(pKey).padStart(2, "0")} de ${String(
-            +order.payment.installments
-          ).padStart(2, "0")}`,
-          value: formatMoney(order.value / order.payment.installments),
-          due: getSlipDue(i, String(order.payment.due)),
-          code: "O código aparecerá aqui.",
-          paidTotal: formatMoney(
-            (order.value / order.payment.installments) * pKey
-          ),
+          installment: String(slip.installment + 1).padStart(2, "0"),
+          value: formatMoney(slip.value),
+          due: new Date(slip.dueDate).toLocaleDateString("pt-BR", {
+            timeZone: "UTC",
+          }),
+          code: slip.barCode,
+          paidTotal: formatMoney(newTotal),
           totalPrice: formatMoney(order.value),
         }
 
         list.push(item)
-      }
+        currentTotal = newTotal
+      })
     }
 
     return list
@@ -525,30 +507,6 @@ const OrdersForm = () => {
                       ],
                       [
                         {
-                          label: "Envio",
-                          field: "shippingType",
-                          options: options.shippingTypes,
-                          value: order.shippingType,
-                          type: "select",
-                          gridSizes: { big: 2, small: 6 },
-                          avoidAutoSelect: true,
-                        },
-                        ...((order.shippingType === "mail"
-                          ? [
-                              {
-                                label: "Emissora",
-                                field: "shippingMode",
-                                options: options.shippingModes,
-                                value: order.shippingMode as string,
-                                type: "select",
-                                gridSizes: { big: 2, small: 6 },
-                                avoidAutoSelect: true,
-                              },
-                            ]
-                          : []) as FormField[]),
-                      ],
-                      [
-                        {
                           label: "Representante",
                           field: "representative",
                           options: options.representatives,
@@ -589,6 +547,7 @@ const OrdersForm = () => {
                             color="green"
                             startIcon={<Icons.Add />}
                             action={handleAddProduct}
+                            disabled={order.payment.slips !== undefined}
                           />
                         </S.FormLine>
                         <S.FormLine $fullSize={true}>
@@ -633,8 +592,32 @@ const OrdersForm = () => {
                 groups: [
                   {
                     type: "fields",
-                    title: "Pagamento",
+                    title: "Pagamento e envio",
                     fields: [
+                      [
+                        {
+                          label: "Envio",
+                          field: "shippingType",
+                          options: options.shippingTypes,
+                          value: order.shippingType,
+                          type: "select",
+                          gridSizes: { big: 2, small: 6 },
+                          avoidAutoSelect: true,
+                        },
+                        ...((order.shippingType === "mail"
+                          ? [
+                              {
+                                label: "Emissora",
+                                field: "shippingMode",
+                                options: options.shippingModes,
+                                value: order.shippingMode as string,
+                                type: "select",
+                                gridSizes: { big: 2, small: 6 },
+                                avoidAutoSelect: true,
+                              },
+                            ]
+                          : []) as FormField[]),
+                      ],
                       {
                         label: "Forma",
                         field: "payment",
@@ -643,6 +626,7 @@ const OrdersForm = () => {
                         type: "select",
                         gridSizes: { big: 3, small: 6 },
                         avoidAutoSelect: true,
+                        disabled: order.payment.slips !== undefined,
                       },
                       [
                         {
@@ -687,7 +671,6 @@ const OrdersForm = () => {
                               {
                                 label: "Parcelado",
                                 field: "hasInstallments",
-                                setByKey: true,
                                 options: [
                                   { key: true, value: "Sim" },
                                   { key: false, value: "Não" },
@@ -695,7 +678,7 @@ const OrdersForm = () => {
                                 value: order.payment.hasInstallments,
                                 type: "select",
                                 gridSizes: { big: 2, small: 4 },
-                                avoidAutoSelect: true,
+                                disabled: order.payment.slips !== undefined,
                               },
                               ...(order.payment.hasInstallments
                                 ? [
@@ -703,10 +686,12 @@ const OrdersForm = () => {
                                       label: "Vezes",
                                       field: "installments",
                                       options: options.installments,
-                                      value: String(order.payment.installments),
+                                      value: order.payment.installments as any,
                                       type: "select",
                                       gridSizes: { big: 2, small: 4 },
                                       avoidAutoSelect: true,
+                                      disabled:
+                                        order.payment.slips !== undefined,
                                     },
                                     {
                                       label: "Vencimento",
@@ -716,6 +701,8 @@ const OrdersForm = () => {
                                       type: "select",
                                       gridSizes: { big: 2, small: 4 },
                                       avoidAutoSelect: true,
+                                      disabled:
+                                        order.payment.slips !== undefined,
                                     },
                                   ]
                                 : []),
@@ -739,10 +726,8 @@ const OrdersForm = () => {
                                   <Table
                                     config={tableConfig.orderFormSlips}
                                     data={getInstallmentsList()}
-                                    extra={{
-                                      productTypes: prodTypes,
-                                    }}
-                                    itemColor={theme.colors.neutral[400]}
+                                    extra={{ productTypes: prodTypes }}
+                                    itemColor={theme.colors.neutral[100]}
                                     noHover={true}
                                   />
 

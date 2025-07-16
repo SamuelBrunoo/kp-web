@@ -53,6 +53,7 @@ const SelectDefault = ({
   elevation,
 
   error,
+  disabled,
 }: Props) => {
   const [showing, setShowing] = useState(false)
   const [selected, setSelected] = useState<TRoOption | undefined>({
@@ -130,12 +131,13 @@ const SelectDefault = ({
       $zIndex={zIndex}
     >
       <C.Area $elevation={elevation} $hasError={error?.has}>
-        <S.SelectArea ref={wrapperRef}>
+        <S.SelectArea $disabled={disabled} ref={wrapperRef}>
           {label && <S.Label>{label}</S.Label>}
           <S.DataArea
             ref={dataRef}
-            onClick={toggleDropdown}
+            onClick={!disabled ? toggleDropdown : undefined}
             className={showing ? "turnedIcon" : ""}
+            $disabled={disabled}
           >
             <S.Left>
               <S.SelectedInfo>{renderText()}</S.SelectedInfo>

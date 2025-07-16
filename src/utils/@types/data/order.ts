@@ -1,4 +1,5 @@
 import { TClient } from "./client"
+import { TPaymentStatus } from "./payment"
 import { TProduct } from "./product"
 
 export type TNewOrder = {
@@ -76,6 +77,7 @@ export type TPageListOrder = {
       representative: string | null
       address: string
     }
+    paymentSlips?: Slip[]
   }
 }
 
@@ -106,6 +108,24 @@ export type TPaymentConfig = {
   paymentNumber: string
   status: string
   due: string | number
+  slips?: (UnfilledSlip | Slip)[]
+}
+
+export type UnfilledSlip = {
+  installment: number
+  dueDate: string
+}
+
+export type Slip = {
+  installment: number
+  value: number
+  dueDate: string
+  status: TPaymentStatus
+  barCode: string
+  cleanCode: string
+  nossoNumero: string
+  txid: string
+  qrCode: string
 }
 
 export type TShipping = "transporter" | "representative" | "mail"

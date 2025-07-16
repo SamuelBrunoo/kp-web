@@ -13,6 +13,7 @@ import * as S from "./styles"
 import { Api } from "../../../api"
 import getStore from "../../../store"
 import { payments } from "../../../utils/sys/payments"
+import Table from "../../Table"
 
 type Props = {
   order: TPageListOrder
@@ -342,6 +343,17 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
         </S.AdditionalInfosArea>
       </S.InfoGroup>
 
+      {order.details.paymentSlips && (
+        <S.InfoGroup>
+          <S.IGTitle>Bcoletos emitidos</S.IGTitle>
+
+          <Table
+            config={tableConfig.orderListSlips}
+            data={order.details.paymentSlips}
+          />
+        </S.InfoGroup>
+      )}
+
       <S.InfoGroup>
         <div
           style={{
@@ -371,7 +383,8 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
             )}
 
             {order.status === "done" &&
-              order.details.additional.paymentMethod === "slip" && (
+              order.details.additional.paymentMethod === "slip" &&
+              order.details.paymentSlips === undefined && (
                 <Button
                   type="secondary"
                   color="green"
@@ -404,20 +417,21 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
               action={handleDownloadPdf}
             />
 
-            {!order.details.additional.shippedAt && [
-              <Button
-                type="secondary"
-                endIcon={<Icons.Edit />}
-                color="orange"
-                action={handleEdit}
-              />,
-              <Button
-                type="secondary"
-                endIcon={<Icons.Trash />}
-                color="red"
-                action={handleDelete}
-              />,
-            ]}
+            {!order.details.additional.shippedAt &&
+              order.details.paymentSlips === undefined && [
+                <Button
+                  type="secondary"
+                  endIcon={<Icons.Edit />}
+                  color="orange"
+                  action={handleEdit}
+                />,
+                <Button
+                  type="secondary"
+                  endIcon={<Icons.Trash />}
+                  color="red"
+                  action={handleDelete}
+                />,
+              ]}
           </div>
         </div>
       </S.InfoGroup>

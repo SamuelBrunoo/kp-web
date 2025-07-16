@@ -1,14 +1,21 @@
 import styled from "styled-components"
 
-export const SelectArea = styled.div`
+export const SelectArea = styled.div<{
+  $disabled?: Boolean
+}>`
   position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  transition: opacity 0.3s;
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 `
 
-export const DataArea = styled.div`
+export const DataArea = styled.div<{
+  $disabled?: Boolean
+}>`
   padding: 9px 10px;
   display: flex;
   justify-content: space-between;
@@ -19,7 +26,7 @@ export const DataArea = styled.div`
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.neutral[900]};
   color: ${({ theme }) => theme.colors.neutral[100]};
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? "default" : "pointer")};
   flex: 1;
   transition: color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

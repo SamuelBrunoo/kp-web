@@ -5,7 +5,7 @@ import TableActions from "../../components/Table/TableActions"
 import { TClient, TPageListClient } from "../@types/data/client"
 import { TColor } from "../@types/data/color"
 import { TModel, TPageListModel } from "../@types/data/model"
-import { TOPStatus, TOrder, TPageListOrder } from "../@types/data/order"
+import { Slip, TOPStatus, TOrder, TPageListOrder } from "../@types/data/order"
 import { TPageListProduct, TProduct } from "../@types/data/product"
 import {
   TPageListProductionLine,
@@ -36,6 +36,7 @@ type TTableConfigs =
   | "orderDetailsProducts"
   | "orderFormProducts"
   | "orderFormSlips"
+  | "orderListSlips"
   | "productionLines"
   | "productProductionGroup"
   | "productionLineProductList"
@@ -294,6 +295,8 @@ export const tableConfig: {
       { title: "Cor", field: "color" },
       { title: "Código", field: "code" },
       { title: "Qnt", field: "quantity", align: "center" },
+      { title: "Preço un.", field: "unitary" },
+      { title: "Preço total", field: "total" },
       { title: "", field: "actions" },
     ],
     specialFields: {
@@ -338,6 +341,35 @@ export const tableConfig: {
             deleteCallback={callbacks.deleteCallback}
             canDelete={true}
             noEdit={true}
+          />
+        ) : null,
+    },
+    itemColor: theme.colors.neutral[600],
+  },
+  orderListSlips: {
+    columns: [
+      { title: "Parcela", field: "installment", align: "center" },
+      { title: "Valor", field: "value" },
+      { title: "Vencimento", field: "dueDate" },
+      { title: "Código de barras", field: "barCode" },
+      { title: "Total pago", field: "paidTotal", align: "center" },
+      { title: "", field: "actions" },
+    ],
+    specialFields: {
+      value: (item: Slip) => formatMoney(item.value),
+      installment: (item: Slip) =>
+        String(item.installment + 1).padStart(2, "0"),
+      dueDate: (item: Slip) => dateFns.formatDate(item.dueDate, "dd/MM/yyyy"),
+      paidTotal: (item: Slip) =>
+        formatMoney(item.value * (item.installment + 1)),
+      actions: (item: TOrder["payment"], { callbacks, extra }) =>
+        Object.keys(callbacks).length > 0 ? (
+          <TableActions
+            table={"orderFormProduct"}
+            id={extra.listIndex}
+            deleteCallback={callbacks.deleteCallback}
+            canDelete={false}
+            noEdit={false}
           />
         ) : null,
     },
