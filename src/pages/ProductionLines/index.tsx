@@ -67,7 +67,8 @@ const ProductionLinesPage = () => {
       const req = await Api.productionLines.updateProductionLine(updateData)
 
       if (req.ok) {
-        removeProductionFromView(itemId)
+
+        if (req.data.status === "done") removeProductionFromView(itemId)
 
         controllers.feedback.setData({
           message: "Informações atualizadas com sucesso.",

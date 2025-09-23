@@ -112,7 +112,7 @@ const TableActions = ({
   return (
     <S.Wrapper className="actions-area">
       <S.Content>
-        {table === "products" && (
+        {(table === "products" || printCallback !== undefined) && (
           <S.Action onClick={handlePrint} $role={"extra"}>
             <icons.DownloadFile />
           </S.Action>

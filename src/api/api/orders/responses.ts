@@ -1,5 +1,5 @@
 import { TDefaultRes } from "../../types/responses"
-import { TOrder } from "../../../utils/@types/data/order"
+import { TOrder, TPageListOrder } from "../../../utils/@types/data/order"
 
 export type TApi_Responses_Orders = {
   orders: {
@@ -8,7 +8,7 @@ export type TApi_Responses_Orders = {
     shipOrder: Promise<TDefaultRes<{ shipDate: number }>>
     getPageListOrders: Promise<
       TDefaultRes<{
-        list: TOrder[]
+        list: TPageListOrder[]
       }>
     >
     getOrders: Promise<

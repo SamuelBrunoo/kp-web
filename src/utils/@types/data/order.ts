@@ -18,7 +18,7 @@ export type TNewOrder = {
     liquid: number
   }
   representative: string
-  payment: TPaymentConfig
+  payment: TNewOrderPaymentConfig
   shippingType: TShipping
   shippingMode: TShippingMode
   emmitter: string
@@ -111,6 +111,13 @@ export type TPaymentConfig = {
   slips?: (UnfilledSlip | Slip)[]
 }
 
+export type TNewOrderPaymentConfig = {
+  hasInstallments: boolean
+  installments: number
+  type: TPayment
+  due?: string | number
+}
+
 export type UnfilledSlip = {
   installment: number
   dueDate: string
@@ -126,6 +133,20 @@ export type Slip = {
   nossoNumero: string
   txid: string
   qrCode: string
+}
+
+export type OrderSlipView = {
+  installment: number
+  value: number
+  dueDate: string
+  status: TPaymentStatus
+  barCode: string
+  cleanCode: string
+  nossoNumero: string
+  txid: string
+  qrCode: string
+  paidTotal: number
+  totalPrice: number
 }
 
 export type TShipping = "transporter" | "representative" | "mail"

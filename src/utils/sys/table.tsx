@@ -23,6 +23,7 @@ import * as dateFns from "date-fns"
 
 import { theme } from "../../theme"
 import { TPageListRepresentative } from "../@types/data/representative"
+import { statusRelations } from "./status"
 
 type TTableConfigs =
   | "colors"
@@ -326,14 +327,16 @@ export const tableConfig: {
     columns: [
       { title: "Parcela", field: "installment" },
       { title: "Valor", field: "value" },
-      { title: "Vencimento", field: "due" },
+      { title: "Vencimento", field: "dueDate" },
       { title: "Código de barras", field: "code" },
       { title: "Total pago", field: "paidTotal", align: "center" },
       { title: "Preço Total", field: "totalPrice" },
       { title: "", field: "actions" },
     ],
     specialFields: {
-      actions: (item: TOrder["payment"], { callbacks, extra }) =>
+      paidTotal: (item: Slip) =>
+        formatMoney(item.value * (item.installment + 1)),
+      actions: (item: Slip, { callbacks, extra }) =>
         Object.keys(callbacks).length > 0 ? (
           <TableActions
             table={"orderFormProduct"}
@@ -352,24 +355,44 @@ export const tableConfig: {
       { title: "Valor", field: "value" },
       { title: "Vencimento", field: "dueDate" },
       { title: "Código de barras", field: "barCode" },
+      { title: "Status", field: "status", align: "center" },
       { title: "Total pago", field: "paidTotal", align: "center" },
-      { title: "", field: "actions" },
+      { title: "Opções", field: "actions", align: "center" },
     ],
     specialFields: {
       value: (item: Slip) => formatMoney(item.value),
       installment: (item: Slip) =>
         String(item.installment + 1).padStart(2, "0"),
-      dueDate: (item: Slip) => dateFns.formatDate(item.dueDate, "dd/MM/yyyy"),
+      dueDate: (item: Slip) =>
+        new Date(item.dueDate).toLocaleDateString("pt-BR", {
+          timeZone: "UTC",
+        }),
+      status: (item: Slip) => (
+        <div style={{ margin: "auto", width: "fit-content" }}>
+          <span
+            style={{
+              color:
+                item.status === "awaiting"
+                  ? theme.colors.orange[460]
+                  : theme.colors.green[460],
+            }}
+          >
+            {statusRelations.payment[item.status]}
+          </span>
+        </div>
+      ),
       paidTotal: (item: Slip) =>
         formatMoney(item.value * (item.installment + 1)),
-      actions: (item: TOrder["payment"], { callbacks, extra }) =>
+      actions: (item: Slip, { callbacks, extra }) =>
         Object.keys(callbacks).length > 0 ? (
           <TableActions
             table={"orderFormProduct"}
             id={extra.listIndex}
-            deleteCallback={callbacks.deleteCallback}
-            canDelete={false}
-            noEdit={false}
+            noEdit={true}
+            noDelete={true}
+            printCallback={() => {
+              callbacks.printCallback(item)
+            }}
           />
         ) : null,
     },

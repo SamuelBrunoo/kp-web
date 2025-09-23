@@ -22,7 +22,7 @@ export type TOrderPaymentConfig = {
   status: string
 }
 
-export type TPaymentStatus = "payed" | "awaiting"
+export type TPaymentStatus = "paid" | "awaiting"
 
 export type TPaymentMethod = "pix" | "ted" | "check" | "slip"
 

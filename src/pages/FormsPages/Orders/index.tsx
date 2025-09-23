@@ -13,7 +13,6 @@ import { initialForm } from "../../../utils/initialData/form"
 import { TBaseClient, TClient } from "../../../utils/@types/data/client"
 import { parseRoOption } from "../../../utils/helpers/parsers/roOption"
 import {
-  Slip,
   TNewOrder,
   TOrder,
   TOrderProduct,
@@ -178,7 +177,7 @@ const OrdersForm = () => {
         setOrder((ord) => ({
           ...ord,
           payment: {
-            ...ord.payment,
+            ...(ord.payment as any),
             hasInstallments: String(value) === "true",
           },
         }))
@@ -186,25 +185,25 @@ const OrdersForm = () => {
       } else if (field === "installments") {
         setOrder((ord) => ({
           ...ord,
-          payment: { ...ord.payment, installments: +value },
+          payment: { ...(ord.payment as any), installments: +value },
         }))
         return
       } else if (field === "installmentsDue") {
         setOrder((ord) => ({
           ...ord,
-          payment: { ...ord.payment, due: value },
+          payment: { ...(ord.payment as any), due: value },
         }))
         return
       } else if (field === "payment") {
         setOrder((ord) => ({
           ...ord,
-          payment: { ...ord.payment, type: value },
+          payment: { ...(ord.payment as any), type: value },
         }))
         return
       } else if (field === "paymentStatus") {
         setOrder((ord) => ({
           ...ord,
-          payment: { ...ord.payment, status: value },
+          payment: { ...(ord.payment as any), status: value },
         }))
         return
       }
@@ -227,15 +226,11 @@ const OrdersForm = () => {
         price: +m.price,
       }
 
-      console.log(`[INFO]: Parsed Product - `, parsedProd)
-
       const obj: TNewOrder["products"][number] = {
         ...parsedProd,
         quantity: quantity,
         status: "queued",
       }
-
-      console.log(`[INFO]: Object - `, obj)
 
       // if id already included, sum qnts.
 
@@ -278,34 +273,6 @@ const OrdersForm = () => {
     })
 
     return v
-  }
-
-  const getInstallmentsList = () => {
-    let list: any = []
-
-    if (order.value > 0 && order.products.length > 0) {
-      let currentTotal = 0
-
-      ;(order.payment.slips as Slip[]).forEach((slip: Slip) => {
-        const newTotal = currentTotal + slip.value
-
-        const item: any = {
-          installment: String(slip.installment + 1).padStart(2, "0"),
-          value: formatMoney(slip.value),
-          due: new Date(slip.dueDate).toLocaleDateString("pt-BR", {
-            timeZone: "UTC",
-          }),
-          code: slip.barCode,
-          paidTotal: formatMoney(newTotal),
-          totalPrice: formatMoney(order.value),
-        }
-
-        list.push(item)
-        currentTotal = newTotal
-      })
-    }
-
-    return list
   }
 
   // # Comission
@@ -547,7 +514,7 @@ const OrdersForm = () => {
                             color="green"
                             startIcon={<Icons.Add />}
                             action={handleAddProduct}
-                            disabled={order.payment.slips !== undefined}
+                            disabled={(order as TOrder).id !== undefined}
                           />
                         </S.FormLine>
                         <S.FormLine $fullSize={true}>
@@ -626,7 +593,9 @@ const OrdersForm = () => {
                         type: "select",
                         gridSizes: { big: 3, small: 6 },
                         avoidAutoSelect: true,
-                        disabled: order.payment.slips !== undefined,
+                        disabled:
+                          (order as TOrder).id !== undefined &&
+                          (order as TOrder).payment.slips !== undefined,
                       },
                       [
                         {
@@ -672,13 +641,13 @@ const OrdersForm = () => {
                                 label: "Parcelado",
                                 field: "hasInstallments",
                                 options: [
-                                  { key: true, value: "Sim" },
-                                  { key: false, value: "Não" },
+                                  { key: "true", value: "Sim" },
+                                  { key: "false", value: "Não" },
                                 ],
-                                value: order.payment.hasInstallments,
+                                value: String(order.payment.hasInstallments),
                                 type: "select",
                                 gridSizes: { big: 2, small: 4 },
-                                disabled: order.payment.slips !== undefined,
+                                disabled: (order as TOrder).id !== undefined,
                               },
                               ...(order.payment.hasInstallments
                                 ? [
@@ -686,12 +655,14 @@ const OrdersForm = () => {
                                       label: "Vezes",
                                       field: "installments",
                                       options: options.installments,
-                                      value: order.payment.installments as any,
+                                      value: String(
+                                        order.payment.installments
+                                      ) as any,
                                       type: "select",
                                       gridSizes: { big: 2, small: 4 },
                                       avoidAutoSelect: true,
                                       disabled:
-                                        order.payment.slips !== undefined,
+                                        (order as TOrder).id !== undefined,
                                     },
                                     {
                                       label: "Vencimento",
@@ -702,7 +673,7 @@ const OrdersForm = () => {
                                       gridSizes: { big: 2, small: 4 },
                                       avoidAutoSelect: true,
                                       disabled:
-                                        order.payment.slips !== undefined,
+                                        (order as TOrder).id !== undefined,
                                     },
                                   ]
                                 : []),
@@ -725,7 +696,7 @@ const OrdersForm = () => {
                                 >
                                   <Table
                                     config={tableConfig.orderFormSlips}
-                                    data={getInstallmentsList()}
+                                    data={[]} //getInstallmentsList()}
                                     extra={{ productTypes: prodTypes }}
                                     itemColor={theme.colors.neutral[100]}
                                     noHover={true}
@@ -733,8 +704,8 @@ const OrdersForm = () => {
 
                                   {!id && (
                                     <span className="slipTableTip">
-                                      Os boletos serão gerados e exibidos aqui
-                                      depois da criação do pedido.
+                                      Os boletos serão gerados e exibidos na
+                                      lsitagem de pedidos.
                                     </span>
                                   )}
                                 </div>

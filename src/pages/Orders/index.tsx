@@ -8,10 +8,11 @@ import PageHead from "../../components/PageHead"
 import Table from "../../components/Table"
 
 import { Api } from "../../api"
-import { TOrder } from "../../utils/@types/data/order"
+import { Slip, TPageListOrder } from "../../utils/@types/data/order"
 import ExpansibleRow from "../../components/ExpandRow"
 import LoadingModal from "../../components/Modal/variations/Loading"
 import getStore from "../../store"
+import { TApi_Params_PDF } from "../../api/api/pdfs/params"
 
 const tabs = [
   { key: "todo", name: "À Fazer" },
@@ -28,7 +29,7 @@ const OrdersPage = () => {
 
   const [loading, setLoading] = useState(false)
 
-  const [orders, setOrders] = useState<TOrder[]>([])
+  const [orders, setOrders] = useState<TPageListOrder[]>([])
   const [search, setSearch] = useState("")
 
   const handleNew = () => {
@@ -38,6 +39,40 @@ const OrdersPage = () => {
   const deleteCallback = (id: string) => {
     setOrders((mdls) => mdls.filter((m) => m.id !== id))
   }
+
+  const printCallback = useCallback(
+    async (slip: Slip, totalInstallments: number, clientName: string) => {
+      setLoading(true)
+
+      try {
+        const params: TApi_Params_PDF["pdfs"]["getSlipPdf"] = {
+          clientName: clientName,
+          slipCode: slip.cleanCode,
+          slipInstallment: slip.installment,
+          totalInstallments: totalInstallments,
+        }
+
+        const req = await Api.pdfs.getSlipPdf(params)
+
+        if (req.ok) {
+          controllers.feedback.setData({
+            state: "success",
+            visible: true,
+            message: "Download realizado com sucesso",
+          })
+        }
+      } catch (error) {
+        controllers.feedback.setData({
+          state: "error",
+          visible: true,
+          message: "Houve um erro ao gerar o pdf. Tente novamente mais tarde.",
+        })
+      }
+
+      setLoading(false)
+    },
+    [controllers.feedback]
+  )
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -94,6 +129,7 @@ const OrdersPage = () => {
           <ExpansibleRow.OrderExpand
             order={orderInfo}
             removeOrderFromList={removeOrderFromList}
+            printCallback={printCallback}
           />
         )}
       />

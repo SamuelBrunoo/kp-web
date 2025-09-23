@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Icons from "../../../assets/icons"
-import { TPageListOrder } from "../../../utils/@types/data/order"
+import { Slip, TPageListOrder } from "../../../utils/@types/data/order"
 import { formatCnpj } from "../../../utils/helpers/formatters/cnpj"
 import { formatCpf } from "../../../utils/helpers/formatters/cpf"
 import { formatMoney } from "../../../utils/helpers/formatters/money"
@@ -18,9 +18,14 @@ import Table from "../../Table"
 type Props = {
   order: TPageListOrder
   removeOrderFromList: (orderId: string) => void
+  printCallback?: (
+    slip: Slip,
+    totalInstallments: number,
+    clientName: string
+  ) => Promise<void>
 }
 
-const OrderExpand = ({ order, removeOrderFromList }: Props) => {
+const OrderExpand = ({ order, removeOrderFromList, printCallback }: Props) => {
   const { controllers } = getStore()
 
   const navigate = useNavigate()
@@ -35,6 +40,16 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
 
   const handleEdit = () => {
     navigate(`/dashboard/orders/single/${order.id}`)
+  }
+
+  const handleSlipPrint = (slip: Slip) => {
+    if (printCallback && order.details.paymentSlips) {
+      printCallback(
+        slip,
+        order.details.additional.installments,
+        order.clientName
+      )
+    }
   }
 
   const handleDelete = () => {
@@ -345,11 +360,12 @@ const OrderExpand = ({ order, removeOrderFromList }: Props) => {
 
       {order.details.paymentSlips && (
         <S.InfoGroup>
-          <S.IGTitle>Bcoletos emitidos</S.IGTitle>
+          <S.IGTitle>Boletos emitidos</S.IGTitle>
 
           <Table
             config={tableConfig.orderListSlips}
             data={order.details.paymentSlips}
+            actions={{ printCallback: handleSlipPrint }}
           />
         </S.InfoGroup>
       )}
