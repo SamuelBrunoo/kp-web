@@ -5,6 +5,7 @@ import getStore from "../../store"
 import { Api } from "../../api"
 import { validateLogin } from "../../utils/helpers/validators/login"
 import { useNavigate } from "react-router-dom"
+import { theme } from "../../theme"
 
 const LoginPage = () => {
   const navigate = useNavigate()
@@ -89,6 +90,14 @@ const LoginPage = () => {
           flexDirection: "row",
           alignItems: "center",
           bgcolor: (theme) => theme.palette.neutral[800],
+
+          [`@media (max-width: ${theme.bp.medium}px)`]: {
+            flexDirection: "column",
+            justifyContent: "center",
+            padding: "32px 16px",
+            minHeight: "100vh",
+            gap: 4,
+          },
         }}
       >
         <Box
@@ -98,6 +107,11 @@ const LoginPage = () => {
           flexDirection={"column"}
           alignItems={"center"}
           justifyContent={"center"}
+          sx={{
+            [`@media (max-width: ${theme.bp.medium}px)`]: {
+              minHeight: "unset",
+            },
+          }}
         >
           <Typography
             fontFamily={"Mr De Haviland"}
