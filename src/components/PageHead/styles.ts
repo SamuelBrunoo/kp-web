@@ -26,12 +26,13 @@ export const HeaderTopLeft = styled.div`
 export const TabsArea = styled.div`
   display: flex;
   align-items: center;
+  gap: 16px;
 `
 
 export const Tab = styled.div<{ $active?: boolean }>`
   display: grid;
   place-items: center;
-  width: 90px;
+  width: fit-content;
   cursor: pointer;
 
   opacity: ${({ $active }) => ($active ? 1 : 0.5)};
@@ -44,6 +45,7 @@ export const TabName = styled.span`
   font-size: 16px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.orange[460]};
+  white-space: nowrap;
 `
 
 export const Title = styled.h1`

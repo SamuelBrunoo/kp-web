@@ -8,13 +8,18 @@ import PageHead from "../../components/PageHead"
 import Table from "../../components/Table"
 
 import { Api } from "../../api"
-import { Slip, TPageListOrder } from "../../utils/@types/data/order"
+import {
+  Slip,
+  TOrderStatus,
+  TPageListOrder,
+} from "../../utils/@types/data/order"
 import ExpansibleRow from "../../components/ExpandRow"
 import LoadingModal from "../../components/Modal/variations/Loading"
 import getStore from "../../store"
 import { TApi_Params_PDF } from "../../api/api/pdfs/params"
+import { TStatisticsOrder } from "../../utils/@types/data/statistics/orders"
 
-const tabs = [
+const tabs: { key: TOrderStatus; name: string }[] = [
   { key: "todo", name: "À Fazer" },
   { key: "waitingShip", name: "À Enviar" },
   { key: "shipped", name: "Enviados" },
@@ -29,6 +34,7 @@ const OrdersPage = () => {
 
   const [loading, setLoading] = useState(false)
 
+  const [ordersStatistics, setOrdersStatistics] = useState<TStatisticsOrder>()
   const [orders, setOrders] = useState<TPageListOrder[]>([])
   const [search, setSearch] = useState("")
 
@@ -81,6 +87,9 @@ const OrdersPage = () => {
       const req = await Api.orders.getPageListOrders({ shippingStatus: tab })
       if (req.ok) {
         const list = req.data.list
+        const stats = req.data.statistics
+
+        setOrdersStatistics(stats)
         setOrders(list)
       } else throw new Error(req.error.message)
     } catch (error) {
@@ -114,7 +123,10 @@ const OrdersPage = () => {
         onChangeSearch={setSearch}
         buttons={[{ role: "new", text: "Novo", onClick: handleNew }]}
         tab={tab}
-        tabs={tabs}
+        tabs={tabs.map((t) => ({
+          ...t,
+          name: `${t.name} (${ordersStatistics?.amountByStatus[t.key]})`,
+        }))}
         onChangeTab={setTab}
       />
 

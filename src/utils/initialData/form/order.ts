@@ -6,7 +6,8 @@ export const initialOrder: TNewOrder = {
   shippedAt: null,
   orderDate: new Date().getTime(),
   value: 0,
-  status: "queued",
+  status: "todo",
+  productionStatus: "queued",
   products: [],
   observations: "",
   totals: {

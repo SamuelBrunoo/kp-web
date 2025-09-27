@@ -1,5 +1,6 @@
 import { TDefaultRes } from "../../types/responses"
 import { TOrder, TPageListOrder } from "../../../utils/@types/data/order"
+import { TStatisticsOrder } from "../../../utils/@types/data/statistics/orders"
 
 export type TApi_Responses_Orders = {
   orders: {
@@ -9,6 +10,7 @@ export type TApi_Responses_Orders = {
     getPageListOrders: Promise<
       TDefaultRes<{
         list: TPageListOrder[]
+        statistics: TStatisticsOrder
       }>
     >
     getOrders: Promise<

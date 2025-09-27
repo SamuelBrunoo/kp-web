@@ -8,7 +8,8 @@ export type TNewOrder = {
   shippedAt?: number | null
   deadline: number | string | Date
   value: number
-  status: TOPStatus
+  status: TOrderStatus
+  productionStatus: TOPStatus
   products: TOrderProduct[]
   observations: string
   totals: {
@@ -151,6 +152,14 @@ export type OrderSlipView = {
 
 export type TShipping = "transporter" | "representative" | "mail"
 export type TShippingMode = "sedex" | "pac"
+
+export type TOrderStatus =
+  | "todo"
+  | "waitingShip"
+  | "ongoing"
+  | "done"
+  | "canceled"
+  | "shipped"
 
 export type TOPStatus = "queued" | "lor" | "doing" | "done"
 
