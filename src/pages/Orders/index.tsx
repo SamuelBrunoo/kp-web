@@ -21,6 +21,7 @@ import { TStatisticsOrder } from "../../utils/@types/data/statistics/orders"
 
 const tabs: { key: TOrderStatus; name: string }[] = [
   { key: "todo", name: "À Fazer" },
+  { key: "ongoing", name: "Em produção" },
   { key: "waitingShip", name: "À Enviar" },
   { key: "shipped", name: "Enviados" },
 ]
