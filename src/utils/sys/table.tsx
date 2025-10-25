@@ -481,7 +481,7 @@ export const tableConfig: {
       inCharge: (
         item: TPageListProductionLine["order"]["details"]["attributions"][number],
         { callbacks, extra }
-      ) => (
+      ) => item.status !== "done" ? (
         <ResponsableIndicator
           value={!item.responsable ? null : item.responsable.id}
           options={extra.responsableList}
@@ -489,6 +489,8 @@ export const tableConfig: {
             callbacks.onChangeResponsable(item.number, newResponsable)
           }
         />
+      ) : (
+        <span>{item.responsable ? item.responsable.name : "Não atribuído"}</span>
       ),
       statusIndicator: (
         item: TPageListProductionLine["order"]["details"]["attributions"][number],
@@ -508,9 +510,7 @@ export const tableConfig: {
         item: TPageListProductionLine["order"]["details"]["attributions"][number]
       ) =>
         item.attributedAt
-          ? typeof item.attributedAt === "number"
-            ? dateFns.format(item.attributedAt, "dd/MM/yyyy")
-            : item.attributedAt
+          ? dateFns.format(item.attributedAt, "dd/MM/yyyy")
           : "Não atribuído",
     },
   },

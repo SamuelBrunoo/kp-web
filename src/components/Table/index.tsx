@@ -1,6 +1,6 @@
 import * as S from "./styles"
 import { TConfig } from "../../utils/sys/table"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import {
   Table as MuiTable,
@@ -142,19 +142,56 @@ const RowItem = (props: TRowItemProps) => {
     pageAutoFocusId,
   } = props
 
+  const itemRowRef = useRef<HTMLTableRowElement | null>(null)
+  const expandableRef = useRef<HTMLTableRowElement | null>(null)
+
   const [isExpanded, setIsExpanded] = useState(pageAutoFocusId === item.id)
 
-  const toggleExpand = () => setIsExpanded(!isExpanded)
+  const toggleExpand = () => {
+    const shouldAdd = !expandableRef.current?.classList.contains("highlighted")
+
+    console.log(`[DEBUG] Should add: `, shouldAdd)
+  
+    document
+      .querySelectorAll("tr.highlighted")
+      .forEach(el => {
+        el.classList.remove("highlighted")
+        el.classList.add("noBg")
+      })
+
+    if (shouldAdd) {
+      expandableRef.current?.classList.add("highlighted")
+      expandableRef.current?.classList.remove("noBg")
+      itemRowRef.current?.classList.add("highlighted")
+      itemRowRef.current?.classList.remove("noBg")
+    }
+  }
+
+  useEffect(() => {
+    if (expandableRef.current) {
+      const newStatus = !(isExpanded || expandableRef.current.classList.contains("highlighted"))
+      setIsExpanded(newStatus)
+
+      console.log("New Status: ", newStatus)
+      
+      if (newStatus) expandableRef.current.classList.remove("noBg")
+      else expandableRef.current.classList.add("noBg")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expandableRef.current?.classList])
 
   return (
     <>
       <TableRow
         hover={!noHover}
+        ref={itemRowRef}
         sx={{
           cursor: noHover ? "default" : "pointer",
           transition: "background-color 0.3s",
-          backgroundColor: (theme) =>
-            isExpanded && !noHover ? theme.palette.neutral[800] : "transparent",
+          backgroundColor: "transparent",
+          "&.highlighted": {
+            backgroundColor: '#F5F5F5',
+          },
           "& td:nth-child(1)": {
             borderTopLeftRadius: 8,
             borderBottomLeftRadius: 8,
@@ -234,9 +271,9 @@ const RowItem = (props: TRowItemProps) => {
         })}
       </TableRow>
       {config.isExpandable && expandComponent && (
-        <S.RowExpandable className={isExpanded ? "highlighted" : "noBg"}>
+        <S.RowExpandable ref={expandableRef} className="noBg">
           <S.REWrapper colSpan={6}>
-            <S.REBox $visible={isExpanded}>
+            <S.REBox className="rowExpandableBox">
               <S.REContainer>{expandComponent(item)}</S.REContainer>
             </S.REBox>
           </S.REWrapper>

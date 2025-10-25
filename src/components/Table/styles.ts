@@ -85,6 +85,10 @@ export const RowExpandable = styled.tr`
       background-color: ${({ theme }) => theme.colors.neutral[800]};
       border-bottom-left-radius: 8px;
       border-bottom-right-radius: 8px;
+  
+      .rowExpandableBox {
+        grid-template-rows: 1fr;
+      }
     }
   }
 `
@@ -96,9 +100,9 @@ export const REWrapper = styled.td`
   transition: background-color 0.3s;
 `
 
-export const REBox = styled.div<{ $visible: boolean }>`
+export const REBox = styled.div`
   display: grid;
-  grid-template-rows: ${({ $visible }) => ($visible ? 1 : 0)}fr;
+  grid-template-rows: 0fr;
   overflow: hidden;
   transition: grid-template-rows 0.3s;
 `

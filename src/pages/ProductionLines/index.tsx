@@ -67,7 +67,6 @@ const ProductionLinesPage = () => {
       const req = await Api.productionLines.updateProductionLine(updateData)
 
       if (req.ok) {
-
         if (req.data.status === "done") removeProductionFromView(itemId)
 
         controllers.feedback.setData({
@@ -86,45 +85,49 @@ const ProductionLinesPage = () => {
     id: number,
     newProducerId: string
   ) => {
-    if (!hasChanges) setHasChanges(true)
+    try {
+      if (!hasChanges) setHasChanges(true)
 
-    const productionLineItem = (productionLines as any[]).find(
-      (i: any) => i.id === plId
-    )
+      const productionLineItem = (productionLines as any[]).find(
+        (i: any) => i.id === plId
+      )
 
-    const rData = responsableList.find((i) => i.key === newProducerId)
+      const rData = responsableList.find((i) => i.key === newProducerId)
 
-    if (rData && productionLineItem) {
-      const rInfo = { id: rData.key, name: rData.value }
+      if (rData && productionLineItem) {
+        const rInfo = { id: rData.key, name: rData.value }
 
-      const newProductsList = productionLineItem.details.products.map(
-        (i: any, key: number) =>
-          key + 1 !== id
+        const newProductsList = productionLineItem.details.products.map(
+          (i: any, key: number) =>
+            key + 1 !== id
+              ? i
+              : { ...i, responsable: rInfo, attributedAt: new Date() }
+        )
+
+        const newAttributionsList = productionLineItem.details.attributions.map(
+          (i: any, key: number) =>
+            key + 1 !== id
+              ? i
+              : { ...i, responsable: rInfo, attributedAt: new Date() }
+        )
+
+        const newList: any[] = productionLines.map((i) =>
+          i.id !== plId
             ? i
-            : { ...i, responsable: rInfo, attributedAt: new Date() }
-      )
+            : {
+                ...i,
+                details: {
+                  ...i.details,
+                  products: newProductsList,
+                  attributions: newAttributionsList,
+                },
+              }
+        )
 
-      const newAttributionsList = productionLineItem.details.attributions.map(
-        (i: any, key: number) =>
-          key + 1 !== id
-            ? i
-            : { ...i, responsable: rInfo, attributedAt: new Date() }
-      )
-
-      const newList: any[] = productionLines.map((i) =>
-        i.id !== plId
-          ? i
-          : {
-              ...i,
-              details: {
-                ...i.details,
-                products: newProductsList,
-                attributions: newAttributionsList,
-              },
-            }
-      )
-
-      setProductionLines(newList)
+        setProductionLines(newList)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
