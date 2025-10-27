@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import * as S from "./styles"
 
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { tableConfig } from "../../utils/sys/table"
 
 import PageHead from "../../components/PageHead"
@@ -28,6 +28,8 @@ const tabs: { key: TOrderStatus; name: string }[] = [
 
 const OrdersPage = () => {
   const { controllers } = getStore()
+
+  const location = useLocation()
 
   const [tab, setTab] = useState<string>("todo")
 
@@ -81,6 +83,42 @@ const OrdersPage = () => {
     [controllers.feedback]
   )
 
+  const filterByParams = useCallback(() => {
+    const params = location.state || {}
+
+    const { status: paramsStatus } = params
+    const { id: paramsOrderId } = params
+
+    if (
+      paramsStatus &&
+      tabs.map((tabItem) => tabItem.key).includes(paramsStatus as any)
+    ) {
+      setTab(paramsStatus)
+    }
+
+    if (paramsOrderId) {
+      let attempts = 3
+      const selectOrderById = () => {
+        const el = document.querySelector(`tr#item-${paramsOrderId} td`)
+        if (el) {
+          ;(el as HTMLTableRowElement).click()
+          el.scrollTo({ behavior: "smooth" })
+          navigate(location.pathname, { replace: true })
+          return true
+        } else return false
+      }
+
+      const selectionResult = selectOrderById()
+      if (!selectionResult && attempts > 0) {
+        setTimeout(() => {
+          selectOrderById()
+        }, 100)
+        attempts--
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location])
+
   const loadData = useCallback(async () => {
     setLoading(true)
 
@@ -104,6 +142,10 @@ const OrdersPage = () => {
 
     setLoading(false)
   }, [controllers.feedback, tab])
+
+  useEffect(() => {
+    if (!loading) filterByParams()
+  }, [loading, filterByParams])
 
   useEffect(() => {
     loadData()
@@ -145,6 +187,7 @@ const OrdersPage = () => {
             printCallback={printCallback}
           />
         )}
+        itemIdProcessor={(item: TPageListOrder) => `item-${item.code}`}
       />
     </S.Content>
   )

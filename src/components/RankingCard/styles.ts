@@ -75,14 +75,20 @@ export const List = styled.ul`
 
 export const ListItem = styled.li`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 8px;
   border-radius: 8px;
   margin-bottom: 8px;
   transition: background-color 0.3s;
-  cursor: default;
+  
+  a {
+    flex: 1;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 8px;
+    cursor: pointer;
+  }
 
   &:nth-last-of-type(1) {
     margin: 0;
@@ -91,6 +97,9 @@ export const ListItem = styled.li`
   &:hover {
     background-color: ${({ theme }) => theme.colors.neutral[900]};
   }
+`
+
+export const ListItemContent = styled.div`
 `
 
 export const InfoArea = styled.div<{

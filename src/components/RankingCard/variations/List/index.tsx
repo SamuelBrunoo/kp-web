@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import * as S from "../../styles"
 
 export type PListVariation = {
@@ -29,19 +30,21 @@ const ListVariation = ({ title, data }: PListVariation) => {
 const ListItem = ({ data }: { data: PListVariation["data"][number] }) => {
   return (
     <S.ListItem>
-      <S.Info $role="id">#{String(data.id).padStart(2, "0")}</S.Info>
-      <S.Info $role="text" $fill={true}>
-        {data.main}
-      </S.Info>
-      <S.Info $role="text" $fill={true}>
-        {data.secondary}
-      </S.Info>
-      {data.tertiary && (
+      <Link to={''}>
+        <S.Info $role="id">#{String(data.id).padStart(2, "0")}</S.Info>
         <S.Info $role="text" $fill={true}>
-          {data.tertiary}
+          {data.main}
         </S.Info>
-      )}
-      <S.Info $role="value">{data.value}</S.Info>
+        <S.Info $role="text" $fill={true}>
+          {data.secondary}
+        </S.Info>
+        {data.tertiary && (
+          <S.Info $role="text" $fill={true}>
+            {data.tertiary}
+          </S.Info>
+        )}
+        <S.Info $role="value">{data.value}</S.Info>
+      </Link>
     </S.ListItem>
   )
 }

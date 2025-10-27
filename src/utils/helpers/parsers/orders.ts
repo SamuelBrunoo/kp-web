@@ -5,7 +5,9 @@ export const parseOrderToDashboardList = (
   order: TOrder
 ): POrdersVariation["data"][number] => {
   const info: POrdersVariation["data"][number] = {
-    id: +order.code,
+    id: order.id,
+    status: order.status,
+    code: +order.code,
     clientName: order.client.clientName,
     value: order.value,
     orderDate: order.orderDate,

@@ -27,6 +27,8 @@ type Props = {
   searchFields?: string[]
   expandComponent?: (item: any) => JSX.Element
   itemColor?: string
+
+  itemIdProcessor?: (item: any) => string
 }
 
 const Table = ({
@@ -40,6 +42,7 @@ const Table = ({
   searchFields,
   expandComponent,
   itemColor,
+  itemIdProcessor,
 }: Props) => {
   return (
     <S.Wrapper>
@@ -111,6 +114,7 @@ const Table = ({
                 expandComponent={expandComponent}
                 noHover={noHover}
                 itemColor={itemColor}
+                itemIdProcessor={itemIdProcessor}
               />
             ))}
         </TableBody>
@@ -128,6 +132,7 @@ type TRowItemProps = {
   expandComponent?: any
   noHover?: boolean
   itemColor?: Props["itemColor"]
+  itemIdProcessor?: Props["itemIdProcessor"]
 }
 
 const RowItem = (props: TRowItemProps) => {
@@ -140,6 +145,8 @@ const RowItem = (props: TRowItemProps) => {
     extra,
     itemColor,
     pageAutoFocusId,
+
+    itemIdProcessor,
   } = props
 
   const itemRowRef = useRef<HTMLTableRowElement | null>(null)
@@ -150,14 +157,10 @@ const RowItem = (props: TRowItemProps) => {
   const toggleExpand = () => {
     const shouldAdd = !expandableRef.current?.classList.contains("highlighted")
 
-    console.log(`[DEBUG] Should add: `, shouldAdd)
-  
-    document
-      .querySelectorAll("tr.highlighted")
-      .forEach(el => {
-        el.classList.remove("highlighted")
-        el.classList.add("noBg")
-      })
+    document.querySelectorAll("tr.highlighted").forEach((el) => {
+      el.classList.remove("highlighted")
+      el.classList.add("noBg")
+    })
 
     if (shouldAdd) {
       expandableRef.current?.classList.add("highlighted")
@@ -169,28 +172,39 @@ const RowItem = (props: TRowItemProps) => {
 
   useEffect(() => {
     if (expandableRef.current) {
-      const newStatus = !(isExpanded || expandableRef.current.classList.contains("highlighted"))
+      const newStatus = !(
+        isExpanded || expandableRef.current.classList.contains("highlighted")
+      )
       setIsExpanded(newStatus)
 
-      console.log("New Status: ", newStatus)
-      
       if (newStatus) expandableRef.current.classList.remove("noBg")
       else expandableRef.current.classList.add("noBg")
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expandableRef.current?.classList])
+
+  useEffect(() => {
+    console.log("Hiding ", item)
+    setIsExpanded(false)
+
+    itemRowRef.current?.classList.remove("highlighted")
+    itemRowRef.current?.classList.add("noBg")
+    expandableRef.current?.classList.remove("highlighted")
+    expandableRef.current?.classList.add("noBg")
+  }, [item])
 
   return (
     <>
       <TableRow
         hover={!noHover}
         ref={itemRowRef}
+        id={itemIdProcessor ? itemIdProcessor(item) : undefined}
         sx={{
           cursor: noHover ? "default" : "pointer",
           transition: "background-color 0.3s",
           backgroundColor: "transparent",
           "&.highlighted": {
-            backgroundColor: '#F5F5F5',
+            backgroundColor: "#F5F5F5",
           },
           "& td:nth-child(1)": {
             borderTopLeftRadius: 8,
