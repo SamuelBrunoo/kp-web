@@ -127,7 +127,7 @@ const ProductionLinesPage = () => {
         setProductionLines(newList)
       }
     } catch (error) {
-      console.log(error)
+      // TODO: Feedback errors
     }
   }
 

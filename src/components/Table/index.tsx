@@ -184,7 +184,6 @@ const RowItem = (props: TRowItemProps) => {
   }, [expandableRef.current?.classList])
 
   useEffect(() => {
-    console.log("Hiding ", item)
     setIsExpanded(false)
 
     itemRowRef.current?.classList.remove("highlighted")
