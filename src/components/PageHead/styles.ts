@@ -27,6 +27,7 @@ export const TabsArea = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
+  overflow: auto;
 `
 
 export const Tab = styled.div<{ $active?: boolean }>`

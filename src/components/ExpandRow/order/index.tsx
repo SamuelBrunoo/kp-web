@@ -246,13 +246,13 @@ const OrderExpand = ({ order, removeOrderFromList, printCallback }: Props) => {
               icon={"user"}
               label={"Emissor"}
               value={additional.emmitter}
-              gridSizes={{ big: 2, small: 6 }}
+              gridSizes={{ big: 2, medium: 6, small: 12 }}
             />
             <AdditionalInfo
               icon={"user"}
               label={"Representante"}
               value={additional.representative ?? "Não atribuído"}
-              gridSizes={{ big: 2, small: 6 }}
+              gridSizes={{ big: 2, medium: 6, small: 12 }}
             />
           </S.AIRow>
           <S.AIRow $columns={12}>
@@ -260,20 +260,20 @@ const OrderExpand = ({ order, removeOrderFromList, printCallback }: Props) => {
               icon={"calendar"}
               label={"Pedido em"}
               value={additional.orderDate}
-              gridSizes={{ big: 2, small: additional.shippedAt ? 4 : 6 }}
+              gridSizes={{ big: 2, medium: additional.shippedAt ? 4 : 6, small: 6 }}
             />
             <AdditionalInfo
               icon={"calendar"}
               label={"Prazo"}
               value={additional.deadline}
-              gridSizes={{ big: 2, small: additional.shippedAt ? 4 : 6 }}
+              gridSizes={{ big: 2, medium: additional.shippedAt ? 4 : 6, small: 6 }}
             />
             {additional.shippedAt && (
               <AdditionalInfo
                 icon={"calendar"}
                 label={"Enviado em"}
                 value={additional.shippedAt as string}
-                gridSizes={{ big: 2, small: 4 }}
+                gridSizes={{ big: 2, medium: 4, small: 12 }}
               />
             )}
           </S.AIRow>
@@ -294,7 +294,7 @@ const OrderExpand = ({ order, removeOrderFromList, printCallback }: Props) => {
                   ? formatCnpj(additional.clientRegister)
                   : formatCpf(additional.clientRegister)
               }
-              gridSizes={{ big: 2, small: 6 }}
+              gridSizes={{ big: 2, medium: 6, small: 12 }}
             />
             <AdditionalInfo
               icon={"user"}
@@ -304,7 +304,7 @@ const OrderExpand = ({ order, removeOrderFromList, printCallback }: Props) => {
                   ? formatStateRegister(additional.clientRegister)
                   : "Não possui"
               }
-              gridSizes={{ big: 2, small: 6 }}
+              gridSizes={{ big: 2, medium: 6, small: 12 }}
             />
           </S.AIRow>
           <S.AIRow $columns={12}>
@@ -312,13 +312,13 @@ const OrderExpand = ({ order, removeOrderFromList, printCallback }: Props) => {
               icon={"dollarCircle"}
               label={"Valor total"}
               value={formatMoney(additional.valueTotal)}
-              gridSizes={{ big: 2, small: 6 }}
+              gridSizes={{ big: 2, medium: 6, small: 12 }}
             />
             <AdditionalInfo
               icon={"dollarCircle"}
               label={"Método de pagamento"}
               value={payments[additional.paymentMethod]}
-              gridSizes={{ big: 2, small: 6 }}
+              gridSizes={{ big: 2, medium: 6, small: 12 }}
             />
           </S.AIRow>
           {additional.paymentMethod === "slip" && (

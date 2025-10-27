@@ -235,7 +235,7 @@ export const tableConfig: {
       { title: "Cliente", field: "clientName" },
       { title: "Data do pedido", field: "orderDate" },
       { title: "Valor", field: "value", hideOn: ["small"] },
-      { title: "Quantidade", field: "quantity", align: "center" },
+      { title: "Quantidade", field: "quantity", align: "center", hideOn: ["small", "medium"] },
     ],
     specialFields: {
       value: (item: TPageListOrder) => formatMoney(item.value),
