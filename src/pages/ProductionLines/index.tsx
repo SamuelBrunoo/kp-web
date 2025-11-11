@@ -259,7 +259,6 @@ const ProductionLinesPage = () => {
         title={"Linha de produção"}
         search={search}
         onChangeSearch={setSearch}
-        // buttons={[{ role: "new", text: "Novo", onClick: handleNew }]}
         withoutNewButton={true}
       />
 

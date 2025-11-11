@@ -1,6 +1,6 @@
 import * as S from "./styles"
 import { TConfig } from "../../utils/sys/table"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 import {
   Table as MuiTable,
@@ -152,15 +152,17 @@ const RowItem = (props: TRowItemProps) => {
   const itemRowRef = useRef<HTMLTableRowElement | null>(null)
   const expandableRef = useRef<HTMLTableRowElement | null>(null)
 
-  const [isExpanded, setIsExpanded] = useState(pageAutoFocusId === item.id)
+  const isExpanded = useRef(pageAutoFocusId === item.id)
 
   const toggleExpand = () => {
     const shouldAdd = !expandableRef.current?.classList.contains("highlighted")
 
-    document.querySelectorAll("tr.highlighted").forEach((el) => {
-      el.classList.remove("highlighted")
-      el.classList.add("noBg")
-    })
+    if (itemRowRef.current && itemRowRef.current.parentElement) {
+      itemRowRef.current.parentElement.querySelectorAll("tr.highlighted").forEach((el) => {
+        el.classList.remove("highlighted")
+        el.classList.add("noBg")
+      })
+    }
 
     if (shouldAdd) {
       expandableRef.current?.classList.add("highlighted")
@@ -173,9 +175,9 @@ const RowItem = (props: TRowItemProps) => {
   useEffect(() => {
     if (expandableRef.current) {
       const newStatus = !(
-        isExpanded || expandableRef.current.classList.contains("highlighted")
+        isExpanded.current || expandableRef.current.classList.contains("highlighted")
       )
-      setIsExpanded(newStatus)
+      isExpanded.current = newStatus
 
       if (newStatus) expandableRef.current.classList.remove("noBg")
       else expandableRef.current.classList.add("noBg")
@@ -184,13 +186,13 @@ const RowItem = (props: TRowItemProps) => {
   }, [expandableRef.current?.classList])
 
   useEffect(() => {
-    setIsExpanded(false)
+    isExpanded.current = false
 
     itemRowRef.current?.classList.remove("highlighted")
     itemRowRef.current?.classList.add("noBg")
     expandableRef.current?.classList.remove("highlighted")
     expandableRef.current?.classList.add("noBg")
-  }, [item])
+  }, [item.id])
 
   return (
     <>
@@ -257,7 +259,10 @@ const RowItem = (props: TRowItemProps) => {
               }}
               align={col.align}
               onClick={
-                col.field !== "actions" ||
+                (
+                  col.field !== "actions" &&
+                  col.field !== "statusIndicator"
+                ) ||
                 (expandComponent && k !== config.columns.length - 1)
                   ? toggleExpand
                   : undefined
