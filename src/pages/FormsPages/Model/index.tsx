@@ -414,6 +414,10 @@ const ModelForm = () => {
                     columns: 12,
                     element: (
                       <Table
+                        emptyList={{
+                          message:
+                            "Seus produtos vão aparecer aqui após serem cadastrados.",
+                        }}
                         config={tableConfig.modelVariations}
                         data={variations}
                         noHover={true}

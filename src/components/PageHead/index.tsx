@@ -10,17 +10,20 @@ type Props = {
   title: string
   subtitle?: string
   search?: string
+  searchPlaceholder?: string
   onChangeSearch?: (v: string) => void
   onFilterChange?: (filter: string, v: string) => void
   filters?: TFilter[]
   withoutNewButton?: boolean
   buttons?: TButton[]
   forForm?: boolean
+  showSearchButton?: boolean
 
   /* Tabs Control */
   tabs?: TTab[]
   onChangeTab?: (newTab: string) => void
   tab?: string
+  onSearch?: () => Promise<void>
 }
 
 export type TTab = {
@@ -45,15 +48,17 @@ const PageHead = ({
   title,
   subtitle,
   search,
+  searchPlaceholder = "Pesquisar...",
   onFilterChange,
   onChangeSearch,
   filters,
   withoutNewButton,
-  buttons,
   forForm,
   tabs,
   onChangeTab,
   tab,
+  showSearchButton = true,
+  onSearch,
 }: Props) => {
   const navigate = useNavigate()
 
@@ -66,7 +71,7 @@ const PageHead = ({
   }
 
   const handleSearch = () => {
-    // ...
+    if (onSearch) onSearch()
   }
 
   const handleTab = (newTab: string) => {
@@ -108,7 +113,7 @@ const PageHead = ({
           <S.SearchArea>
             {search !== undefined && onChangeSearch !== undefined && (
               <Input.PageSearch
-                placeholder="Pesquisar..."
+                placeholder={searchPlaceholder}
                 value={search}
                 onChange={onChangeSearch}
               />
@@ -125,12 +130,14 @@ const PageHead = ({
               ))}
           </S.SearchArea>
 
-          <Button
-            action={handleSearch}
-            color="green"
-            text="Buscar"
-            type="primary"
-          />
+          {showSearchButton && (
+            <Button
+              action={handleSearch}
+              color="green"
+              text="Buscar"
+              type="primary"
+            />
+          )}
         </S.Main>
       )}
     </S.Wrapper>

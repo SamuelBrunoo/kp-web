@@ -82,6 +82,7 @@ const ModelsPage = () => {
       <PageHead
         title={"Modelos"}
         search={search}
+        searchPlaceholder={"Pesquise por nome ou código..."}
         onChangeSearch={setSearch}
         filters={[
           {
@@ -95,6 +96,7 @@ const ModelsPage = () => {
             value: filters.type,
           },
         ]}
+        onSearch={loadData}
         onFilterChange={handleFilter}
         buttons={[{ role: "new", text: "Novo", onClick: handleNew }]}
       />
