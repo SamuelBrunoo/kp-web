@@ -11,6 +11,8 @@ import Table from "../../components/Table"
 import { Api } from "../../api"
 import getStore from "../../store"
 import LoadingModal from "../../components/Modal/variations/Loading"
+import Button from "../../components/Button"
+import Icons from "../../assets/icons"
 
 const ProductsPage = () => {
   const { controllers } = getStore()
@@ -113,12 +115,28 @@ const ProductsPage = () => {
             value: filters.type,
           },
         ]}
+        onSearch={loadData}
         onFilterChange={handleFilter}
         buttons={[{ role: "new", text: "Novo", onClick: handleNewProduct }]}
       />
 
       {/* Table */}
       <Table
+        emptyList={{
+          message: [
+            "Nenhum produto cadastrado.",
+            "Clique no botão e adicione um novo.",
+          ],
+          component: (
+            <Button
+              type="primary"
+              action={handleNewProduct}
+              color="green"
+              text="Novo"
+              startIcon={<Icons.Add />}
+            />
+          ),
+        }}
         config={tableConfig.products}
         data={products.filter((i) =>
           filters.type !== "all" ? i.typeKey === filters.type : true

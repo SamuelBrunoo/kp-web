@@ -7,5 +7,5 @@ export const initialProduct = {
     has: true,
     quantity: 0,
   },
-  active: false,
+  active: true,
 }

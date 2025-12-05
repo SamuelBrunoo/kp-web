@@ -429,7 +429,7 @@ const ProductForm = () => {
                           "&:has(.Mui-checked) .MuiSwitch-track": {
                             backgroundColor: (theme) =>
                               product.active
-                                ? theme.palette.green[460]
+                                ? theme.palette.green[400]
                                 : undefined,
                           },
                           "& .Mui-checked .MuiSwitch-thumb": {
