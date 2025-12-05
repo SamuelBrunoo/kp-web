@@ -13,6 +13,10 @@ import {
 import { theme } from "../../theme"
 
 type Props = {
+  emptyList?: {
+    message: string | string[]
+    component?: JSX.Element
+  }
   pageAutoFocusId?: string
   config: TConfig
   data: any[]
@@ -32,6 +36,7 @@ type Props = {
 }
 
 const Table = ({
+  emptyList,
   pageAutoFocusId,
   config,
   data = [],
@@ -44,7 +49,48 @@ const Table = ({
   itemColor,
   itemIdProcessor,
 }: Props) => {
-  return (
+  return data.length === 0 && emptyList ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        justifyContent: "center",
+        alignItems: "center",
+        flex: 1,
+        height: "100%",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
+        }}
+      >
+        {typeof emptyList.message === "string" ? (
+          <Typography
+            textAlign={"center"}
+            fontWeight={500}
+            color={theme.colors.orange[400]}
+          >
+            {emptyList.message}
+          </Typography>
+        ) : (
+          emptyList.message.map((messageRow) => (
+            <Typography
+              textAlign={"center"}
+              fontWeight={500}
+              color={theme.colors.orange[400]}
+            >
+              {messageRow}
+            </Typography>
+          ))
+        )}
+      </div>
+      {emptyList.component && emptyList.component}
+    </div>
+  ) : (
     <S.Wrapper>
       <MuiTable
         sx={{
@@ -158,10 +204,12 @@ const RowItem = (props: TRowItemProps) => {
     const shouldAdd = !expandableRef.current?.classList.contains("highlighted")
 
     if (itemRowRef.current && itemRowRef.current.parentElement) {
-      itemRowRef.current.parentElement.querySelectorAll("tr.highlighted").forEach((el) => {
-        el.classList.remove("highlighted")
-        el.classList.add("noBg")
-      })
+      itemRowRef.current.parentElement
+        .querySelectorAll("tr.highlighted")
+        .forEach((el) => {
+          el.classList.remove("highlighted")
+          el.classList.add("noBg")
+        })
     }
 
     if (shouldAdd) {
@@ -175,7 +223,8 @@ const RowItem = (props: TRowItemProps) => {
   useEffect(() => {
     if (expandableRef.current) {
       const newStatus = !(
-        isExpanded.current || expandableRef.current.classList.contains("highlighted")
+        isExpanded.current ||
+        expandableRef.current.classList.contains("highlighted")
       )
       isExpanded.current = newStatus
 
@@ -259,10 +308,7 @@ const RowItem = (props: TRowItemProps) => {
               }}
               align={col.align}
               onClick={
-                (
-                  col.field !== "actions" &&
-                  col.field !== "statusIndicator"
-                ) ||
+                (col.field !== "actions" && col.field !== "statusIndicator") ||
                 (expandComponent && k !== config.columns.length - 1)
                   ? toggleExpand
                   : undefined

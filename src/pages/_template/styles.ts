@@ -17,5 +17,5 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   gap: 32px;
   flex: 1;
-  min-height: inherit;
+  height: 100%;
 `

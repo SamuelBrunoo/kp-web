@@ -11,6 +11,8 @@ import Table from "../../components/Table"
 import { Api } from "../../api"
 import getStore from "../../store"
 import LoadingModal from "../../components/Modal/variations/Loading"
+import Button from "../../components/Button"
+import Icons from "../../assets/icons"
 
 const ModelsPage = () => {
   const navigate = useNavigate()
@@ -99,6 +101,21 @@ const ModelsPage = () => {
 
       {/* Table */}
       <Table
+        emptyList={{
+          message: [
+            "Nenhum modelo cadastrado.",
+            "Clique no botão e adicione um novo.",
+          ],
+          component: (
+            <Button
+              type="primary"
+              action={handleNew}
+              color="green"
+              text="Novo"
+              startIcon={<Icons.Add />}
+            />
+          ),
+        }}
         config={tableConfig.models}
         data={models.filter((i) =>
           filters.type !== "all" ? i.typeKey === filters.type : true
